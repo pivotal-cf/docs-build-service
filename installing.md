@@ -7,13 +7,13 @@ owner: Partners
 
 This topic describes how to install and configure Pivotal Build Service.
 
-##<a id='install'></a> Install and Configure Pivotal Build Service
+## <a id='install'></a> Install and Configure Pivotal Build Service
 
 ## Pre requirements
 
 - PKS installed
-- Kubectl installed locally (Only need if no ingress controller is already installed)
-- Ruby (This is needed to create the UAA client)
+- Kubectl installed locally (Only required if no ingress controller is already installed)
+- Ruby (This is required to create the UAA client)
 
 
 ## Target cluster
@@ -25,9 +25,9 @@ PKS cluster where Pivotal Build Service will run
 pks get-credentials <cluster-name>
 ```
 
-This command only need to be done once in the full installation.
+This command only needs to be run once for the full installation.
 
-##<a id='uaa-client-creation'></a> Create UAA Pivotal Build Service client
+## <a id='uaa-client-creation'></a> Create UAA Pivotal Build Service client
 
 ### Pre requirements
 - Ruby
@@ -35,20 +35,22 @@ This command only need to be done once in the full installation.
 ### Create the UAA client
 
 The users of Pivotal Build Service are configured on a UAA.
-In order to talk with UAA Pivotal Build Service need to have a client
+In order to talk with UAA Pivotal Build Service must have a client
 configured. To configure this client we recommend using `uaac` tool
 
-If the tool is not installed in your machine run the following command:
+If the tool is not installed on your machine, run the following command:
 ```bash
 gem install cf-uaac
 ```
 
-**Note:** if not using `rbenv` or `rvm` you might need to execute `sudo gem install cf-uaac`
+**Note:** if not using `rbenv` or `rvm` you may need to execute `sudo gem install cf-uaac`
 
 Target the UAA that will be used to authenticate the Build Service Users
 ```bash
-uaac target <UAA_URL> --skip-ssl-validation
+uaac target <UAA_URL>
 ```
+
+**Note:** If you are using a self-signed certificate, you must use the `--skip-ssl-validation` flag in conjuction with `uaac` 
 
 Create the UAA Client
 ```bash
@@ -59,9 +61,9 @@ uaac client add pb_cli --scope="openid" --secret="" --authorized_grant_types="pa
 
 ## Configure TLS certificates for Pivotal Build Service
 
-Download the `.crt` and `.key` file to `/tmp/certificate.crt` and `/tmp/certificate.key`
+Download the `.crt` and `.key` files to `/tmp/certificate.crt` and `/tmp/certificate.key`
 
-Create the secret in Kubernetes cluster
+Create the secret in the Kubernetes cluster
 
 ```bash
 tlsCert=$(cat /tmp/certificate.crt | base64)
@@ -81,17 +83,17 @@ EOF
 
 After this step the files can be removed.
 
-**NOTES:** For MacOS when using `pb` cli the CA certificate should be added to the keychain and change the Trust
-setting of it to `Always Trust` instead of `Use System Defaults`
+**NOTES:** For MacOS, when using `pb` cli the CA certificate should be added to the keychain and the Trust
+setting must be changed to `Always Trust` instead of `Use System Defaults`
 
 
 ## Install Pivotal Build Service
 
-Download from Pivnet the following files:
+Download the following files from [Pivnet](https://network.pivotal.io/products/build-service/):
 1) Duffle executable for you operating system
 1) Pivotal Build Service Bundle
 
-    Create a credentials files that maps the location where the credentials can be found.
+    Create a credentials file that maps the location where the credentials can be found.
     This file will be used by `duffle` during the installation
     
     A template for the file is next:
@@ -111,13 +113,16 @@ Download from Pivnet the following files:
     ```
     
     This file should be created in `/tmp/credentials.yml` this location can be changed but
-    the next command need to be updated accordingly
+    the next command must be updated accordingly
+    
 1) Import the images bundle
+
     This step will extract the bundle
     ```bash
     duffle import /tmp/build-service-${version}.tgz -d /tmp/build-service/
     ```
 1) Copy the images from the extracted bundle into an internal Image Registry
+
     Login to the Image Registry where the images will be stored
     ```bash
     docker login <SOME_IMAGE_REGISTRY>
@@ -147,8 +152,8 @@ Download from Pivnet the following files:
     
     Variables information:
     
-    - `my-build-service-installation-name` this is unique name for the installation. 
-    This name can be used after for upgrading Pivotal Build Service in the cluster `kubectl` is pointing to
+    - `my-build-service-installation-name` this is the unique name for the installation. 
+    This name can be used after for upgrading Pivotal Build Service in the cluster `kubectl` is pointing at
     - `BUILD_SERVICE_DOMAIN` is the domain name that will be used to target Pivotal Build Service.
     This domain should have been configured as the domain for the Ingress controller.
     - `PKS_CLUSTER_NAME` Name of the PKS cluster where Pivotal Build Service will be installed
@@ -159,11 +164,12 @@ Download from Pivnet the following files:
     - `UAA_URL` URL to access UAA
     
     **Note** Some images will be pushed again to the image registry because during installation the CA Certificate provided
-    will be added to the list of the available CA on these images. To do this the duffle command need to be provided
+    will be added to the list of the available CA on these images. To do this, the duffle command must be provided
     with the credentials for the image registry
 
 1) Verify installation
-    Download `pb` binary from PivNet
+
+    Download `pb` binary from Pivnet
     
     Target Pivotal Build Service
     ```bash
@@ -175,22 +181,20 @@ Download from Pivnet the following files:
     pb login
     ```
 
-##<a id='faq'></a> FAQ
+## <a id='faq'></a> FAQ
 
-##<a id='users-create'></a> Create users to use on Pivotal Build Service
+### <a id='users-create'></a> How do I create users to use with Pivotal Build Service?
 
-### Pre requirements
+#### Pre requirements
 - Ruby
 
-### Create the users
+#### Create the UAA users
 
 The users of Pivotal Build Service are configured on a UAA.
 To create these users we recommend using `uaac` tool.
 
 Follow the steps in <a url="#uaa-client-creation">Create the UAA client</a> to
 install `uaac` client tool
-
-#### Create UAA users
 
 Target the UAA that will be used to authenticate the Build Service Users
 
