@@ -9,7 +9,7 @@ This topic describes how to install and configure Pivotal Build Service.
 
 ## <a id='install'></a> Install and Configure Pivotal Build Service
 
-## Pre requirements
+## Prerequisites
 
 - PKS installed
 - Kubectl installed locally (Only required if no ingress controller is already installed)
@@ -52,7 +52,7 @@ uaac target <UAA_URL>
 
 **Note:** If you are using a self-signed certificate, you must use the `--skip-ssl-validation` flag in conjuction with `uaac` 
 
-Create the UAA Client
+Install the UAA Client
 ```bash
 uaac client add pb_cli --scope="openid" --secret="" --authorized_grant_types="password,refresh_token" --access_token_validity 600 --refresh_token_validity 21600
 ```
@@ -185,7 +185,7 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
 
 ### <a id='users-create'></a> How do I create users to use with Pivotal Build Service?
 
-#### Pre requirements
+#### Prerequisites
 - Ruby
 
 #### Create the UAA users
