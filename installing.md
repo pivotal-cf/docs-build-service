@@ -16,7 +16,7 @@ This topic describes how to install and configure Pivotal Build Service.
 - Ruby (This is required to create the UAA client)
 
 
-## Target cluster
+## Retrieve cluster credentials
 
 This step retrieves the credentials used by `kubectl` to talk to the
 PKS cluster where Pivotal Build Service will run
@@ -25,37 +25,48 @@ PKS cluster where Pivotal Build Service will run
 pks get-credentials <cluster-name>
 ```
 
-This command only needs to be run once for the full installation.
+To target the cluster execute
 
-## <a id='uaa-client-creation'></a> Create UAA Pivotal Build Service client
+```bash
+kubectl config use-context <cluster-name>
+```
 
-### Pre requirements
+These commands only needs to be run once for the full installation.
+
+## <a id='uaa-client-creation'></a> Install UAA Pivotal Build Service client
+
+### Prerequisites
 - Ruby
 
-### Create the UAA client
+### Install the UAA client
 
 The users of Pivotal Build Service are configured on a UAA.
-In order to talk with UAA Pivotal Build Service must have a client
+In order to talk with UAA, Pivotal Build Service must have a client
 configured. To configure this client we recommend using `uaac` tool
 
-If the tool is not installed on your machine, run the following command:
-```bash
-gem install cf-uaac
-```
+1. Install `uaac` tool on your machine, run the following command
 
-**Note:** if not using `rbenv` or `rvm` you may need to execute `sudo gem install cf-uaac`
+  ```bash
+  gem install cf-uaac
+  ```
 
-Target the UAA that will be used to authenticate the Build Service Users
-```bash
-uaac target <UAA_URL>
-```
+  **Note:** if not using `rbenv` or `rvm` you may need to execute `sudo gem install cf-uaac`
 
-**Note:** If you are using a self-signed certificate, you must use the `--skip-ssl-validation` flag in conjuction with `uaac` 
+1. Target the UAA that will be used to authenticate the Build Service Users
 
-Install the UAA Client
-```bash
-uaac client add pb_cli --scope="openid" --secret="" --authorized_grant_types="password,refresh_token" --access_token_validity 600 --refresh_token_validity 21600
-```
+  ```bash
+  uaac target <UAA_URL>
+  ```
+
+  **Note:** When using a self-signed certificate, you must use the `--skip-ssl-validation` flag in conjuction with `uaac` 
+
+1. Install the UAA Client
+
+  ```bash
+  uaac client add pb_cli --scope="openid" --secret="" --authorized_grant_types="password,refresh_token" --access_token_validity 600 --refresh_token_validity 21600
+  ```
+  
+  **Note:** this command need to be executed as is. The secret in this case **need** to be an empty string
 
 
 
@@ -175,6 +186,8 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
     ```bash
     pb api <PIVOTAL_BUILD_SERVICE_DOMAIN>
     ```
+    
+    A user should be created at this point, please follow the instructions in [here](#users-create)
     
     After creating a UAA user the next step should successfully log you in to Pivotal Build Service
     ```bash
