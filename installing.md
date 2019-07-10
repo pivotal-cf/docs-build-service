@@ -158,7 +158,7 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
         --set registry_password=<REGISTRY_PASSWORD> \
         --set uaa_url=<UAA_URL> \
         -f /tmp/build-service/bundle.json
-        -r /tmp/relocated.json
+        -m /tmp/relocated.json
     ```
     
     Variables information:
