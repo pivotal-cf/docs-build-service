@@ -143,7 +143,7 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
     
     Push the images to the Image Registry
     ```bash
-    duffle relocate -f /tmp/build-service/bundle.json -m /tmp/relocated.json -p <SOME_IMAGE_REGISTRY>
+    duffle relocate -f /tmp/build-service/*/bundle.json -m /tmp/relocated.json -p <SOME_IMAGE_REGISTRY>
     ```
 
 1) Install Pivotal Build Service
