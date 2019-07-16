@@ -86,8 +86,8 @@ When you have the `.crt` and `.key` files place them in `/tmp/certificate.crt` a
 Create the secret in the Kubernetes cluster
 
 ```bash
-tlsCert=$(cat /tmp/certificate.crt | base64)
-tlsKey=$(cat /tmp/certificate.key | base64)
+tlsCert=$(cat /tmp/certificate.crt | base64 -w 0)
+tlsKey=$(cat /tmp/certificate.key | base64 -w 0)
 cat << EOF| kubectl create -f -
 apiVersion: v1
 kind: Secret
