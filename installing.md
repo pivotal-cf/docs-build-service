@@ -14,6 +14,8 @@ This topic describes how to install and configure Pivotal Build Service.
 - PKS installed
 - Kubectl installed locally (Only required if no ingress controller is already installed)
 - Ruby (This is required to create the UAA client)
+- An Ingress Controller has been installed on the cluster where Pivotal Build Service is going to be installed. The Pivotal Build Service expects an Ingress Controller and an Ingress Service to be running to configure it's own ingress. A example of an Ingress Controller Deployment can be found [here](ingress.md)
+- Persistent Volumes have been configured on the cluster where Pivotal Build Service will be installed as it relies on Persistent Volume Claims to cache build artifacts to speed up subsequent builds. The cache size per image has been configured to 2GiBs
 
 
 ## Retrieve cluster credentials
@@ -86,8 +88,8 @@ When you have the `.crt` and `.key` files place them in `/tmp/certificate.crt` a
 Create the secret in the Kubernetes cluster
 
 ```bash
-tlsCert=$(cat /tmp/certificate.crt | base64 | awk '{printf "%s", $0}'))
-tlsKey=$(cat /tmp/certificate.key | base64 | awk '{printf "%s", $0}'))
+tlsCert=$(cat /tmp/certificate.crt | base64 | awk '{printf "%s", $0}')
+tlsKey=$(cat /tmp/certificate.key | base64 | awk '{printf "%s", $0}')
 cat << EOF| kubectl create -f -
 apiVersion: v1
 kind: Secret
