@@ -202,7 +202,7 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
     ```bash
     pb api <PIVOTAL_BUILD_SERVICE_DOMAIN>
     ```
-    In case the you have a UAA that has been signed by a self-signed CA, add the `--skip-ssl-validation` flag at the end of the `pb api` command
+    In case you have a UAA that has been signed by a self-signed CA, add the `--skip-ssl-validation` flag at the end of the `pb api` command
     
     A user should be created at this point, please follow the instructions in [here](#users-create)
     
