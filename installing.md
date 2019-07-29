@@ -75,7 +75,8 @@ configured. To configure this client we recommend using `uaac` tool
   uaac client add pivotal_build_service_cli --scope="openid" --secret="" --authorized_grant_types="password,refresh_token" --access_token_validity 600 --refresh_token_validity 21600
   ```
   
-  **Note:** this command need to be executed as is. The secret in this case **need** to be an empty string
+  **Note:** this command need to be executed as is. The secret in this case **need** to be an empty string.   
+  **Note** If you're installing the PBS 0.0.1 alpha, then the user needs to be `pb_cli`. 
 
 
 
@@ -137,7 +138,8 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
     This file should be created in `/tmp/credentials.yml` this location can be changed but
     the next command must be updated accordingly
     
-    **Note:** In the credentials file all the local paths need to be absolute.
+    **Note:** In the credentials file all the local paths need to be absolute.  
+    **Note:** If your registry certificate has been signed by a trusted certificate, then the path `ca_cert` credential may point to an empty file.
     
 1) Import the images bundle
 
@@ -181,9 +183,9 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
     This domain should have been configured as the domain for the Ingress controller.
     - `PKS_CLUSTER_NAME` Name of the PKS cluster where Pivotal Build Service will be installed
     - `DOCKER_REGISTRY` Image Registry used in the previous step to push images to
-    - `REGISTRY_USERNAME` Username to access the registry
+    - `REGISTRY_USERNAME` Username to access the registry. This user needs push access to the registry.
     - `REGISTRY_PASSWORD` Password to access the registry
-    - `UAA_URL` URL to access UAA
+    - `UAA_URL` URL to access UAA. If you're using the UAA which ships with PKS then the format will be similar to `https://api.my-pks.com:8443`
     
     Additional optional properties: 
     - `disable_builder_polling` this will prevent the build service from polling builder images for buildpack updates
@@ -193,6 +195,8 @@ Download the following files from [Pivnet](https://network.pivotal.io/products/b
     **Note** Some images will be pushed again to the image registry because during installation the CA Certificate provided
     will be added to the list of the available CA on these images. To do this, the duffle command must be provided
     with the credentials for the image registry
+    
+    If the installation fails and you'd like to restart the installation, please refer to [manually uninstalling PBS](#uninstall-pbs)
 
 1) Verify installation
 
@@ -236,4 +240,22 @@ Command to create a single user:
 
 ```bash
 uaac user add <username> -p <password> --emails <email>
+```
+
+
+### <a id='uninstall-pbs'></a> How do I manually uninstall PBS during a failed install?
+
+If there is an error during the installation of PBS, you may manually delete the PBS resources.
+
+**Note** This will entirelly erase your PBS installation and remove any stored images, builds or teams.
+
+While targetting the kubernetes cluster which PBS has been installed to.
+
+```bash
+rm ~/.duffle/claims/NAME_OF_BUILD_SERVICE.json
+
+kubectl delete namespace knative-build
+kubectl delete namespace build-service-system
+kubectl delete namespace build-service-gateway
+kubectl delete namespace build-service-builds
 ```
