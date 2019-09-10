@@ -122,13 +122,16 @@ After installation the TLS certificates may be removed.
        destination:
          path: "/cnab/app/cert/tls.key"
    ```
-    `kube_config`: The configuration file required during the installation to interact with the cluster that Pivotal Build Service will be installed on
 
-    `ca_cert`: The CA certificate required by Pivotal Build Service to interact with you internally deployed registries. This is the CA certificate that was used while deploying the registry.
+    Credentials information:
 
-    `tls_cert`: The certificate required for authenticated communication between the `pb` cli and the deployed Build Service. The CA for this certificate must be trusted by the workstation communicating with Pivotal Build Service.
+    - `kube_config`: The configuration file required during the installation to interact with the cluster that Pivotal Build Service will be installed on
 
-    `tls_key`: The private key corresponding to the above certificate.
+    - `ca_cert`: The CA certificate required by Pivotal Build Service to interact with you internally deployed registries. This is the CA certificate that was used while deploying the registry.
+
+    - `tls_cert`: The certificate required for authenticated communication between the `pb` cli and the deployed Build Service. The CA for this certificate must be trusted by the workstation communicating with Pivotal Build Service.
+
+    - `tls_key`: The private key corresponding to the above certificate.
 
    This file should be created in `/tmp/credentials.yml` this location can be changed but
    the `duffle install` command must be updated accordingly.
