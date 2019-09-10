@@ -142,9 +142,9 @@ After installation the TLS certificates may be removed.
    **Note:** In the credentials file all the local paths need to be absolute.
 
 1) Create a parameters file that specifies the parameters for the installation.
-   This file will be used by `duffle` during the installation. This need for this file can optionally be replaced by using the `--set` flag to set parameters explicitly as covered later.
+   This file will be used by `duffle` during the installation. This file can optionally be replaced by using the `--set` flag to set parameters explicitly as covered later.
 
-    Here is a template for the `paramerters.json` file
+    Here is a template for the `parameters.json` file
    ```json
     {
       "domain": "<BUILD SERVICE DOMAIN>",
