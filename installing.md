@@ -142,7 +142,7 @@ After installation the TLS certificates may be removed.
    **Note:** In the credentials file all the local paths need to be absolute.
 
 1) Create a parameters file that specifies the parameters for the installation.
-   This file will also be used by `duffle` during the installation
+   This file will be used by `duffle` during the installation. This need for this file can optionally be replaced by using the `--set` flag to set parameters explicitly as covered later.
 
     Here is a template for the `paramerters.json` file
    ```json
@@ -170,7 +170,7 @@ After installation the TLS certificates may be removed.
    - `docker_registry` Domain of the Image Registry used in the previous step to push images to
 
      **Note:** if using dockerhub the domain should be `index.docker.io`
-     The registry should not include subpaths in the registry. `gcr.io`, `acr.io` are examples of valid fields for the registry. 
+     The registry should not include subpaths in the registry. `gcr.io`, `acr.io` are examples of valid fields for the registry.
    - `registry_username` Username to access the registry
    - `registry_password` Password to access the registry
    - `uaa_url` URL to access UAA
@@ -178,10 +178,10 @@ After installation the TLS certificates may be removed.
    Additional optional properties:
    - `disable_builder_polling` this will prevent the build service from polling builder images for buildpack updates
    This option requires you to set up a [Builder Webhook](https://github.com/pivotal-cf/docs-build-service/blob/master/webhooks.md).
-   This is a boolean value so it should be used like: `"disable_builder_polling": true`
+   This is a boolean value that defaults to `false`.
    - `ingress_annotations` this will set ingress annotations (see the "Optional: Setting custom Ingress controller annotations" step below)
-   - `replica_count` this will define the number of build service instances running. It defaults to 1.
-   - `no_gateway` this will install only [kpack](https://github.com/pivotal/kpack), the Build Service CRDs and controllers. This allows one to interact with Build Service via `kubectl` ONLY.
+   - `replica_count` this will define the number of build service instances running. It defaults to `1`.
+   - `no_gateway` this will install only [kpack](https://github.com/pivotal/kpack), the Build Service CRDs and controllers. This allows one to interact with Build Service via `kubectl` ONLY. This is a boolean value that defaults to `false`.
    (see the "Optional: KPACK only Install" step below)
 
     ##### Optional: Setting custom Ingress controller annotations
@@ -222,7 +222,7 @@ After installation the TLS certificates may be removed.
 
     Push the images to the Image Registry
     ```bash
-    duffle relocate -f /tmp/build-service-${version}.tgz -m /tmp/relocated.json -p <SOME_IMAGE_REGISTRY>
+    duffle relocate -f /tmp/build-service-${version}.tgz -m /tmp/relocated.json -p <TARGET_IMAGE_REGISTRY>
     ```
 
 1) <a href="install-pivotal-build-service"></a>Install Pivotal Build Service
@@ -236,7 +236,7 @@ After installation the TLS certificates may be removed.
    `installation-name` this is the unique name for the Build Service installation. 
    This name can be used after for upgrading Pivotal Build Service in the cluster `kubectl` is pointing at
 
-    One can avoid creating a `parameters.json` file and set parameter values explicitly during the install. The install command would look as below. 
+    One can avoid creating a `parameters.json` file and set parameter values explicitly during the install. The install command would look as below.
     ```bash
     duffle install <installation-name> -c /tmp/credentials.yml  \
         --set domain=<BUILD_SERVICE_DOMAIN> \
@@ -258,7 +258,7 @@ After installation the TLS certificates may be removed.
     
     Target Pivotal Build Service
     ```bash
-    pb api <PIVOTAL_BUILD_SERVICE_DOMAIN>
+    pb api set <PIVOTAL_BUILD_SERVICE_DOMAIN>
     ```
     In case you have a UAA that has been signed by a self-signed CA, add the `--skip-ssl-validation` flag at the end of the `pb api` command
     
