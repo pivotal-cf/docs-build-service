@@ -130,7 +130,7 @@ After installation the TLS certificates may be removed.
 
     - `kube_config`: The configuration file required during the installation to interact with the cluster that Pivotal Build Service will be installed on
 
-    - `ca_cert`: The CA certificate required by Pivotal Build Service to interact with you internally deployed registries. This is the CA certificate that was used while deploying the registry.
+    - `ca_cert`: The CA certificate required by Pivotal Build Service to interact with internally deployed registries. This is the CA certificate that was used while deploying the registry.
 
     - `tls_cert`: The certificate required for authenticated communication between the `pb` cli and the deployed Build Service. The CA for this certificate must be trusted by the workstation communicating with Pivotal Build Service.
 
