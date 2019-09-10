@@ -81,7 +81,8 @@ configured. To configure this client we recommend using `uaac` tool
 
 You need to get or create TLS certificates for the Pivotal Build Service Domain that will be used in the [Install Pivotal Build Service step](#install-pivotal-build-service). These certificates may be self signed.
 
-When you have the `.crt` and `.key` files, place them in `/tmp/certificate.crt` and `/tmp/certificate.key`
+When you have the `.crt` and `.key` files, note the paths to these files.
+Pass the paths to these files into the `credentials.yml` described in the following steps.
 
 After installation the TLS certificates may be removed.
 
@@ -177,6 +178,9 @@ After installation the TLS certificates may be removed.
    This option requires you to set up a [Builder Webhook](https://github.com/pivotal-cf/docs-build-service/blob/master/webhooks.md).
    This is a boolean value so it should be used like: `"disable_builder_polling": true`
    - `ingress_annotations` this will set ingress annotations (see the "Optional: Setting custom Ingress controller annotations" step below)
+   - `replica_count` this will define the number of build service instances running. It defaults to 1.
+   - `no_gateway` this will install only [kpack](https://github.com/pivotal/kpack), the Build Service CRDs and controllers. This allows one to interact with Build Service via `kubectl` ONLY.
+   (see the "Optional: S KPACK only Install" step below)
 
     ##### Optional: Setting custom Ingress controller annotations
     If you would like to use an ingress controller other than NGINX or you would like to pass additional annotations
@@ -190,6 +194,18 @@ After installation the TLS certificates may be removed.
       }
     }
     ```
+
+    ##### Optional: KPACK only Install
+    This only install the Build Service CRDs and it's controllers and `kubectl` is the CLI tool required to interact with the components. When installing without the gateway, it removes the need for the following parameters:
+    - `domain`
+    - `uaa_url`
+    - `ingress_annotations`
+
+    Additionally, the it will also remove the need to provide values to the following credentials:
+    - `tls_cert`
+    - `tls_key`
+
+    Replace the values of the `source.path` properties with `""` but do not remove these fields from the file.
 
    **Note** Some images will be pushed again to the image registry because during installation the CA Certificate provided
    will be added to the list of the available CA on these images. To do this, the parameters file or duffle install command (in case one would like to avoid using the `parameters.json`) must be provided
