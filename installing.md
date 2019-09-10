@@ -179,9 +179,9 @@ After installation the TLS certificates may be removed.
    - `disable_builder_polling` this will prevent the build service from polling builder images for buildpack updates
    This option requires you to set up a [Builder Webhook](https://github.com/pivotal-cf/docs-build-service/blob/master/webhooks.md).
    This is a boolean value that defaults to `false`.
-   - `ingress_annotations` this will set ingress annotations (see the "Optional: Setting custom Ingress controller annotations" step below)
+   - `ingress_annotations` this will set ingress annotations (see the "Optional: Setting custom Ingress controller annotations" step below). This needs to be supplied inside the `parameters.json` file and not via the `--set` flag.
    - `replica_count` this will define the number of build service instances running. It defaults to `1`.
-   - `no_gateway` this will install only [kpack](https://github.com/pivotal/kpack), the Build Service CRDs and controllers. This allows one to interact with Build Service via `kubectl` ONLY. This is a boolean value that defaults to `false`.
+   - `no_gateway` this will install only the Pivotal Builder and [kpack](https://github.com/pivotal/kpack), the Build Service CRDs and controllers. This allows one to interact with Build Service via `kubectl` ONLY. This is a boolean value that defaults to `false`.
    (see the "Optional: KPACK only Install" step below)
 
     ##### Optional: Setting custom Ingress controller annotations
@@ -203,11 +203,11 @@ After installation the TLS certificates may be removed.
     - `uaa_url`
     - `ingress_annotations`
 
-    Additionally, the it will also remove the need to provide values to the following credentials:
+    Additionally, the one will not need to provide values to the following credentials in `credentials.yml`:
     - `tls_cert`
     - `tls_key`
 
-    Replace the values of the `source.path` properties with `""` but do not remove these fields from the file.
+    Replace the values of the `source.path` properties for these properties with `""` but do not remove them from the file. Removing them will fail the install.
 
    **Note** Some images will be pushed again to the image registry because during installation the CA Certificate provided
    will be added to the list of the available CA on these images. To do this, the parameters file or duffle install command (in case one would like to avoid using the `parameters.json`) must be provided
