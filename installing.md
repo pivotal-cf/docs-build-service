@@ -81,6 +81,8 @@ configured. To configure this client we recommend using `uaac` tool
 
 You need to get or create TLS certificates for the Pivotal Build Service Domain that will be used in the [Install Pivotal Build Service step](#install-pivotal-build-service). These certificates may be self signed.
 
+**Note:** When using a self-signed certificate, you must use the `--skip-ssl-validation` flag in conjuction with `pb`
+
 When you have the `.crt` and `.key` files, note the paths to these files.
 Pass the paths to these files into the `credentials.yml` described in the following steps.
 
