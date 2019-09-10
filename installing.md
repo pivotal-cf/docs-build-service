@@ -189,7 +189,7 @@ After installation the TLS certificates may be removed.
     ```
 
    **Note** Some images will be pushed again to the image registry because during installation the CA Certificate provided
-   will be added to the list of the available CA on these images. To do this, the duffle command must be provided
+   will be added to the list of the available CA on these images. To do this, the parameters file or duffle install command (in case one would like to avoid using the `parameters.json`) must be provided
    with the credentials for the image registry
 
 1) Relocate the images from the extracted bundle into an internal Image Registry
