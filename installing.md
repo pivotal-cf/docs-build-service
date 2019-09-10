@@ -180,7 +180,7 @@ After installation the TLS certificates may be removed.
    - `ingress_annotations` this will set ingress annotations (see the "Optional: Setting custom Ingress controller annotations" step below)
    - `replica_count` this will define the number of build service instances running. It defaults to 1.
    - `no_gateway` this will install only [kpack](https://github.com/pivotal/kpack), the Build Service CRDs and controllers. This allows one to interact with Build Service via `kubectl` ONLY.
-   (see the "Optional: S KPACK only Install" step below)
+   (see the "Optional: KPACK only Install" step below)
 
     ##### Optional: Setting custom Ingress controller annotations
     If you would like to use an ingress controller other than NGINX or you would like to pass additional annotations
