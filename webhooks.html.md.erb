@@ -5,70 +5,71 @@ owner: Build Service Team
 
 <strong><%= modified_date %></strong>
 
-The Build Service polls the image registry to know when buildpacks have been updated. This allows the build service to
-to rebuild images when updated buildpacks are available.
+This topic describes how to set up builder webhooks for Pivotal Build Service. 
 
-Webhooks can be used instead of polling. This can be used to avoiding the polling delay when a builder has been updated.
+By default, Build Service polls its image registry to know when buildpacks have been udpated for a builder image. This allows the Build Service to rebuild your images when updated buildpacks are available. 
 
-## <a id='supported-image-registries'></a> Supported image registries
+You may want to use webhooks instead of relying on the default polling behavior. Using webhooks avoids the polling delay when a builder image has been updated with new buildpacks.
 
-### Artifactory
+## <a id='supported-image-registries'></a> Supported Image Registries
 
-Follow the installation instructions for the [Artifactory Webhook Plugin](https://github.com/jfrog/artifactory-user-plugins/tree/master/webhook).
+You can set up builder webhooks for any of image registries in this section. 
 
-The plugin should be configured to send `docker.tagCreated` events to the <BUILD-SERVICE-API>/v1/artifactory/webhook endpoint.
+### <a id='artifactory'></a> Artifactory
 
-An example arfifactory webhook configuration is provided below:
+To set up builder webhooks for Artifactory:
 
-```yaml
-{
-  "webhooks": {
-    "ci": {
-      "url": "<BUILD-SERVICE-API>/v1/artifactory/webhook",
-      "events": [
-        "docker.tagCreated"
-      ],
-      "repositories": ["<ARTIFACTORY-REPOSITORY>"],
-      "format": "default"
-    },
+<p class="note"><strong>Note</strong>: The artifactory repository must be the same one used when you ran <code>duffle relocate</code> during the Build Service installation.</p>
+
+
+1. Follow the installation instructions for the [Artifactory Webhook Plugin](https://github.com/jfrog/artifactory-user-plugins/tree/master/webhook).
+
+1. Configure the plugin to send `docker.tagCreated` events to the `BUILD-SERVICE-API/v1/artifactory/webhook` endpoint. See the following example configuration:
+
+  ```yaml
+  {
+    "webhooks": {
+      "ci": {
+        "url": "BUILD-SERVICE-API/v1/artifactory/webhook",
+        "events": [
+          "docker.tagCreated"
+        ],
+        "repositories": ["ARTIFACTORY-REPOSITORY"],
+        "format": "default"
+      },
+    }
   }
-}
-```
-
-<p class="note"><strong>Note</strong>: Make sure the configured artifactory repository is the the one used in <code>duffle relocate</code>.</p>
-
+  ```
 ### <a id='docker-notifications'></a>Docker Registry Notifications
 
-If you are using the [docker registry](https://docs.docker.com/registry/) you can setup registry notifications with the build service.
+To set up notifications for [Docker registry](https://docs.docker.com/registry/):
 
-Follow the [configuration instructions for docker notifications](https://docs.docker.com/registry/notifications/).
+<p class="note"><strong>Note</strong>: The Docker registry must be the same one used when you ran <code>duffle relocate</code> during the Build Service installation.</p>
 
-You will need to add a notification endpoint to your registry configuration. An example is provided below:
+1. Follow the [configuration instructions for docker notifications](https://docs.docker.com/registry/notifications/).
 
-```yaml
- notifications:
-    endpoints:
-      - name: build-service
-        url: <BUILD-SERVICE-API>/v1/docker/notification
-        timeout: 5s
-        threshold: 5
-        backoff: 10s
-```
-<p class="note"><strong>Note</strong>: Make sure the configured docker registry is the one used in <code>duffle relocate</code>.</p>
+1. Add a notification endpoint to your registry configuration. See the following example:
+
+  ```yaml
+   notifications:
+      endpoints:
+        - name: build-service
+          url: BUILD-SERVICE-API/v1/docker/notification
+          timeout: 5s
+          threshold: 5
+          backoff: 10s
+  ```
 
 
 ### <a id='dockerhub'></a>Dockerhub
 
-If you are using the [Docker Hub](https://hub.docker.com/) you can setup webhooks with the build service.
+To set up builder webhooks for [Docker Hub](https://hub.docker.com/):
 
-Follow the [Dockerhub Hub Webhook Instructions](https://docs.docker.com/registry/notifications/).
+1. Follow the [Dockerhub Hub Webhook Instructions](https://docs.docker.com/docker-hub/webhooks/) to add a webhook for the relocated builder image. 
+  * The name of this image can be found with:
 
-You will need to add a webhook for the relocated builder image. The name of this image can be easily found with:
-
-```bash
-kubectl get builder build-service-builder -n build-service-builds -o jsonpath='{.spec.image}'
-```
-
-The webhook should be configured to use the <BUILD-SERVICE-API>/v1/docker/webhook endpoint.
-
-<p class="note warning"><strong>Warning</strong>: Docker Hub requires the build service to use a CA-Signed Certificate.</p>
+    ```bash
+    kubectl get builder build-service-builder -n build-service-builds -o jsonpath='{.spec.image}'
+    ```
+  * The webhook should be configured to use the `BUILD-SERVICE-API/v1/docker/webhook` endpoint.
+    <p class="note warning"><strong>Warning</strong>: Docker Hub requires the build service to use a CA-Signed Certificate.</p>
