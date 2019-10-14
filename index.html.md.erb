@@ -23,12 +23,12 @@ For more information about the Cloud Native Buildpacks project, see [Cloud Nativ
 For more information about modern container standards, see [Open Container Initiative](https://github.com/opencontainers/image-spec/blob/master/spec.md) in Github.
 
 
-## <a id='image-and-team'></a> Image and Team Configurations
+## <a id='image-and-project'></a> Image and Project Configurations
 
 Build Service reduces operational overhead and improves security by automating builds of container images for apps in your environment. 
 
-To organize container image builds, Build Service defines `image` and `team` entities, as described below.
-To define and modify configurations for `image` and `team` entities, you can use the Build Service CLI, `pb`.
+To organize container image builds, Build Service defines `image` and `project` entities, as described below.
+To define and modify configurations for `image` and `project` entities, you can use the Build Service CLI, `pb`.
 
 ### <a id='image-config'></a> Build Service Images
 
@@ -36,7 +36,7 @@ Build Service `image` configurations are defined by `.yml` files that include:
 
 - The registry location of a built container image
 - Source code for the image
-- The team that owns the image
+- The project that owns the image
 - Other configuration values, as described in [Image Configurations](./using.html#create-image)
 
 If you change a field in an image configuration file, for example by updating a buildpack version or source branch in git,
@@ -45,25 +45,25 @@ Build Service rebuilds the container image based on its new configuration.
 
 For more information about managing images in Build Service, see [Manage Images](./using.html#manage-images).
 
-### <a id='team-config'></a> Build Service Teams
+### <a id='project-config'></a> Build Service Projects
 
-Build Service `team` configurations include:
+Build Service `project` configurations include:
 
 - The development team that owns container images, as managed by a [UAA server](https://docs.cloudfoundry.org/concepts/architecture/uaa.html)
-- Container registries for the team's images, and the registry credentials to access them
-- A `builder` file that defines the languages, buildpack versions, plugins, and other build configurations that the team uses
+- Container registries for the project's images, and the registry credentials to access them
+- A `builder` file that defines the languages, buildpack versions, plugins, and other build configurations that the project uses
 
-Build Service teams have the following constraints:
+Build Service projects have the following constraints:
 
-* All members of a team are also team `owners` and are able to create new images, manage secrets, and add or remove other users from the team.
-* Only the users that belong to a team are able to create images against the team and check the builds against an image.
-* To add a user to a team, the user email address must exist in UAA.
-* You cannot use a previously existing UAA user group as a Build Service team. You need to add users individually with `pb team` commands.
-* Each team must have at least one team member.
+* All members of a project are also project `owners` and are able to create new images, manage secrets, and add or remove other users from the project.
+* Only the users that belong to a project are able to create images against the project and check the builds against an image.
+* To add a user to a project, the user email address must exist in UAA.
+* You cannot use a previously existing UAA user group as a Build Service project. You need to add users individually with `pb project` commands.
+* Each project must have at least one project member.
 
-For more information about creating and managing teams in Build Service, see [Manage Teams](./using.html#manage-teams).
+For more information about creating and managing projects in Build Service, see [Manage Projects](./using.html#manage-projects).
 
 
 ## <a id='troubleshooting'></a>Troubleshooting
 
-For troubleshooting Build Service, contact the Build Service team. 
+For troubleshooting Build Service, contact the Build Service project.

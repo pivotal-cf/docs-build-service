@@ -3,7 +3,7 @@ title: Using the Pivotal Build Service CLI
 owner: Build Service Team
 ---
 
-This topic describes how to use the Pivotal Build Service CLI, `pb`, to log in to Build Service and manage images, teams, and builds.
+This topic describes how to use the Pivotal Build Service CLI, `pb`, to log in to Build Service and manage images, projects, and builds.
 
 
 ## <a id='configure-cli'></a> Log In to Build Service
@@ -38,57 +38,57 @@ To target your Build Service installation and log in:
     You can also pass your username and password to Build Service by specifying the environment variables `BUILD_SERVICE_USERNAME` and `BUILD_SERVICE_PASSWORD`. The CLI defaults to using them if they exist in the environment.
 
 
-## <a id='manage-teams'></a> Manage Teams
+## <a id='manage-projects'></a> Manage Projects
 
-The following procedures describe how to manage teams and team members with the `pb` CLI.
+The following procedures describe how to manage projects and project members with the `pb` CLI.
 
-A `team` is a Build Service entity that uses UAA to provide user access control to images, image configurations, and image builders. For more information, see [Build Service Teams](./index.html#team-config).
+A `project` is a Build Service entity that uses UAA to provide user access control to images, image configurations, and image builders. For more information, see [Build Service Projects](./index.html#project-config).
 
-### <a id='create-team'></a> Create a Team
+### <a id='create-project'></a> Create a Project
 
-To create a new team:
-
-1. Run:
-
-    ```
-    pb team create TEAM-NAME
-    ```
-    Where `TEAM-NAME` is a unique name for the team.  
-
-### <a id='manage-team-members'></a> Add and Remove Team Members
-
-All members of a team can add and remove team members. 
-
-#### Add Members to a Team
-
-To add members to a team:
+To create a new project:
 
 1. Run:
 
     ```
-    pb team user add UAA-USER-EMAIL -t TEAM-NAME
+    pb project create PROJECT-NAME
+    ```
+    Where `PROJECT-NAME` is a unique name for the project.
+
+### <a id='manage-project-members'></a> Add and Remove Project Members
+
+All members of a project can add and remove project members.
+
+#### Add Members to a Project
+
+To add members to a project:
+
+1. Run:
+
+    ```
+    pb project user add UAA-USERNAME -t PROJECT-NAME
     ```
 
     Where:
-    * `UAA-USER-EMAIL` is the email address for the user. The user email address must be in UAA to add the user to a team.
-    * `TEAM-NAME` is the name of the team where the user is added.
+    * `UAA-USERNAME` is the username for the user.
+    * `PROJECT-NAME` is the name of the project where the user is added.
 
-#### Remove Members of a Team
+#### Remove Members of a Project
 
-To remove members of a team:
+To remove members of a project:
 
 1. Run:
 
     ```
-    pb team user remove UAA-USER-EMAIL -t TEAM-NAME
+    pb project user remove UAA-USERNAME -t PROJECT-NAME
     ```
     Where:
-    * `UAA-USER-EMAIL`: Is the email address for the user.
-    * `TEAM-NAME` is the name of the user's team.
+    * `UAA-USERNAME`: Is the username address for the user.
+    * `PROJECT-NAME` is the name of the user's project.
 
-### <a id='manage-image-registries'></a> Manage Image Registries for a Team
+### <a id='manage-image-registries'></a> Manage Image Registries for a Project
 
-For a team to use an image registry in Build Service, you must associate an image registry and the image registry credentials with the team. If the source code for the image is saved in a repository, you must also associate the Git credentials with the team.
+For a project to use an image registry in Build Service, you must associate an image registry and the image registry credentials with the project. If the source code for the image is saved in a repository, you must also associate the Git credentials with the project.
 
 Build Service uses these credentials to deliver container image builds to the specified registry. 
 
@@ -101,20 +101,20 @@ Build Service supports the following image registries:
 * Harbor
 * Artifactory
 
-#### <a id='add-image'></a> Associate an Image Registry with a Team
+#### <a id='add-image'></a> Associate an Image Registry with a Project
 
-To associate an image registry and image registry credentials with a team:
+To associate an image registry and image registry credentials with a project:
 
 1. Create a YAML file with the image registry location and credentials. Enter the following variables:
 
     ```
-    team: YOUR-TEAM-NAME
+    project: YOUR-PROJECT-NAME
     registry: REGISTRY-DOMAIN
     username: REGISTRY-USERNAME
     password: REGISTRY-PASSWORD
     ```
     Where:
-    * `YOUR-TEAM-NAME` is the name of the team that owns the image.
+    * `YOUR-PROJECT-NAME` is the name of the project that owns the image.
     * `REGISTRY-DOMAIN` is the domain for the registry. Use the following guidance to complete the `registry` field, depending on your image registry:
       * **Docker Hub**: Enter `index.docker.io`.  
       * **GCR**: Enter `gcr.io`.
@@ -131,11 +131,11 @@ To associate an image registry and image registry credentials with a team:
 
 #### <a id='change-registry-association'></a> Change Image Registry Association and Credentials
 
-To update the registry association and credentials for a team:
+To update the registry association and credentials for a project:
 
 1. Modify the variables in your image registry YAML file.
-    * To change the team the registry is associated with, modify `team`.
-    * To change the registry associated with the team, modify `registry`.
+    * To change the project the registry is associated with, modify `project`.
+    * To change the registry associated with the project, modify `registry`.
     * To change the credentials for the registry, modify `username` and `password`.
 
 1. Apply the image registry file by running:
@@ -145,33 +145,33 @@ To update the registry association and credentials for a team:
     ```
     Where `PATH-TO-REGISTRY-CREDENTIALS-YAML` is the local path to the YAML file that you created in the previous section.
 
-### <a id='manage-git-repos'></a> Manage Git Repositories for a Team
+### <a id='manage-git-repos'></a> Manage Git Repositories for a Project
 
-To allow Build Service to execute builds against app source code in a private Git repository, you must add the Git username and password to the team that manages the source code.
+To allow Build Service to execute builds against app source code in a private Git repository, you must add the Git username and password to the project that manages the source code.
 
-As you apply YAML files that associate a Git repository and Git repository credentials with a team, the `pb` CLI provides feedback indicating whether or not the commands succeeded.
+As you apply YAML files that associate a Git repository and Git repository credentials with a project, the `pb` CLI provides feedback indicating whether or not the commands succeeded.
 
-#### <a id='add-git-credentials'></a> Associate a Git Repository with a Team
+#### <a id='add-git-credentials'></a> Associate a Git Repository with a Project
 
-To associate a Git repository and Git repository credentials with a team:
+To associate a Git repository and Git repository credentials with a project:
 
 <p class='note'><strong>Note:</strong> If your YAML file utilizes a username and password, only the first build succeeds, while subsequent rebuilds do not trigger. To avoid this, Pivotal recommends you use an access token. For more information, see <a href="https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line">Creating a personal access token for the command line</a> in the GitHub documentation.</p>
 
 1. Create a YAML file with the Git repository location and credentials. Enter the following variables:
 
     ```
-    team: YOUR-TEAM-NAME
+    project: YOUR-PROJECT-NAME
     repository: GIT-REPOSITORY
     username: GIT-USERNAME
     password: GIT-PASSWORD/TOKEN
     ```
     Where:
-    * `YOUR-TEAM-NAME` is the name of the team that owns the image.
+    * `YOUR-PROJECT-NAME` is the name of the project that owns the image.
     * `GIT-REPOSITORY` is the URL of the GitHub repository.
     * `GIT-USERNAME` is the Git username used to access the GitHub repository.
     * `GIT-PASSWORD/TOKEN` is the password or access token used to access the GitHub repository.
 
-1. Apply the Git repository file to the team by running:
+1. Apply the Git repository file to the project by running:
     
     ```
     pb secrets git apply -f PATH-TO-REPOSITORY-CREDENTIALS-YAML-FILE
@@ -180,11 +180,11 @@ To associate a Git repository and Git repository credentials with a team:
 
 #### <a id='change-repo-association'></a> Change Git Repository Association and Credentials
 
-To update the Git repository and credentials for a team:
+To update the Git repository and credentials for a project:
 
 1. Modify the variables in your Git repository YAML file.
-    * To change the team the Git repository is associated with, modify `team`.
-    * To change the Git repository associated with the team, modify `repository`.
+    * To change the project the Git repository is associated with, modify `project`.
+    * To change the Git repository associated with the project, modify `repository`.
     * To change the credentials for the Git repository, modify `username` and `password`.
 
 1. Apply the image registry file by running:
@@ -194,46 +194,46 @@ To update the Git repository and credentials for a team:
     ```
     Where `PATH-TO-REPOSITORY-CREDENTIALS-YAML-FILE` is the local path to the YAML file that you created in the previous step.
 
-#### <a id='delete-git-creds'></a> Delete Git Repository and Credentials from a Team
+#### <a id='delete-git-creds'></a> Delete Git Repository and Credentials from a Project
 
-To delete a Git repository from a team:
-
-1. Run:
-
-    ```
-    pb secrets registry delete REGISTRY-DOMAIN -t TEAM-NAME
-    ```
-    Where `TEAM-NAME` is the name of the team.
-
-To delete Git credentials from a team:
+To delete a Git repository from a project:
 
 1. Run:
 
     ```
-    pb secrets git delete github.com -t TEAM-NAME
+    pb secrets registry delete REGISTRY-DOMAIN -t PROJECT-NAME
     ```
+    Where `PROJECT-NAME` is the name of the project.
 
-### <a id='delete-team'></a> Delete a Team
-
-This procedure describes how to delete a team using the `pb` CLI.
-
-<p class="note warning"><strong>Warning:</strong> If you delete a team, all registry credentials and Git secrets associated with that team are also deleted.</p>
-
-To delete a team:
-
-1. Delete any images on Build Service owned by the team. You cannot delete a team if the team owns any images on Build Service.
+To delete Git credentials from a project:
 
 1. Run:
 
     ```
-    pb team delete TEAM-NAME
+    pb secrets git delete github.com -t PROJECT-NAME
     ```
-    Where `TEAM-NAME` is the name of the team to delete.
+
+### <a id='delete-project'></a> Delete a Project
+
+This procedure describes how to delete a project using the `pb` CLI.
+
+<p class="note warning"><strong>Warning:</strong> If you delete a project, all registry credentials and Git secrets associated with that project are also deleted.</p>
+
+To delete a project:
+
+1. Delete any images on Build Service owned by the project. You cannot delete a project if the project owns any images on Build Service.
+
+1. Run:
+
+    ```
+    pb project delete PROJECT-NAME
+    ```
+    Where `PROJECT-NAME` is the name of the project to delete.
 
 1. View the following success message in the CLI output:
 
     ```
-    Successfully deleted team TEAM-NAME
+    Successfully deleted project PROJECT-NAME
     ```
 
 
@@ -245,7 +245,7 @@ The following procedures describe how to create and manage images in Build Servi
 
 To create an image, you must create an image configuration YAML that includes the following properties:
 
-* `team`: The team in Build Service that owns the image. You can only create images for teams of which you are a member. 
+* `project`: The project in Build Service that owns the image. You can only create images for projects of which you are a member.
 
 * `source`: Defines the Git location of the code that the image is built against. The `revision` can be either a `branch`, `tag` or a commit `sha`. When you target the image against a branch, Build Service triggers a build for every new commit.
 
@@ -253,7 +253,7 @@ To create an image, you must create an image configuration YAML that includes th
   - Includes an `env` property that supplies values to the build by setting environment variables.
   - Each `env` environment variable is an object with a `name` and a `value`, for example `BP_JAVA_VERSION` and `8.*`.
 
-* `image`: Defines the destination registry of the builds for the image. You must specify the credentials for the target registry in the `registries` section of the team configuration. For more information, see [Manage Image Registries for a Team](#manage-image-registries). The value for `image` must match the domain of one of the registries that you provided in the team configuration. Build Service uses the value of `image.tag` to refer to the image after it is created. If you update the image `tag`, Build Service creates a new image.
+* `image`: Defines the destination registry of the builds for the image. You must specify the credentials for the target registry in the `registries` section of the project configuration. For more information, see [Manage Image Registries for a Project](#manage-image-registries). The value for `image` must match the domain of one of the registries that you provided in the project configuration. Build Service uses the value of `image.tag` to refer to the image after it is created. If you update the image `tag`, Build Service creates a new image.
 
 For more information about creating and applying image configurations for apps with source code in GitHub or source code saved locally, see [Apply Image Configurations](#apply-image).
 
@@ -270,7 +270,7 @@ To apply an image configuration to Build Service:
 1. Create an image configuration YAML file. For example:
 
     ```
-    team: TEAM-NAME
+    project: PROJECT-NAME
     source:
       git:
         url: https://github.com/PATH-TO-EXAMPLE-APP
@@ -284,7 +284,7 @@ To apply an image configuration to Build Service:
     ```
 
     Where:
-      * `TEAM-NAME` is the name of the team that owns the new image.
+      * `PROJECT-NAME` is the name of the project that owns the new image.
       * `PATH-TO-EXAMPLE-APP` is the path to an app on GitHub.
       * `ENV-NAME` is the name of your build environment.
       * `ENV-VALUE` is the value of your build environment.
@@ -309,7 +309,7 @@ To apply an image configuration that uses local source code:
 1. Create an image configuration file that has no Git properties. For example:
 
     ```
-    team: TEAM-NAME
+    project: PROJECT-NAME
     build:
       env:
       - name: ENV-NAME
@@ -318,7 +318,7 @@ To apply an image configuration that uses local source code:
       tag: REGISTRY-DOMAIN/PATH-TO-EXAMPLE-APP
     ```
     Where:
-    * `TEAM-NAME` is the name of the team that owns the new image.
+    * `PROJECT-NAME` is the name of the project that owns the new image.
     * `PATH-TO-EXAMPLE-APP` is the local path to an app.
     * `ENV-NAME` is the name of your build environment.
     * `ENV-VALUE` is the value of your build environment.
