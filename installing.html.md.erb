@@ -19,7 +19,7 @@ The procedures in this topic describe how to do a standard Build Service install
 
 Before you install Build Service, you must do the following:
 
-- Install Pivotal Container Service (PKS). See [Installing Enterprise PKS](https://docs.pivotal.io/pks/1-5/installing.html).
+- Install Pivotal Container Service (PKS) 1.5 or newer. See [Installing Enterprise PKS](https://docs.pivotal.io/pks/1-5/installing.html).
 
 - Install Ruby. Ruby is required to create a UAA client.
 
@@ -34,6 +34,22 @@ Before you install Build Service, you must do the following:
 
 - Download the Build Service Bundle from PivNet. See [Pivotal Build Service](https://network.pivotal.io/products/build-service/). 
 
+
+## <a id='enable-uaa-oidc'></a> Enable UAA as OIDC provider for PKS
+
+The authorization on Build Service is done using Rbac and integrating the authentication with PKS UAA.
+
+To enable this authorization flow the PKS UAA need to be enabled as a OIDC provider and these are the steps:
+
+1. Access opsman an enter the PKS tile configuration
+
+1. In the `Settings` tab press the `UAA` link
+
+1. Find the option `Configure created clusters to use UAA as the OIDC provider.` and select `Enabled`
+
+1. Ensure the values from `UAA OIDC Groups Prefix` and `UAA OIDC Username Prefix` are the same and save it to use on the duffle installation step
+
+1. Save the changes and Review Pending Changes and Apply them to the clusters
 
 ## <a id='configure'></a> Configure Build Service
 
@@ -135,6 +151,7 @@ To define custom parameters and annotations for Build Service:
     - `http_proxy`: The http proxy to be used for network traffic.
     - `https_proxy`: The https proxy to be used for network traffic.
     - `no_proxy`: A comma separated list of host names that should not use a proxy.
+    - `uaa_username_prefix`: Value retrieved from [Enable UAA as OIDC provider for PKS](#enable-uaa-oidc). The default value is `oidc:`
 
     <p class="note warning"><strong>Warning:</strong> If you set <code>no_gateway</code> to <code>true</code>, you can only interact with Build Service through <code>kubectl</code>. For more information, see <a href="#kpack-only">(Optional) Install Build Service as a kpack-Only Installation</a>.</p>
     
@@ -203,6 +220,8 @@ The following procedure describes how to do a standard Build Service installatio
     - `REGISTRY-USERNAME` is the username to access the registry. `gcr.io` expects `_json_key` as the username when using the `JSON Key File` auth.
     - `REGISTRY-PASSWORD` is the password to access the registry.  
     - `UAA-URL` is the URL to access UAA.
+
+    *Note:* If on the step [Enable UAA as OIDC provider for PKS](#enable-uaa-oidc) the values saved were different than `oidc:` please add the flag --uaa_username_prefix="VALUE-SAVED" to the duffle command
 
 ### <a id='kpack-only'></a> Install Build Service as a kpack-Only Installation 
 
