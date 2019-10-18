@@ -19,7 +19,7 @@ The procedures in this topic describe how to do a standard Build Service install
 
 Before you install Build Service, you must do the following:
 
-- Install Pivotal Container Service (PKS). See [Installing Enterprise PKS](https://docs.pivotal.io/pks/1-5/installing.html).
+- Install Pivotal Container Service (PKS) 1.5 or newer. See [Installing Enterprise PKS](https://docs.pivotal.io/pks/1-5/installing.html).
 
 - Install Ruby. Ruby is required to create a UAA client.
 
@@ -34,6 +34,22 @@ Before you install Build Service, you must do the following:
 
 - Download the Build Service Bundle from PivNet. See [Pivotal Build Service](https://network.pivotal.io/products/build-service/). 
 
+
+## <a id='enable-uaa-oidc'></a> Enable UAA as OIDC provider for PKS
+
+The authorization on Build Service is done using Rbac and integrating the authentication with PKS UAA.
+
+To enable this authorization flow the PKS UAA need to be enabled as a OIDC provider and these are the steps:
+
+1. Access opsman an enter the PKS tile configuration
+
+1. In the `Settings` tab press the `UAA` link
+
+1. Find the option `Configure created clusters to use UAA as the OIDC provider.` and select `Enabled`
+
+1. Ensure the values from `UAA OIDC Groups Prefix` and `UAA OIDC Username Prefix` are the same and save it to use on the duffle installation step
+
+1. Save the changes and Review Pending Changes and Apply them to the clusters
 
 ## <a id='configure'></a> Configure Build Service
 
@@ -59,44 +75,9 @@ To retrieve the PKS cluster credentials:
     ```
     Where `CLUSTER-NAME` is the name of the PKS cluster where Build Service runs.
 
-### <a id='uaa-client-creation'></a> Install a UAA Client
+### <a id='uaa-client-creation'></a> User Management
 
-UAA authenticates Build Service users. To allow Build Service to interact with UAA, you must install and configure a UAA client.
-
-To install a UAA client for Build Service:
-
-1. Install the `uaac` client by running:
-
-    ```
-    gem install cf-uaac
-    ```
-    <p class="note"><strong>Note</strong>: If you are not using <code>rbenv</code> or <code>rvm</code>, you may need to run <code>sudo gem install cf-uaac</code> to install <code>uaac</code>.</p>
-
-1. Target the UAA that you use to authenticate Build Service users by running:
-
-    ```
-    uaac target UAA-URL
-    ```
-    Where `UAA-URL` is the URL for the UAA that is used to authenticate users for Build Service.
-
-    <p class="note"><strong>Note:</strong> If the UAA uses a self-signed certificate, add the <code>--skip-ssl-validation</code> flag to the command.</p>
-
-1. In Ops Manager, go to the **UAA credentials** section. Record the password for the admin user. 
-
-1. Login as the admin user with the password you recorded in the previous step by running:
-
-    ```
-    uaac token client get admin -s ADMIN-PASSWORD
-    ```
-    Where `ADMIN-PASSWORD` is the password for the UAA admin user. 
-
-1. Associate the UAA client with Build Service:
-    <p class="note warning"><strong>Warning:</strong> Run the following command exactly as it appears below. The <code>--secret</code> property must be an empty string.</p>
-
-    ```
-    uaac client add pivotal_build_service_cli --secret="" --authorized_grant_types="password"
-    uaac client update pivotal_build_service_cli --scope="openid,scim.read" --authorized_grant_types="password,refresh_token,client_credentials" --authorities="scim.read" --access_token_validity 600 --refresh_token_validity 21600
-    ```
+Build Service uses PKS Provided UAA to authenticate the Users. At [this step](#users-create) more information on how to create users is provided
 
 ### <a id='configure-tls'></a> Configure TLS Certificate
 
@@ -170,6 +151,7 @@ To define custom parameters and annotations for Build Service:
     - `http_proxy`: The http proxy to be used for network traffic.
     - `https_proxy`: The https proxy to be used for network traffic.
     - `no_proxy`: A comma separated list of host names that should not use a proxy.
+    - `uaa_username_prefix`: Value retrieved from [Enable UAA as OIDC provider for PKS](#enable-uaa-oidc). The default value is `oidc:`
 
     <p class="note warning"><strong>Warning:</strong> If you set <code>no_gateway</code> to <code>true</code>, you can only interact with Build Service through <code>kubectl</code>. For more information, see <a href="#kpack-only">(Optional) Install Build Service as a kpack-Only Installation</a>.</p>
     
@@ -239,6 +221,8 @@ The following procedure describes how to do a standard Build Service installatio
     - `REGISTRY-PASSWORD` is the password to access the registry.  
     - `UAA-URL` is the URL to access UAA.
 
+    *Note:* If on the step [Enable UAA as OIDC provider for PKS](#enable-uaa-oidc) the values saved were different than `oidc:` please add the flag --uaa_username_prefix="VALUE-SAVED" to the duffle command
+
 ### <a id='kpack-only'></a> Install Build Service as a kpack-Only Installation 
 
 This procedure describes how to install Build Service as a kpack-only installation.
@@ -292,14 +276,26 @@ To access Build Service, configure one or more users on UAA using `uaac`.
 
 To create a UAA user for Build Service:
 
-1. Install `uaac`. See [Install a UAA Client](#uaa-client-creation).
+1. Install `uaac`.
+   ```
+   gem install cf-uaac
+   ```
 
 1. Target the UAA that you use to authenticate Build Service users by running:
 
     ```
     uaac target UAA-URL --skip-ssl-validation
     ```
-    Where `UAA-URL` is the URL of the UAA that authenticates Build Service users. 
+    Where `UAA-URL` is the URL of the UAA that authenticates Build Service users.
+
+1. In Ops Manager, go to the **UAA credentials** section. Record the password for the admin user.
+
+1. Login as the admin user with the password you recorded in the previous step by running:
+
+   ```
+   uaac token client get admin -s ADMIN-PASSWORD
+   ```
+   Where `ADMIN-PASSWORD` is the password for the UAA admin user.
 
 1. Create a user by running:
 
