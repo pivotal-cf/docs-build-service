@@ -3,6 +3,12 @@ title: Using Tanzu Build Service with Projects
 owner: Build Service Team
 ---
 
+Given that Tanzu Build Service supports functionality most customers would likely want to restrict to only certain users, we encourage utilization of RBAC as a best practice if Tanzu Build Service is to be broadly deployed for usage by many users.
+
+Tanzu Build Service does not ship with a prescribed RBAC method given the wide variety of customer preference for managing these policies. But the "Projects Operator" is an open source solution that can be used to enforce RBAC policy in Kubernetes namespaces.
+
+# <a id='projects-operator'></a> Projects Operator for Kubernetes
+
 Projects Operator for Kubernetes -> (Need a link) is a separate open source project from VMWare that works with Tanzu Build Service.
 A `project` is a resource that simplifies kubernetes namespaces and RBAC to provide multi-tenancy for images, secrets, and builders.
 
@@ -102,5 +108,5 @@ To list members of a project, simply get the status of the project resource.
 To delete a project:
 
     kubectl delete project my-project
-    
+
 Deleting a project will clean up and delete the corresponding namespace.
