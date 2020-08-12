@@ -364,6 +364,67 @@ status:
 
 If further debugging is required, inspect the image's latest Build status discussed in [Viewing Build Details for an Image](#build-status).
 
+## <a id='service-bindings'></a> Image Service Bindings
+
+Tanzu Build Service supports application service bindings as described in the Cloud Native Buildpack [Service Bindings specification](https://github.com/buildpacks/spec/blob/main/extensions/bindings.md).
+
+The `kp` CLI does not currently support creating service bindings, you should use `kubectl`.
+
+### <a id='service-bindings'></a> Creating an Image with Service Bindings
+
+To create a service binding in your application image, you must create the following:
+
+* A Kubernetes Secret containing the service binding data
+  * The Secret `stringData` field must contain key-value pairs of `<binding file name>:<binding data>`. For each key-value pair, a file will be created that is accessible during build.
+* A Kubernetes ConfigMap containing the metadata for the service binding
+  * The ConfigMap must have the fields `data.kind` and `data.provider` populated. The buildpacks used to build the image will handle the service bindings based on these fields.
+* A Tanzu Build Service Image referencing that Secret and ConfigMap in the `spec.build.bindings` field.
+
+<p class='note'><strong>Note:</strong> Check the desired buildpack documentation for details on the service bindings it supports. To find buildpack docs, see [Store Status](managing-stores.html#show-buildpackages-in-store).</p>
+
+The following is an example that can be used with `kubectl apply`. It creates a `settings.xml` service binding for a maven app.
+
+Example:
+
+```
+apiVersion: kpack.io/v1alpha1
+kind: Image
+metadata:
+  name: sample-binding-with-secret
+spec:
+  tag: my-registry.com/repo
+  builder:
+    kind: ClusterBuilder
+    name: default
+  source:
+    git:
+      url: https://github.com/buildpack/sample-java-app.git
+      revision: 0eccc6c2f01d9f055087ebbf03526ed0623e014a
+  build:
+    bindings:
+    - name: settings
+      secretRef:
+        name: settings-xml
+      metadataRef:
+        name: settings-binding-metadata
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: settings-xml
+type: Opaque
+stringData:
+  settings.xml: <settings>...</settings>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: settings-binding-metadata
+data:
+  kind: maven
+  provider: sample
+```
+
 # <a id='builds'></a> Builds
 
 The procedures in this section describe how to view information and logs for image builds using the `kp` CLI.
