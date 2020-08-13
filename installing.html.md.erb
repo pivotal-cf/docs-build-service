@@ -16,7 +16,7 @@ The installation instructions are divided between the PKS installation, which us
 
 Before you install Build Service, you must:
 
-* Ensure your Kubernetes cluster is configured with `PersistentVolumes`. Configure the cache size per image to 2&nbsp;GB. Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds. For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation.
+* Ensure your Kubernetes cluster is configured with `PersistentVolumes`. Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds. For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation.
 
 * Download three k14s CLIs for your operating system. These can be found on their respective Tanzu Network pages:
   - [kapp](https://network.pivotal.io/products/kapp/)
@@ -75,6 +75,7 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
    for example, <code>IMAGE-REGISTRY/build-service-imgs</code>.</p>
 
 For example:
+
 * Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-repo`
 * GCR `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
 * Artifactory `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
@@ -95,6 +96,7 @@ ytt -f /tmp/values.yaml \
 ```
 
 Where:
+
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
@@ -131,6 +133,7 @@ ytt -f /tmp/values.yaml \
 ```
 
 Where:
+
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
@@ -168,6 +171,7 @@ pks get-kubeconfig CLUSTER-NAME -a API-URI -u USERNAME -p PASSWORD --ca-cert PAT
 ```
 
 Where:
+
 * `API-URI` is the PKS API server URI.
 * `USERNAME` is name of your cluster admin.
 * `PASSWORD` is the cluster admin password.
@@ -215,6 +219,7 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
    for example, <code>IMAGE-REGISTRY/build-service-imgs</code>.</p>
 
 For example:
+
 * Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-repo`
 * GCR `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
 * Artifactory `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
@@ -235,6 +240,7 @@ ytt -f /tmp/values.yaml \
 ```
 
 Where:
+
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
@@ -271,6 +277,7 @@ ytt -f /tmp/values.yaml \
 ```
 
 Where:
+
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
@@ -361,6 +368,7 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
    for example, <code>IMAGE-REGISTRY/build-service-imgs</code>.</p>
 
 For example:
+
 * Dockerhub `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository my-dockerhub-repo`
 * GCR `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
 * Artifactory `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
@@ -381,6 +389,7 @@ ytt -f /tmp/values.yaml \
 ```
 
 Where:
+
 * `IMAGE-REPOSITORY` is the image repository where stack images and store buildpackages will be relocated.
     <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
@@ -419,6 +428,7 @@ kbld unpackage -f descriptor-<version>.yml \
 ```
 
 Where:
+
 * `IMAGE-REPOSITORY` is the internal image repository where dependency images will be relocated.
 
 <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY`. This is done in the [Relocate Images to a Registry](#offline-relocate-images) step.</p>
