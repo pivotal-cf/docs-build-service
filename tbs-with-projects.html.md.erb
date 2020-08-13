@@ -1,114 +1,73 @@
 <p class='note'><strong>Note:</strong> Tanzu Build Service 1.0.0 is currently only available as a release candidate. These docs are a work-in-progress and may contain some inaccurate or missing info. The final documentation for this page will be available here when TBS is fully GA soon. </p>
 
 ---
-title: Using Tanzu Build Service with Projects
+title: RBAC in Tanzu Build Service
 owner: Build Service Team
 ---
 
 Given that Tanzu Build Service supports functionality most customers would likely want to restrict to only certain users, we encourage utilization of RBAC as a best practice if Tanzu Build Service is to be broadly deployed for usage by many users.
 
-Tanzu Build Service does not ship with a prescribed RBAC method given the wide variety of customer preference for managing these policies. But the "Projects Operator" is an open source solution that can be used to enforce RBAC policy in Kubernetes namespaces.
+# <a id='rbac'></a> RBAC Support in Tanzu Build Service
 
-# <a id='projects-operator'></a> Projects Operator for Kubernetes
+Tanzu Build Service is installed with 2 Kubernetes [ClusterRoles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) that can be used for RBAC for Build Service users and admins:
 
-Projects Operator for Kubernetes -> (Need a link) is a separate open source project from VMWare that works with Tanzu Build Service.
-A `project` is a resource that simplifies kubernetes namespaces and RBAC to provide multi-tenancy for images, secrets, and builders.
+* `build-service-user-role`
+* `build-service-admin-role`
 
-The following procedures describe how to manage projects and project members with Build Service.
+## <a id='user-role'></a> Build Service User Role
 
-## <a id='projects-operator-installation'></a> Installing Projects Operator for Kubernetes
+This should be used for users that will create Images and Builds.
 
-Tanzu Build Service installs a ClusterRole on the cluster named `build-service-user-role`. To allow Projects Operator to integrate with Build Service,
-provide the ClusterRole `build-service-user-role` as the `CLUSTER_ROLE_REF` to use during Projects Operator installation. 
-
-## <a id='create-project'></a> Creating a Project
-
-To create a new project:
-
-    kubectl create -f PROJECT-YAML
-
-Where `PROJECT-YAML` is a YAML file of the form:
+To view the configuration for this role:
 
 ```
-apiVersion: projects.vmware.com/v1alpha1
-kind: Project
+kubectl get clusterrole build-service-user-role -o yaml
+```
+
+To use this ClusterRole you should create a [RoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding) with an existing user.
+
+Example:
+
+```yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
 metadata:
-    name: my-project
-spec:
-   access:
-    - kind: User
-      name: user-1@company.org
-    - kind: User
-      name: user-2@company.org
-    - kind: Group
-      name: group-1@company.org
-    - kind: User
-      name: oidc:oidc-backed-user
+  name: my-build-service-user-role-binding
+  namespace: my-build-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: build-service-user-role
+subjects:
+- kind: User
+  name: my-user
 ```
 
-* `name`: The name of the project and the corresponding namespace.
-* `access`: A list of subjects to grant access to.
-* `access.[kind]`: The kind of the subject, either `User` or `Group`.
-* `name`: The name the subject.
+## <a id='admin-role'></a> Build Service Admin Role
 
-<p class='note'><strong>Note:</strong> If you are utilizing oidc for identity, names may need to be prefixed with the oidc prefix.</p>
+This should be used for admin users that will operate Tanzu Build Service.
 
-To grant the current user sole ownership of the project, create a project with an empty access list. 
-For example:
+To view the configuration for this role:
 
 ```
-apiVersion: projects.vmware.com/v1alpha1
-kind: Project
+kubectl get clusterrole build-service-admin-role -o yaml
+```
+
+To use this ClusterRole you should create a [RoleBinding or ClusterRoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding) with an existing user.
+
+Example:
+
+```yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
 metadata:
-    name: my-project
-spec:
-   access: []
-```
-
-## <a id='lizt-projects'></a> Listing Projects
-
-To view projects of which the user is a member:
-
-    kubectl create -f PROJECT-LIST-YAML
-    
-Where `PROJECT-LIST-YAML` is a YAML file of the form:
-
-```
-apiVersion: projects.vmware.com/v1alpha1
-kind: ProjectAccess
-metadata:
-    name: access-query
-```
-
-Get the status of the `ProjectAccess` resource to determine your available projects.
-
-    kubectl get projectaccess access-query -o yaml
-
-Be sure to delete the resource after checking the status.
-
-    kubectl delete projectaccess access-query
-
-## <a id='using-projects'></a> Using Projects
-
-Projects will generate namespaces with an identical name and the appropriate RBAC policies. 
-Therefore, you can use projects by targeting the corresponding namespace.
-
-<p class='note'><strong>Note:</strong> because Projects map to Kubernetes namespaces, you should not create projects with the same name as pre-existing Kubernetes namespaces.
-
-## <a id='manage-project-members'></a> Adding and Removing Project Members
-
-Any member of a project can add and remove other project members. Simply modify the project spec via `kubectl edit`, `kubectl update`, `kubectl patch`, or `kubectl apply`.
-
-### <a id='list-members'></a> Listing Members of a Project
-
-To list members of a project, simply get the status of the project resource.
-
-    kubectl get project my-project -o yaml
-
-## <a id='delete-project'></a> Deleting a Project
-
-To delete a project:
-
-    kubectl delete project my-project
-
-Deleting a project will clean up and delete the corresponding namespace.
+  name: my-build-service-admin-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: build-service-admin-role
+subjects:
+- kind: User
+  name: my-cluster-wide-admin-user
