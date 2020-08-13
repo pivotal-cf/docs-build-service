@@ -141,7 +141,7 @@ Use `kp clusterstore status <store-name> --verbose` to find the homepage of the 
 
 #### <a id='buildpack-config-use-cases'></a> Buildpack Configuration in Images
 
-Buildpack configuration can be set in two ways in Tanzu Build Service Images. The configuration depends on the specific buildpack, find buildpack details in [Buildpack Configuration Documentation](#buildpack-config-docs).
+Buildpack configuration – including manually selecting buildpacks to use – can be set in two ways in Tanzu Build Service Images. The configuration depends on the specific buildpack, find buildpack details in [Buildpack Configuration Documentation](#buildpack-config-docs).
 
 1. Creating a `buildpack.yml` file at the root of the application source code.
 
@@ -692,3 +692,11 @@ Adding cache layer 'paketo-buildpacks/maven:cache'
 ===> COMPLETION
 Build successful
 ```
+
+## <a id='offline-builds'></a> Offline Builds
+
+Tanzu Build Service supports offline/air-gapped builds with Tanzu Buildpacks. Offline builds use pre-packaged dependencies and do not need to download from anywhere off-cluster to create application images.
+
+When using Tanzu Buildpacks the build will execute as an offline build. For details on how to configure buildpacks, see [Buildpack Configuration in Images](#buildpack-config-use-cases).
+
+<p class='note'><strong>Note:</strong> Offline builds only ensure buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.</p>
