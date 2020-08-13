@@ -68,7 +68,7 @@ Where:
 * `git-repo` Git repository URL of the source code.
 * `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
 
-<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#manage-git-repos">Managing Git Repositories for a Project</a>.</p>
+<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
 
 ### <a id='create-image-by-referencing-blob-store-source'></a> Create an Image With Source Code In A Blob Store
 
@@ -218,7 +218,7 @@ Where:
 * `blob-url` URL of the source code blob file. Must select one of `git-repo`, `blob-url`, or `source-path`
 * `source-path` Path to local source code. Must select one of `git-repo`, `blob-url`, or `source-path`
 
-<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#manage-git-repos">Managing Git Repositories for a Project</a>.</p>
+<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
 <p class='note'><strong>Note:</strong> The <code>tag</code> location in a registry and <code>name</code> of an image cannot be modified. To change these fields, you must create a new image.</p>
 
 ## <a id='list-images'></a> Listing Images
