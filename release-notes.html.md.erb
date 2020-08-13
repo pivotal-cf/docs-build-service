@@ -17,7 +17,7 @@ Notable improvements in the install experience:
 	* `kbld` is used to relocate images.
 	* `ytt` is used to template kubernetes installation manifests.
 	* `kapp` is used to apply the kubernetes configuration and process updates.
-* The installation and relocation of buildup and stack dependencies is accomplished separately via the `kp` cli with the new `import` command.
+* The installation and relocation of buildpack and stack dependencies is accomplished separately via the `kp` cli with the new `import` command.
 
 This release includes the 0.1.0 release of kpack which incorporates a new more consistent api within the kpack.io api group. Notably, the CustomBuilder and CustomClusterBuilder resources have been renamed to Builder and ClusterBuilder and the Stack and Store have been renamed to ClusterStack and ClusterStore.  
 
@@ -29,7 +29,7 @@ Tanzu Build Service 1.0.0 ships with the following components:
 
 * [kpack 0.1.0](https://github.com/pivotal/kpack/releases/tag/v0.1.0)
 * [CNB lifecycle v0.9.0](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.0)	
-* [kp cli v0.1.0](https://github.com/pivotal/kpack-cli/releases/tag/v0.1.0)
+* [kp cli v0.1.0](https://network.pivotal.io/products/build-service#/releases/716705)
 
 The following buildpacks are available and supported for Tanzu Build Service:
 
@@ -60,7 +60,7 @@ Build Service can be installed on any Kubernetes cluster (v1.16 or later).
 * Tanzu Build Service now require Kubernetes api v1.16 or later
 * All kpack resources were moved to the kpack.io api group
 * CustomBuilders were renamed to Builders in the kpack api and in the kp cli
-* CustomBuilders were renamed to ClusterBuilders in the kpack api and in the kp cli
+* CustomClusterBuilders were renamed to ClusterBuilders in the kpack api and in the kp cli
 * Stacks were renamed to ClusterStacks in the kpack api and in the kp cli
 * Stores were renamed to ClusterStores in the kpack api and in the kp cli
 * Project functionality has been removed. 
