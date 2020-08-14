@@ -126,15 +126,14 @@ If you have trouble configuring the registry credentials for gcr when following 
 
 	registry_name="_json_key"
 	registry_password="$(cat /path/to/gcp/service/account/key.json)"
-	duffle install BUILD-SERVICE-INSTALLATION-NAME -c /tmp/credentials.yml  \
-        --set kubernetes_env=CLUSTER-NAME \
-        --set docker_registry=DOCKER-REGISTRY \
-        --set docker_repository=DOCKER-REPOSITORY \
-        --set registry_username="$registry_name" \
-        --set registry_password="$registry_password" \
-        --set custom_builder_image="BUILDER-IMAGE-TAG" \
-        -f /tmp/build-service-${version}.tgz \
-        -m /tmp/relocated.json
+	ytt -f /tmp/values.yaml \
+		-f /tmp/manifests/ \
+		-v docker_repository="<IMAGE-REPOSITORY>" \
+		-v docker_username="$registry_name" \
+		-v docker_password="$registry_password>" \
+		| kbld -f /tmp/images-relocated.lock -f- \
+		| kapp deploy -a tanzu-build-service -f- -y
+
 
 ---
 
