@@ -56,7 +56,7 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
 ```
-docker login registry.network.pivotal.io
+docker login registry.pivotal.io
 ```
 
 1. Relocate the images with the k14s tool `kbld` by running:
@@ -113,7 +113,7 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 kp import -f /tmp/descriptor-<version>.yml
 ```
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.network.pivotal.io`. This is done in the [Relocate Images to a Registry](#other-relocate-images) step.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#other-relocate-images) step.</p>
 
 #### <a id='other-ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -200,7 +200,7 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
 ```
-docker login registry.network.pivotal.io
+docker login registry.pivotal.io
 ```
 
 1. Relocate the images with the k14s tool `kbld` by running:
@@ -257,7 +257,7 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 kp import -f /tmp/descriptor-<version>.yml
 ```
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.network.pivotal.io`. This is done in the [Relocate Images to a Registry](#pks-relocate-images) step.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#pks-relocate-images) step.</p>
 
 #### <a id='pks-ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -337,7 +337,7 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
 ```
-docker login registry.network.pivotal.io
+docker login registry.pivotal.io
 ```
 
 1. Package the images in a file on your local machine with the k14s tool `kbld` by running:
