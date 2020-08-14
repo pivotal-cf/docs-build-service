@@ -79,7 +79,7 @@ kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpac
 
 If your Tanzu Build Service installation is in an offline/air-gapped environment, you can update stores with the following offline workflow:
 
-1. Download the Dependency Descriptor file (`descriptor-<version>.yml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
+1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
 
 2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
 
@@ -90,7 +90,7 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 ```
 docker login registry.pivotal.io
 
-kbld package -f descriptor-<version>.yml \
+kbld package -f descriptor-<version>.yaml \
   --output /tmp/packaged-dependencies.tar
 ```
 
@@ -101,7 +101,7 @@ kbld package -f descriptor-<version>.yml \
 ```
 docker login <build-service-registry>
 
-kbld unpackage -f descriptor-<version>.yml \
+kbld unpackage -f descriptor-<version>.yaml \
   --input /tmp/packaged-dependencies.tar \
   --repository <IMAGE-REPOSITORY> \
   --lock-output /tmp/dependencies-relocated.lock
@@ -112,7 +112,7 @@ Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. 
 7. Now that dependencies are relocated to the internal registry, you can use the following command to update the necessary resources:
 
 ```
-kbld -f descriptor-<version>.yml -f /tmp/dependencies-relocated.lock | kp import -f -
+kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
 ```
 
 ## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a Store

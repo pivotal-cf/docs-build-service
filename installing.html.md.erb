@@ -107,10 +107,10 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
+These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
 
 ```
-kp import -f /tmp/descriptor-<version>.yml
+kp import -f /tmp/descriptor-<version>.yaml
 ```
 
 <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#other-relocate-images) step.</p>
@@ -251,10 +251,10 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
+These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
 
 ```
-kp import -f /tmp/descriptor-<version>.yml
+kp import -f /tmp/descriptor-<version>.yaml
 ```
 
 <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#pks-relocate-images) step.</p>
@@ -400,7 +400,7 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
+These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
 
 #### <a id='offline-import-relocate'></a> Relocate Tanzu Build Service Dependency Images (Air-Gapped)
 
@@ -409,7 +409,7 @@ To import these dependencies into an air-gapped environment, they must first be 
 1. Download the dependency images locally:
 
 ```
-kbld package -f descriptor-<version>.yml \
+kbld package -f descriptor-<version>.yaml \
   --output /tmp/packaged-dependencies.tar
 ```
 
@@ -420,7 +420,7 @@ kbld package -f descriptor-<version>.yml \
 1. Upload the dependency images to the Tanzu Build Service registry:
 
 ```
-kbld unpackage -f descriptor-<version>.yml \
+kbld unpackage -f descriptor-<version>.yaml \
   --input /tmp/packaged-dependencies.tar \
   --repository <IMAGE-REPOSITORY> \
   --lock-output /tmp/dependencies-relocated.lock
@@ -439,7 +439,7 @@ After the dependency images are uploaded to the internal registry, you can succe
 Use the following command with `kbld` and the `kp` CLI:
 
 ```
-kbld -f descriptor-<version>.yml -f /tmp/dependencies-relocated.lock | kp import -f -
+kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
 ```
 
 ### <a id='offline-ca-cert'></a> Installing with a CA certificate for internal registry (Air-Gapped)
@@ -451,7 +451,7 @@ When installing to an air-gapped environment, you may need to configure a CA cer
 You can pass a CA certificate file to `kbld` when unpackaging the local packages file:
 
 ```
-kbld unpackage -f descriptor-<version>.yml \
+kbld unpackage -f descriptor-<version>.yaml \
 	--input /tmp/packaged-dependencies.tar \
 	--repository <IMAGE-REPOSITORY> \
 	--lock-output /tmp/dependencies-relocated.lock \
