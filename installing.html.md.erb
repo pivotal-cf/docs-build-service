@@ -75,7 +75,7 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
 
 For example:
 
-* Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-repo`
+* Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service`
 * GCR `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
 * Artifactory `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
 * Harbor `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
@@ -97,7 +97,7 @@ ytt -f /tmp/values.yaml \
 Where:
 
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
+    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -135,7 +135,7 @@ Where:
 
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
+    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -219,7 +219,7 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
 
 For example:
 
-* Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-repo`
+* Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service`
 * GCR `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
 * Artifactory `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
 * Harbor `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
@@ -241,7 +241,7 @@ ytt -f /tmp/values.yaml \
 Where:
 
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
+    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -279,7 +279,7 @@ Where:
 
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
+    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -368,7 +368,7 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
 
 For example:
 
-* Dockerhub `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository my-dockerhub-repo`
+* Dockerhub `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service`
 * GCR `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
 * Artifactory `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
 * Harbor `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
@@ -390,7 +390,7 @@ ytt -f /tmp/values.yaml \
 Where:
 
 * `IMAGE-REPOSITORY` is the image repository where stack images and store buildpackages will be relocated.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation.</p>
+    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
