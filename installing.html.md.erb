@@ -107,7 +107,15 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
+These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
+
+Run`kbld relocate` to prepare the cluster for the import command:
+
+```
+kbld relocate -f /tmp/descriptor-<version>.yaml --repository <IMAGE-REPOSITORY>
+```
+
+Run the `kp import` command:
 
 ```
 kp import -f /tmp/descriptor-<version>.yaml
