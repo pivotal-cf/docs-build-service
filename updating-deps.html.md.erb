@@ -15,9 +15,7 @@ You can use the `kp` CLI to update any resource.
 
 ### <a id='online-bulk-update'></a> Bulk Update
 
-This workflow can be used to update all dependencies (stacks and stores) in Tanzu Build Service with a single command. This can be used as a wholesale way to keep Tanzu Build Service up-to-date.
-
-You can update all of the dependencies that are installed by default with Tanzu Build Service with the `kp import` command.
+The Bulk Update workflow can update all dependencies (ClusterStacks and ClusterStores) in Tanzu Build Service using the `kp import` command.
 
 1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
 
@@ -27,20 +25,10 @@ You can update all of the dependencies that are installed by default with Tanzu 
 kp import -f descriptor-<version>.yaml
 ```
 
-The following stacks will be updated with the latest Operating System patches:
+The following ClusterStacks will be updated with the latest Operating System patches: `base`, `default`, `full`, and `tiny`.
 
-```
-base
-default
-full
-tiny
-```
+The following ClusterStore will be updated with the latest Cloud Native Buildpacks: `default`
 
-The following store will be updated with the latest Cloud Native Buildpacks:
-
-```
-default
-```
 
 ### <a id='online-stack-update'></a> Cluster Stacks Update
 
@@ -54,30 +42,69 @@ page on Tanzu Network to find the image references and their `<sha256>` sums. Ex
 Use the following `kp` CLI commands to update the desired stack:
 
 ```
-kp clusterstack update base --build-image registry.pivotal.io/tbs-dependencies/build-base@<sha256> --run-image registry.pivotal.io/tbs-dependencies/run-base@<sha256>
-kp clusterstack update default --build-image registry.pivotal.io/tbs-dependencies/build-full@<sha256> --run-image registry.pivotal.io/tbs-dependencies/run-full@<sha256>
-kp clusterstack update full --build-image registry.pivotal.io/tbs-dependencies/build-full@<sha256> --run-image registry.pivotal.io/tbs-dependencies/run-full@<sha256>
-kp clusterstack update tiny --build-image registry.pivotal.io/tbs-dependencies/build-tiny@<sha256> --run-image registry.pivotal.io/tbs-dependencies/run-tiny@<sha256>
+kp clusterstack update base \
+  --build-image registry.pivotal.io/tbs-dependencies/build-base@<sha256> \
+  --run-image registry.pivotal.io/tbs-dependencies/run-base@<sha256>
+
+kp clusterstack update default \
+  --build-image registry.pivotal.io/tbs-dependencies/build-full@<sha256> \
+  --run-image registry.pivotal.io/tbs-dependencies/run-full@<sha256>
+
+kp clusterstack update full \
+  --build-image registry.pivotal.io/tbs-dependencies/build-full@<sha256> \
+  --run-image registry.pivotal.io/tbs-dependencies/run-full@<sha256>
+
+kp clusterstack update tiny \
+  --build-image registry.pivotal.io/tbs-dependencies/build-tiny@<sha256> \
+  --run-image registry.pivotal.io/tbs-dependencies/run-tiny@<sha256>
 ```
 
 <p class="note"><strong>Note:</strong> Both build and run images need to be provided to update the stack.</p>
 
-The updated stack can be viewed with the following command:
+The updated ClusterStack can be viewed with the following command:
 
 ```
 kp clusterstack status <stack-name>
 ```
 
+Example output
+
+```
+$ kp clusterstack status tiny
+Status:         Ready
+Id:             io.paketo.stacks.tiny
+Run Image:      gcr.io/build-service-dev/test/run@sha256:34b01fd9a3745fcaa345f8993938291c931f7977cc2bee78ed377da2edc55e3d
+Build Image:    gcr.io/build-service-dev/test/build@sha256:5288d9c5b7cf7068d07b5a184f3ec2f124fbc5842401b8b23c74485c4d2ba23a
+
+```
+
 ### <a id='online-store-update'></a> Cluster Store Update
 
-Cluster Stores contain all of the buildpackages (one or more packaged Cloud Native Buildpacks) to be used by Builders to build application images.
+ClusterStores contain all of the buildpackages (one or more packaged Cloud Native Buildpacks) to be used by Builders to build application images.
 
-Patch Cloud Native Buildpacks in Tanzu Build Service by adding new buildpackage versions to the store.
+You can update Cloud Native Buildpacks in Tanzu Build Service by adding new buildpackage versions to the store.
 
 To list the buildpackages available in a store:
 
 ```
 kp clusterstore status <store-name>
+```
+
+Example output
+
+```
+$ kp clusterstore status default
+Status:    Ready
+
+BUILDPACKAGE ID                 VERSION    HOMEPAGE
+paketo-buildpacks/procfile      1.4.0      https://github.com/paketo-buildpacks/procfile
+tanzu-buildpacks/dotnet-core    0.0.3
+tanzu-buildpacks/go             1.0.5
+tanzu-buildpacks/httpd          0.0.38
+tanzu-buildpacks/java           2.5.0      https://github.com/pivotal-cf/tanzu-java
+tanzu-buildpacks/nginx          0.0.45
+tanzu-buildpacks/nodejs         1.1.0
+tanzu-buildpacks/php            0.0.3
 ```
 
 To show a complete list of all buildpacks available in a store:
@@ -100,29 +127,32 @@ New Cloud Native Buildpacks (packaged as buildpackages) will be available on [Ta
 and should be uploaded to a Tanzu Build Service to keep application images patched.
 
 New versions of the Java, NodeJS, and Go buildpacks will be released on their respective Tanzu Network pages:
+[Java](https://network.pivotal.io/products/tanzu-java-buildpack),
+[NodeJS](https://network.pivotal.io/products/tanzu-nodejs-buildpack) and
+[Go](https://network.pivotal.io/products/tanzu-go-buildpack).
+New versions of all other buildpacks will be released on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies) page.
 
-* [Java](https://network.pivotal.io/products/tanzu-java-buildpack)
-* [NodeJS](https://network.pivotal.io/products/tanzu-nodejs-buildpack)
-* [Go](https://network.pivotal.io/products/tanzu-go-buildpack)
-* New versions of all other buildpacks will be released on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies) page.
 
 Here is a list of how to update each buildpack that is included with Tanzu Build Service by default:
 
 ```
-kp clusterstore add default registry.pivotal.io/tanzu-java-buildpack/java:<version>
-kp clusterstore add default registry.pivotal.io/tanzu-nodejs-buildpack/nodejs:<version>
-kp clusterstore add default registry.pivotal.io/tanzu-go-buildpack/go:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_dotnet-core:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_php:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_nginx:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_httpd:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_procfile:<version>
+kp clusterstore add default -b registry.pivotal.io/tanzu-java-buildpack/java:<version>
+kp clusterstore add default -b registry.pivotal.io/tanzu-nodejs-buildpack/nodejs:<version>
+kp clusterstore add default -b registry.pivotal.io/tanzu-go-buildpack/go:<version>
+kp clusterstore add default -b registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_dotnet-core:<version>
+kp clusterstore add default -b registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_php:<version>
+kp clusterstore add default -b registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_nginx:<version>
+kp clusterstore add default -b registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_httpd:<version>
+kp clusterstore add default -b registry.pivotal.io/tbs-dependencies/paketo-buildpacks_procfile:<version>
 ```
 
 Additionally, multiple buildpackages can be added to Build Service by passing multiple image references:
 
 ```
-kp clusterstore add <store-name> registry.pivotal.io/buildpacakge-1 registry.pivotal.io/buildpackage-2 registry.pivotal.io/buildpackage-3
+kp clusterstore add <store-name> \
+  -b registry.pivotal.io/buildpacakge-1 \
+  -b registry.pivotal.io/buildpackage-2 \
+  -b registry.pivotal.io/buildpackage-3
 ```
 
 ## <a id='online-update'></a> Offline Update of Dependencies
@@ -131,36 +161,36 @@ The stack images and buildpacks used by build service can be updated by first do
 
 1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
+1. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
 
-3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.pivotal.io/products/kbld) page.
+1. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.pivotal.io/products/kbld) page.
 
-4. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
+1. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
 
-```
-docker login registry.pivotal.io
+    ```
+    docker login registry.pivotal.io
 
-kbld package -f descriptor-<version>.yaml \
-  --output /tmp/packaged-dependencies.tar
-```
+    kbld package -f descriptor-<version>.yaml \
+        --output /tmp/packaged-dependencies.tar
+    ```
 
-5. Move the output file `packaged-dependencies.tar` to a machine that has access to the "offline" environment
+1. Move the output file `packaged-dependencies.tar` to a machine that has access to the "offline" environment
 
-6. Upload the dependency images to the registry used to deploy Tanzu Build Service:
+1. Upload the dependency images to the internal registry used to deploy Tanzu Build Service:
 
-```
-docker login <build-service-registry>
+    ```
+    docker login <build-service-registry>
 
-kbld unpackage -f descriptor-<version>.yaml \
-  --input /tmp/packaged-dependencies.tar \
-  --repository <IMAGE-REPOSITORY> \
-  --lock-output /tmp/dependencies-relocated.lock
-```
+    kbld unpackage -f descriptor-<version>.yaml \
+      --input /tmp/packaged-dependencies.tar \
+      --repository <IMAGE-REPOSITORY> \
+      --lock-output /tmp/dependencies-relocated.lock
+    ```
 
-Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
+    Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
 
-7. Now that dependencies are relocated to the internal registry, you can use the following command to update the necessary resources:
+1. Now that dependencies are relocated to the internal registry, you can use the following command to update the necessary resources:
 
-```
-kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
-```
+    ```
+    kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
+    ```
