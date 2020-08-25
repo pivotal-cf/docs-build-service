@@ -113,6 +113,15 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 kp import -f /tmp/descriptor-<version>.yaml
 ```
 
+Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor. Currently, users can only access these images if they agree to the EULA for each dependency. Users must navigate to each of the dependency product pages in Tanzu Network and accept the EULA highlighted in yellow underneath the `Releases` dropdown. Here are the links to each Tanzu Network page in which users must accept the EULA:
+
+1) [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
+2) [Java Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-java-buildpack/)
+3) [Node.js Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-nodejs-buildpack/)
+4) [Go Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-go-buildpack/)
+
+<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>		
+		
 <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#other-relocate-images) step.</p>
 
 #### <a id='other-ca-cert'></a> Installing with a CA certificate for internal registry
@@ -257,6 +266,15 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 kp import -f /tmp/descriptor-<version>.yaml
 ```
 
+Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor. Currently, users can only access these images if they agree to the EULA for each dependency. Users must navigate to each of the dependency product pages in Tanzu Network and accept the EULA highlighted in yellow underneath the `Releases` dropdown. Here are the links to each Tanzu Network page in which users must accept the EULA:
+
+1) [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
+2) [Java Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-java-buildpack/)
+3) [Node.js Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-nodejs-buildpack/)
+4) [Go Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-go-buildpack/)
+
+<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>		
+		
 <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#pks-relocate-images) step.</p>
 
 #### <a id='pks-ca-cert'></a> Installing with a CA certificate for internal registry
