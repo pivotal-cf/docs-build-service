@@ -464,11 +464,12 @@ The following describes the fields in the example output:
 * `REASON`: Describes why an image rebuild occurred. These reasons include:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
-    * `BUILDER`: Occurs when new buildpack versions are made available through an updated builder image.
-        <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDER</code>.</p>
+    * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder.
     * `STACK`: Occurs when a new base OS image, called a `run image`, is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
+<p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDER</code>.</p>
+	    
 ## <a id='build-status'></a> Viewing Build Details for an Image
 
 To display retrieve a detailed Bill of Materials for a particular build:
@@ -510,11 +511,12 @@ The following describes the fields in the example output:
 * `Build Reasons`: Describes why an image rebuild occurred. These reasons include:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
-    * `BUILDER`: Occurs when new buildpack versions are made available through an updated builder image.
-        <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDER</code>.</p>
+    * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder.
     * `STACK`: Occurs when a new base OS image (called a `run image`) is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
+<p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDER</code>.</p>
+	    
 * `Pod Name`: The name of the Pod being used for the Build.
 
 * `Builder`: The full image tag for the builder image used by the build.
