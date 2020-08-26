@@ -8,8 +8,8 @@ To use your Build Service installation, gain kubeconfig access to the Kubernetes
 For example, if you are using TKGI (formerly PKS):
 
 ```
-pks login -a <PKS URL> -u <username> -p <password>
-pks get-credentials <cluster> -a <PKS URL> -u <username> -p <password>
+tkgi login -a <tkg-api-url> -u <username> -p <password>
+tkgi get-credentials <clustername> -a <tkg-api-url> -u <username> -p <password>
 ```
 
 You can use the `kp` cli, downloaded as part of the [installation](installing.html) to interact with Build Service.
