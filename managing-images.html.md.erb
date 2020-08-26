@@ -446,7 +446,7 @@ BUILD    STATUS    IMAGE                           STARTED                FINISH
 2        SUCCESS   gcr.io/myapp@sha256:some-sha2   2019-09-09 21:56:55    2019-07-08 21:57:40    COMMIT
 3        SUCCESS   gcr.io/myapp@sha256:some-sha3   2019-09-09 21:57:55    2019-07-08 21:58:40    STACK
 4        FAILURE   gcr.io/myapp@sha256:some-sha4   2019-09-09 21:58:55    2019-07-08 21:59:40    CONFIG+
-5        BUILDING  gcr.io/myapp@sha256:some-sha5   2019-09-09 21:59:55    --                     BUILDER
+5        BUILDING  gcr.io/myapp@sha256:some-sha5   2019-09-09 21:59:55    --                     BUILDPACK
 ```
 
 The following describes the fields in the example output:
@@ -464,8 +464,8 @@ The following describes the fields in the example output:
 * `REASON`: Describes why an image rebuild occurred. These reasons include:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
-    * `BUILDER`: Occurs when new buildpack versions are made available through an updated builder image.
-        <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDER</code>.</p>
+    * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder image.
+        <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDPACK</code>.</p>
     * `STACK`: Occurs when a new base OS image, called a `run image`, is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
@@ -510,8 +510,8 @@ The following describes the fields in the example output:
 * `Build Reasons`: Describes why an image rebuild occurred. These reasons include:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
-    * `BUILDER`: Occurs when new buildpack versions are made available through an updated builder image.
-        <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDER</code>.</p>
+    * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder image.
+        <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, and <code>BUILDPACK</code></p>
     * `STACK`: Occurs when a new base OS image (called a `run image`) is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
