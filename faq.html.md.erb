@@ -25,7 +25,11 @@ By default Build Service will tag each built image twice. The first tag will be 
 
 Build Service is installed and deployed using [k14s](https://k14s.io/) tools. Therefore, the `kbld package` command can create a `.tar` file  composed of the kubernetes manifests and images required to successfully install Build Service. 
 The `kbld unpackage` command ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
-executing the `install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments. For more details, see [Installation to Air-Gapped Environment](installing.html#offline-installation).
+executing the `install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
+
+For more details on air-gapped installation, see [Installation to Air-Gapped Environment](installing.html#offline-installation).
+
+For more details on air-gapped builds, see [Offline Builds](managing-images.html#offline-builds).
 
 ---
 
@@ -137,12 +141,27 @@ If you have trouble configuring the registry credentials for gcr when following 
 
 ---
 
-## Can I configure a proxy for my Tanzu Build Service
+## Can I configure a proxy for my Tanzu Build Service?
 
-Tanzu Build Service does not currently support configuring a service-wide proxy. This is expected to be supported in the future.
+TBS can be configured with a proxy at [installation](installing.html.md) time by specifying additional parameters:
 
-Tanzu Build Service does support offline/air-gapped installation and builds with Tanzu Buildpacks which may mitigate the need for a proxy.
+* `http_proxy`: The HTTP proxy to use for network traffic.
+* `https_proxy`: The HTTPS proxy to use for network traffic.
+* `no_proxy`: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
 
-For more details on air-gapped installation, see [Installation to Air-Gapped Environment](installing.html#offline-installation).
+<p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the kubernetes API server will also flow through the proxy server.
+This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.</p>
 
-For more details on air-gapped builds, see [Offline Builds](managing-images.html#offline-builds).
+```
+ytt -f /tmp/values.yaml \
+	-f /tmp/manifests/ \
+	-v docker_repository="<IMAGE-REPOSITORY>" \
+	-v docker_username="<REGISTRY-USERNAME>" \
+	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v http_proxy="<HTTP-PROXY-URL>" \
+	-v https_proxy="<HTTPS-PROXY-URL>" \
+	-v no_proxy="<KUBERNETES-API-SERVER-URL>" \
+	| kbld -f /tmp/images-relocated.lock -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
