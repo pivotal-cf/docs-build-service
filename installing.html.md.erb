@@ -8,8 +8,8 @@ This topic describes how to install and configure Tanzu Build Service.
 
 ## <a id='overview'></a> Overview
 
-Build Service can be installed on any Kubernetes cluster (v1.16 or later) including PKS, GKE and AKS clusters.
-The installation instructions are divided between the PKS installation, which uses OpenID Connect (OIDC) for authentication, and the install on other hosted Kubernetes clusters.
+Build Service can be installed on any Kubernetes cluster (v1.16 or later) including TKGI (formerly PKS), GKE and AKS clusters.
+The installation instructions are divided between the TKGI installation, which uses OpenID Connect (OIDC) for authentication, and the install on other hosted Kubernetes clusters.
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -157,44 +157,44 @@ Other optional parameters can be added using the `-v` flag:
 * `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
 * `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
 
-## <a id='pks-install'></a> Installing on PKS
+## <a id='tkgi-install'></a> Installing on TKGI (formerly PKS)
 
-* Install PKS v1.6 or later. For more information, see [Installing Enterprise PKS](https://docs.pivotal.io/pks/1-6/installing.html) in the PKS documentation.
+* Install TKGI v1.7 or later. For more information, see [Installing Tanzu Kubernetes Grid Integrated Edition](https://docs.pivotal.io/tkgi/1-8/installing.html) in the TKGI documentation.
 
 * To install Build Service, you must configure a User Account and Authentication (UAA) client credentials.
 
-* <strong>Optional:</strong> configure your PKS tile with `oidc` as described [here](#pks-as-oidc-provider).
+* <strong>Optional:</strong> configure your TKGI tile with `oidc` as described [here](#tkgi-as-oidc-provider).
 
-### <a id='retrieve-credentials'></a> Retrieve PKS Cluster Credentials
+### <a id='retrieve-credentials'></a> Retrieve TKGI Cluster Credentials
 
 This procedure retrieves the credentials that authenticate communication between `kubectl`
-and the PKS cluster where Build Service runs.
+and the TKGI cluster where Build Service runs.
 
-To retrieve the PKS cluster credentials:
+To retrieve the TKGI cluster credentials:
 
-1. Log in to PKS and get the latest kubeconfig by running:
+1. Log in to TKGI and get the latest kubeconfig by running:
 
 ```
-pks get-kubeconfig CLUSTER-NAME -a API-URI -u USERNAME -p PASSWORD --ca-cert PATH-TO-CERTIFICATE
+tkgi get-kubeconfig CLUSTER-NAME -a API-URI -u USERNAME -p PASSWORD --ca-cert PATH-TO-CERTIFICATE
 ```
 
 Where:
 
-* `API-URI` is the PKS API server URI.
+* `API-URI` is the TKGI API server URI.
 * `USERNAME` is name of your cluster admin.
 * `PASSWORD` is the cluster admin password.
 * `PATH-TO-CERTIFICATE` is the path to your root CA certificate.
-* `CLUSTER-NAME` is the name of the PKS cluster where Build Service runs.
+* `CLUSTER-NAME` is the name of the TKGI cluster where Build Service runs.
 
 This command sets the context to the `CLUSTER-NAME` provided.
 
 For example:
 
 ```
-pks get-kubeconfig build-cluster -a api.pks.example.com -u alana -p P4ssW0rd --ca-cert /var/tempest/workspaces/default/root_ca_certificate
+tkgi get-kubeconfig build-cluster -a api.tkgi.example.com -u alana -p P4ssW0rd --ca-cert /var/tempest/workspaces/default/root_ca_certificate
 ```
 
-### <a id='pks-relocate-images'></a> Relocate Images to a Registry
+### <a id='tkgi-relocate-images'></a> Relocate Images to a Registry
 
 This procedure relocates images from the Tanzu Network registry to an internal image registry.
 
@@ -233,7 +233,7 @@ For example:
 * Artifactory `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
 * Harbor `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
 
-### <a id='pks-install'></a> Install Tanzu Build Service
+### <a id='tkgi-install'></a> Install Tanzu Build Service
 
 Use the k14s tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
@@ -256,7 +256,7 @@ Where:
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
     <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
-### <a id='pks-import'></a> Import Tanzu Build Service Dependencies
+### <a id='tkgi-import'></a> Import Tanzu Build Service Dependencies
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
@@ -275,9 +275,9 @@ Successfully performing a `kp import` command requires that your Tanzu Network a
 
 <p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>		
 		
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#pks-relocate-images) step.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#tkgi-relocate-images) step.</p>
 
-#### <a id='pks-ca-cert'></a> Installing with a CA certificate for internal registry
+#### <a id='tkgi-ca-cert'></a> Installing with a CA certificate for internal registry
 
 To install Tanzu Build Service with an internal registry that requires providing a CA cert such as Harbor, use the normal
 installation command with the CA certificate file passed in with a `-f` flag:
@@ -303,24 +303,24 @@ Where:
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
     <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
-#### <a id='pks-additional-config'></a> Additional Configuration
+#### <a id='tkgi-additional-config'></a> Additional Configuration
 
 Other optional parameters can be added using the `-v` flag:
 
 * `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
 * `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
 
-### <a id='pks-as-oidc-provider'></a> Configuring PKS as an OIDC Provider
+### <a id='tkgi-as-oidc-provider'></a> Configuring TKGI as an OIDC Provider
 
 The authentication and authorization processes for Build Service use a combination of RBAC rules and
 third-party authentication, including OpenID Connect (OIDC).
-You may configure UAA as an OIDC provider for your PKS deployment to provide authentication for Build Service.
+You may configure UAA as an OIDC provider for your TKGI deployment to provide authentication for Build Service.
 
-To configure UAA as an OIDC provider for your PKS deployment:
+To configure UAA as an OIDC provider for your TKGI deployment:
 
 1. Navigate to the OpsManager Installation Dashboard.
 
-1. Click the PKS tile.
+1. Click the TKGI tile.
 
 1. Select **UAA**.
 
