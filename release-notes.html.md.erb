@@ -3,56 +3,9 @@ title: Release Notes
 owner: Build Service Team
 ---
 
-## <a id="1-0-1"></a> v1.0.2
-
-**Release Date: August 27, 2020**
-
-**1.0.2** represents the first GA patch release of Tanzu Build Service.
-
-This release includes an updated kp cli which will provide better user feedback when performing `kp import`
-
-This release includes an update to kpack v0.1.2 which fixes an issue that prevented buildpacks from using the 0.3 and 0.4 buildpack apis. 
-
-### Product Snapshot
-
-Tanzu Build Service 1.0.2 ships with the following components:
-
-* [kpack 0.1.2](https://github.com/pivotal/kpack/releases/tag/v0.1.2)
-* [CNB lifecycle v0.9.1](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.1)	
-* [kp cli v0.1.1](ADD_LINK)
-
-The following buildpacks are available and supported for Tanzu Build Service:
-
-* [Tanzu Java](https://network.pivotal.io/products/tanzu-java-buildpack) `tanzu-buildpacks/java`
-* [Tanzu Golang](https://network.pivotal.io/products/tanzu-go-buildpack) `tanzu-buildpacks/go`
-* [Tanzu NodeJS](https://network.pivotal.io/products/tanzu-nodejs-buildpack) `tanzu-buildpacks/nodejs`
-
-The following buildpacks are available with beta support on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
-
-* Tanzu .NET Core `tanzu-buildpacks/dotnet-core`
-* Tanzu PHP `tanzu-buildpacks/php`
-* Tanzu HTTPD `tanzu-buildpacks/httpd`
-* Tanzu NGINX `tanzu-buildpacks/nginx`
-* Paketo Procfile `paketo-buildpacks/procfile`
-
-The following stacks will be provided and updated on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
-
-* tiny `io.paketo.stacks.tiny`
-* base `io.buildpacks.stacks.bionic`
-* full `io.buildpacks.stacks.bionic`
-
-### Product Dependencies
-
-Build Service can be installed on any Kubernetes cluster (v1.16 or later).
-
-
-### Upgrade Path
-
-v1.0.1 can be upgraded to v1.0.2. Please follow the [install](installing.html) process to upgrade from v1.0.1.
-
 ## <a id="1-0-1"></a> v1.0.1
 
-**Release Date: August 19, 2020**
+**Release Date: August 27, 2020**
 
 **1.0.1** represents the first GA release of the Tanzu Build Service.
 
@@ -74,8 +27,8 @@ The Project functionality in previous versions of Tanzu Build Service has been r
 
 Tanzu Build Service 1.0.1 ships with the following components:
 
-* [kpack 0.1.1](https://github.com/pivotal/kpack/releases/tag/v0.1.0)
-* [CNB lifecycle v0.9.1](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.1)	
+* [kpack 0.1.0](https://github.com/pivotal/kpack/releases/tag/v0.1.0)
+* [CNB lifecycle v0.9.0](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.0)	
 * [kp cli v0.1.0](https://network.pivotal.io/products/build-service#/releases/716705)
 
 The following buildpacks are available and supported for Tanzu Build Service:
@@ -115,6 +68,10 @@ Build Service can be installed on any Kubernetes cluster (v1.16 or later).
 ### Security Fixes
 
 * Secret Syncing functionality is not enabled by default and is only available to users that explicitly [opt in](managing-secrets.html).
+
+### Known Issues
+
+* Tanzu Build Service does not currently support configuring a service-wide proxy. This is expected to be supported in the future.
 
 
 ### Upgrade Path
