@@ -14,7 +14,11 @@ The installation instructions are divided between the TKGI installation, which u
 
 Before you install Build Service, you must:
 
-* Ensure your Kubernetes cluster is configured with `PersistentVolumes`. Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds. For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation.
+* Ensure your Kubernetes cluster is configured with default `StorageClass`.
+Tanzu Build Service will default to using 2G of cache if a default `StorageClass` is defined.
+Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds.
+
+    For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
 * Download three k14s CLIs for your operating system. These can be found on their respective Tanzu Network pages:
   - [kapp](https://network.pivotal.io/products/kapp/)
