@@ -20,10 +20,10 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
-* Download three k14s CLIs for your operating system. These can be found on their respective Tanzu Network pages:
-  - [kapp](https://network.pivotal.io/products/kapp/)
-  - [ytt](https://network.pivotal.io/products/ytt/)
-  - [kbld](https://network.pivotal.io/products/kbld/)
+* Download three [Carvel](https://carvel.dev/) CLIs for your operating system. These can be found on their respective Tanzu Network pages:
+  - [kapp](https://network.pivotal.io/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
+  - [ytt](https://network.pivotal.io/products/ytt/) is a templating tool that understands YAML structure.
+  - [kbld](https://network.pivotal.io/products/kbld/) is tool that builds, pushes, and relocates container images.
 
 * Download the Build Service Bundle from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
   * Unarchive the Build Service Bundle file:
@@ -62,7 +62,7 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 docker login registry.pivotal.io
 ```
 
-1. Relocate the images with the k14s tool `kbld` by running:
+1. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
 
 ```
 kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
@@ -85,7 +85,7 @@ For example:
 
 ### <a id='other-install'></a> Install Tanzu Build Service
 
-Use the k14s tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
 ytt -f /tmp/values.yaml \
@@ -225,7 +225,7 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 docker login registry.pivotal.io
 ```
 
-1. Relocate the images with the k14s tool `kbld` by running:
+1. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
 
 ```
 kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
@@ -248,7 +248,7 @@ For example:
 
 ### <a id='tkgi-install'></a> Install Tanzu Build Service
 
-Use the k14s tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
 ytt -f /tmp/values.yaml \
@@ -381,7 +381,7 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 docker login registry.pivotal.io
 ```
 
-1. Package the images in a file on your local machine with the k14s tool `kbld` by running:
+1. Package the images in a file on your local machine with the [Carvel](https://carvel.dev/) tool `kbld` by running:
 
 ```
 kbld package -f /tmp/images.lock --output /tmp/packaged-images.tar
@@ -416,7 +416,7 @@ For example:
 
 ### <a id='offline-install'></a> Install Tanzu Build Service (Air-Gapped)
 
-Use the k14s tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
 ytt -f /tmp/values.yaml \

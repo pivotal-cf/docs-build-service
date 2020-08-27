@@ -22,7 +22,7 @@ By default Build Service will tag each built image twice. The first tag will be 
 
 ## How does TBS work in air gapped environments?
 
-Build Service is installed and deployed using [k14s](https://k14s.io/) tools. Therefore, the `kbld package` command can create a `.tar` file  composed of the kubernetes manifests and images required to successfully install Build Service. 
+Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `kbld package` command can create a `.tar` file  composed of the kubernetes manifests and images required to successfully install Build Service.
 The `kbld unpackage` command ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
 executing the `install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
 
