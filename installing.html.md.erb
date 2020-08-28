@@ -69,9 +69,13 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
 
 <p class="note"><strong>Note:</strong> The flag argument <code>--lock-output /tmp/images-relocated.lock</code> creates a file that will be used for installation</code>.</p>
 
-<p class="note"><strong>Note:</strong> When relocating to a registry that is *not* Dockerhub,
-   the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images,
-   for example, <code>IMAGE-REGISTRY/build-service-imgs</code>.</p>
+<p class="note">
+<strong>Note:</strong> When relocating, the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
+For example, <code>IMAGE-REGISTRY/build-service</code>.
+
+<strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub repository and an 
+image name that kbld will use for relocation. For example, <code>my-dockerhub-account/build-service</code>. 
+</p>
 
 For example:
 
@@ -97,7 +101,12 @@ ytt -f /tmp/values.yaml \
 Where:
 
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -148,7 +157,12 @@ Where:
 
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -226,9 +240,13 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
 
 <p class="note"><strong>Note:</strong> The flag argument <code>--lock-output /tmp/images-relocated.lock</code> creates a file that will be used for installation</code>.</p>
 
-<p class="note"><strong>Note:</strong> When relocating to a registry that is *not* Dockerhub,
-   the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images,
-   for example, <code>IMAGE-REGISTRY/build-service-imgs</code>.</p>
+<p class="note">
+<strong>Note:</strong> When relocating, the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
+For example, <code>IMAGE-REGISTRY/build-service</code>.
+
+<strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub repository and an 
+image name that kbld will use for relocation. For example, <code>my-dockerhub-account/build-service</code>. 
+</p>
 
 For example:
 
@@ -254,7 +272,12 @@ ytt -f /tmp/values.yaml \
 Where:
 
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -305,7 +328,12 @@ Where:
 
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
@@ -388,9 +416,14 @@ Where `IMAGE-REPOSITORY` is the repository in your registry that you want to rel
 <p class="note"><strong>Note:</strong> The flag argument `--lock-output /tmp/images-relocated.lock`
  creates a file that will be used for installation</code>.</p>
 
-<p class="note"><strong>Note:</strong> When unpackaging to a registry that is *not* Dockerhub,
-   the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination folder for the images,
-   for example, <code>IMAGE-REGISTRY/build-service-imgs</code>.</p>
+<p class="note">
+<strong>Note:</strong> When relocating to a registry that is not Dockerhub,
+the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
+For example, <code>IMAGE-REGISTRY/build-service</code>.
+
+<strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub repository and an 
+image name that kbld will use for relocation. For example, <code>my-dockerhub-account/build-service</code>. 
+</p>
 
 For example:
 
@@ -416,7 +449,12 @@ ytt -f /tmp/values.yaml \
 Where:
 
 * `IMAGE-REPOSITORY` is the image repository where stack images and store buildpackages will be relocated.
-    <p class="note"><strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation (except when installing with Dockerhub use the top level folder ie. `my-dockerhub-account` in the relocation example for Dockerhub).</p>
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
