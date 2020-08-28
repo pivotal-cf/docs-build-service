@@ -428,7 +428,7 @@ kbld package -f /tmp/images.lock --output /tmp/packaged-images.tar
 1. Unpackage the images from your local machine to the internal registry:
 
 ```
-kbld unpackage -f /tmp/dev-images.lock \
+kbld unpackage -f /tmp/images.lock \
   --input /tmp/packaged-images.tar \
   --repository <IMAGE-REPOSITORY> \
   --lock-output /tmp/images-relocated.lock
