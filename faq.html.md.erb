@@ -47,7 +47,7 @@ Unfortunately, you will either need to target a registry that does not have self
 
 ## How do I configure a secret to publish images to Dockerhub?
 
-1. Create a dockerhub secret with the `kp` cli:
+1. Create a dockerhub secret with the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md):
 
     ```
     kp secret create my-dockerhub-creds --dockerhub DOCKERHUB-USERNAME
@@ -60,7 +60,7 @@ Unfortunately, you will either need to target a registry that does not have self
 
 ## How can I configure an image to pull from a private GitHub repository?
 
-1. Create a github secret with the `kp` cli:
+1. Create a github secret with the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md):
 
 	Using a [git ssh key](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
 
@@ -87,7 +87,7 @@ The run image must be publicly readable or readable with the registry credential
 
 To see where the build service run image is located run: `kp stack status STACK-NAME`.
 
-If you cannot make the run image publicly readable, you must `kp` to create a registry secret within the namespace where your builds reside.
+If you cannot make the run image publicly readable, you must use [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) to create a registry secret within the namespace where your builds reside.
 This can be accomplished using `kp secret create`.
 
 ---
