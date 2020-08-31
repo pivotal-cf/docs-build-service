@@ -8,7 +8,7 @@ Keeping applications up-to-date with the latest dependency patches is a core fea
 - **ClusterStacks** - Update a ClusterStack to patch operating system packages.
 - **ClusterStores** - Update a ClusterStore to patch the Cloud Native Buildpacks used to build your applications.
 
-You can use the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) to update any resource.
+You can use the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) to update any resource.
 
 ## <a id='online-update'></a> Updating Dependencies
 
@@ -18,7 +18,7 @@ The Bulk Update workflow can update all dependencies (ClusterStacks, ClusterStor
 
 1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Use the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md)
+2. Use the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md)
 
 ```
 kp import -f descriptor-<version>.yaml
@@ -38,7 +38,7 @@ New stack versions will be provided on the [Tanzu Build Service Dependencies](ht
 To update specific cluster stacks, go to the latest release of the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
 page on Tanzu Network to find the image references and their `<sha256>` sums. Example commands will be provided on this page.
 
-Use the following [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) commands to update the desired stack:
+Use the following [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) commands to update the desired stack:
 
 ```
 kp clusterstack update base \
@@ -156,11 +156,11 @@ kp clusterstore add <store-name> \
 
 ## <a id='online-update'></a> Offline Update of Dependencies
 
-The stack images and buildpacks used by build service can be updated by first downloading those images and saving them as a .tar file. This file can be provided to the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) to import to Tanzu Build Service.
+The stack images and buildpacks used by build service can be updated by first downloading those images and saving them as a .tar file. This file can be provided to the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) to import to Tanzu Build Service.
 
 1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
 
-1. Download the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
+1. Download the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
 
 1. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.pivotal.io/products/kbld) page.
 

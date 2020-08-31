@@ -32,7 +32,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 	tar xvf build-service-<version>.tar -C /tmp
 	```
 
-* Download the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
+* Download the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
 
 * Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network
 
@@ -121,7 +121,7 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
+These must be imported with the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
 
 ```
 kp import -f /tmp/descriptor-<version>.yaml
@@ -302,7 +302,7 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
+These must be imported with the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
 
 ```
 kp import -f /tmp/descriptor-<version>.yaml
@@ -489,7 +489,7 @@ Where:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
+These must be imported with the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
 
 #### <a id='offline-import-relocate'></a> Relocate Tanzu Build Service Dependency Images (Air-Gapped)
 
@@ -576,7 +576,7 @@ Verify your Build Service installation by first targeting the cluster Build Serv
 
 To verify your Build Service installation:
 
-1. Download the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md) binary from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
+1. Download the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md) binary from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
 
 1. List the cluster builders available in your installation:
 
@@ -622,7 +622,7 @@ kp clusterstack status <stack-name>
 
 If the cluster stack run image is not public, you may need to create a registry secret in any namespace where Images or Builds will be used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
 
-This can be done with the [kp cli](https://github.com/pivotal/kpack-cli/blob/master/docs/kp.md):
+This can be done with the [kp cli](https://github.com/pivotal/kpack-cli/blob/v0.1.1/docs/kp.md):
 
 ```
 kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
