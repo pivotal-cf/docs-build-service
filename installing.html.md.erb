@@ -58,13 +58,13 @@ docker login <IMAGE-REGISTRY>
 
 Where `IMAGE-REGISTRY` is the name of the image registry where you want to store the images.
 
-1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
+2. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
 ```
 docker login registry.pivotal.io
 ```
 
-1. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
+3. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
 
 ```
 kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
@@ -92,6 +92,13 @@ For example:
 
 ### <a id='other-install'></a> Install Tanzu Build Service
 
+There are two ways to install Tanzu Build Service:
+
+1. Using a public registry (eg. GCR, Dockerhub) or an internal registry that uses a trusted certificate (eg. Let's Encrypt)
+2. Using an internal registry that uses a self-signed CA certificate (eg. Harbor, Artifactory)
+
+#### <a id='other-install-no-ca'></a> Install Tanzu Build Service Public Registry
+
 Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
@@ -106,6 +113,38 @@ ytt -f /tmp/values.yaml \
 
 Where:
 
+* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+    <br>
+    <br>
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
+* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+   as the username when using JSON key file authentication.
+* `REGISTRY-PASSWORD` is the password you use to access the registry.
+    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+
+#### <a id='other-ca-cert'></a> Installing with a CA certificate for internal registry
+
+To install Tanzu Build Service with an internal registry that requires providing a CA certificate such as Harbor, use the normal
+installation command with the CA certificate file passed in with a `-f` flag:
+
+```
+ytt -f /tmp/values.yaml \
+	-f /tmp/manifests/ \
+	-f <PATH-TO-CA> \
+	-v docker_repository="<IMAGE-REPOSITORY>" \
+	-v docker_username="<REGISTRY-USERNAME>" \
+	-v docker_password="<REGISTRY-PASSWORD>" \
+	| kbld -f /tmp/images-relocated.lock -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
+Where:
+
+* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note">
     <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
@@ -141,41 +180,9 @@ Here are the links to each Tanzu Network page in which users must accept the EUL
 1. [Node.js Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-nodejs-buildpack/)
 1. [Go Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-go-buildpack/)
 
-<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>		
-		
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#other-relocate-images) step.</p>
+<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>
 
-#### <a id='other-ca-cert'></a> Installing with a CA certificate for internal registry
-
-To install Tanzu Build Service with an internal registry that requires providing a CA cert such as Harbor, use the normal
-installation command with the CA certificate file passed in with a `-f` flag:
-
-```
-ytt -f /tmp/values.yaml \
-	-f /tmp/manifests/ \
-	-f <PATH-TO-CA> \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-
-Where:
-
-* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
-* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
-    <br>
-    <br>
-    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
-    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`.</p>
 
 #### <a id='other-additional-config'></a> Additional Configuration
 
@@ -240,13 +247,13 @@ docker login <IMAGE-REGISTRY>
 
 Where `IMAGE-REGISTRY` is the name of the image registry where you want to store the images.
 
-1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
+2. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
 ```
 docker login registry.pivotal.io
 ```
 
-1. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
+3. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
 
 ```
 kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
@@ -273,6 +280,13 @@ For example:
 * Harbor `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
 
 ### <a id='tkgi-install'></a> Install Tanzu Build Service
+
+There are two ways to install Tanzu Build Service:
+
+1. Using a public registry (eg. GCR, Dockerhub) or an internal registry that uses a trusted certificate (eg. Let's Encrypt)
+2. Using an internal registry that uses a self-signed CA certificate (eg. Harbor, Artifactory)
+
+#### <a id='tkgi-install-no-ca'></a> Install Tanzu Build Service Public Registry
 
 Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
@@ -301,35 +315,9 @@ Where:
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
     <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
-### <a id='tkgi-import'></a> Import Tanzu Build Service Dependencies
-
-The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
-
-These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
-
-```
-kp import -f /tmp/descriptor-<version>.yaml
-```
-
-Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
-Currently, users can only access these images if they agree to the EULA for each dependency.
-Users must navigate to each of the dependency product pages in Tanzu Network and accept the EULA highlighted in yellow underneath the `Releases` dropdown.
-
-Here are the links to each Tanzu Network page in which users must accept the EULA:
-
-1. [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
-1. [Java Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-java-buildpack/)
-1. [Java Native Image Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-java-native-image-buildpack)
-1. [Node.js Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-nodejs-buildpack/)
-1. [Go Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-go-buildpack/)
-
-<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>		
-		
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`. This is done in the [Relocate Images to a Registry](#tkgi-relocate-images) step.</p>
-
 #### <a id='tkgi-ca-cert'></a> Installing with a CA certificate for internal registry
 
-To install Tanzu Build Service with an internal registry that requires providing a CA cert such as Harbor, use the normal
+To install Tanzu Build Service with an internal registry that requires providing a CA certificate such as Harbor, use the normal
 installation command with the CA certificate file passed in with a `-f` flag:
 
 ```
@@ -358,6 +346,33 @@ Where:
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
     <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+
+
+### <a id='tkgi-import'></a> Import Tanzu Build Service Dependencies
+
+The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
+
+These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page:
+
+```
+kp import -f /tmp/descriptor-<version>.yaml
+```
+
+Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
+Currently, users can only access these images if they agree to the EULA for each dependency.
+Users must navigate to each of the dependency product pages in Tanzu Network and accept the EULA highlighted in yellow underneath the `Releases` dropdown.
+
+Here are the links to each Tanzu Network page in which users must accept the EULA:
+
+1. [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
+1. [Java Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-java-buildpack/)
+1. [Java Native Image Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-java-native-image-buildpack)
+1. [Node.js Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-nodejs-buildpack/)
+1. [Go Buildpack for VMware Tanzu](https://network.pivotal.io/products/tanzu-go-buildpack/)
+
+<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>
+
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.pivotal.io`.</p>
 
 #### <a id='tkgi-additional-config'></a> Additional Configuration
 
@@ -401,6 +416,11 @@ To configure UAA as an OIDC provider for your TKGI deployment:
 
 Tanzu Build Service can be installed to a Kubernetes Cluster and registry that are air-gapped from external traffic.
 
+An air-gapped environment will often use an internal registry with a self-signed CA certificate and you will need access to this
+CA certificate file to install TBS.
+
+<p class="note"><strong>Note:</strong> If you are using a CA certificate that is trusted (eg. Let's Encrypt) you will not need the CA certificate file. </p>
+
 ### <a id='offline-relocate-images'></a> Relocate Images to a Registry (Air-Gapped)
 
 This procedure relocates images from the Tanzu Network registry to an internal image registry via a local machine.
@@ -415,30 +435,34 @@ docker login <IMAGE-REGISTRY>
 
 Where `IMAGE-REGISTRY` is the name of the image registry where you want to store the images.
 
-1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
+2. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
 ```
 docker login registry.pivotal.io
 ```
 
-1. Package the images in a file on your local machine with the [Carvel](https://carvel.dev/) tool `kbld` by running:
+3. Package the images in a file on your local machine with the [Carvel](https://carvel.dev/) tool `kbld` by running:
 
 ```
 kbld package -f /tmp/images.lock --output /tmp/packaged-images.tar
 ```
 
-1. Move the output file `packaged-images.tar` to a machine that has access to the air-gapped environment.
+4. Move the output file `packaged-images.tar` to a machine that has access to the air-gapped environment.
 
-1. Unpackage the images from your local machine to the internal registry:
+5. Unpackage the images from your local machine to the internal registry:
 
 ```
 kbld unpackage -f /tmp/images.lock \
   --input /tmp/packaged-images.tar \
   --repository <IMAGE-REPOSITORY> \
-  --lock-output /tmp/images-relocated.lock
+  --lock-output /tmp/images-relocated.lock \
+  --registry-ca-cert-path <PATH-TO-CA>
 ```
 
-Where `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+Where:
+
+* `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+* `PATH-TO-CA` is the path to the registry CA certificate file.
 
 <p class="note"><strong>Note:</strong> The flag argument `--lock-output /tmp/images-relocated.lock`
  creates a file that will be used for installation</code>.</p>
@@ -455,39 +479,10 @@ image name that kbld will use for relocation. For example, <code>my-dockerhub-ac
 
 For example:
 
-* Dockerhub `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service`
-* GCR `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
-* Artifactory `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
-* Harbor `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
-
-### <a id='offline-install'></a> Install Tanzu Build Service (Air-Gapped)
-
-Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
-
-```
-ytt -f /tmp/values.yaml \
-	-f /tmp/manifests/ \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-
-Where:
-
-* `IMAGE-REPOSITORY` is the image repository where stack images and store buildpackages will be relocated.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
-    <br>
-    <br>
-    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
-    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+* Dockerhub `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service --registry-ca-cert-path ca.crt`
+* GCR `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service --registry-ca-cert-path ca.crt`
+* Artifactory `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
+* Harbor `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
 ### <a id='offline-import'></a> Import Tanzu Build Service Dependencies (Air-Gapped)
 
@@ -506,7 +501,7 @@ kbld package -f descriptor-<version>.yaml \
   --output /tmp/packaged-dependencies.tar
 ```
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry. This is done in the [Relocate Images to a Registry](#offline-relocate-images) step.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry.</p>
 
 1. Move the output file `packaged-dependencies.tar` to a machine that has access to the air-gapped environment.
 
@@ -516,14 +511,16 @@ kbld package -f descriptor-<version>.yaml \
 kbld unpackage -f descriptor-<version>.yaml \
   --input /tmp/packaged-dependencies.tar \
   --repository <IMAGE-REPOSITORY> \
-  --lock-output /tmp/dependencies-relocated.lock
+  --lock-output /tmp/dependencies-relocated.lock \
+  --registry-ca-cert-path <PATH-TO-CA>
 ```
 
 Where:
 
 * `IMAGE-REPOSITORY` is the internal image repository where dependency images will be relocated.
+* `PATH-TO-CA` is the path to the registry CA certificate file.
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY`. This is done in the [Relocate Images to a Registry](#offline-relocate-images) step.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY`.</p>
 
 #### <a id='offline-import-import'></a> Import Tanzu Build Service Dependency Resources (Air-Gapped)
 
@@ -535,26 +532,11 @@ Use the following command with `kbld` and the `kp` CLI:
 kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
 ```
 
-### <a id='offline-ca-cert'></a> Installing with a CA certificate for internal registry (Air-Gapped)
+<p class="note"><strong>Note:</strong> If you receive a TLS error, you may need to add the registry CA certificate to your local machine's trusted certs.</p>
 
-When installing to an air-gapped environment, you may need to configure a CA certificate to use the internal registry.
+#### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
 
-#### <a id='offline-ca-cert-relocation'></a> Relocating with a CA certificate (Air-Gapped)
-
-You can pass a CA certificate file to `kbld` when unpackaging the local packages file:
-
-```
-kbld unpackage -f descriptor-<version>.yaml \
-	--input /tmp/packaged-dependencies.tar \
-	--repository <IMAGE-REPOSITORY> \
-	--lock-output /tmp/dependencies-relocated.lock \
-	--registry-ca-cert-path <PATH-TO-CA>
-```
-
-#### <a id='offline-ca-cert-install'></a> Installing with a CA certificate (Air-Gapped)
-
-To install Tanzu Build Service with an internal registry that requires providing a CA cert such as Harbor, use the normal
-installation command with the CA certificate file passed in with a `-f` flag:
+Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
 ytt -f /tmp/values.yaml \
@@ -566,6 +548,22 @@ ytt -f /tmp/values.yaml \
 	| kbld -f /tmp/images-relocated.lock -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
+
+Where:
+
+* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
+* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+    <br>
+    <br>
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
+* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+   as the username when using JSON key file authentication.
+* `REGISTRY-PASSWORD` is the password you use to access the registry.
+    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 #### <a id='offline-additional-config'></a> Additional Configuration
 
