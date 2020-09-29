@@ -22,7 +22,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
-* Download three [Carvel](https://carvel.dev/) CLIs for your operating system. These can be found on their respective Tanzu Network pages:
+* Download three [Carvel](https://carvel.dev/) CLIs for your operating system. These tools will facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
   - [kapp](https://network.pivotal.io/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
   - [ytt](https://network.pivotal.io/products/ytt/) is a templating tool that understands YAML structure.
   - [kbld](https://network.pivotal.io/products/kbld/) is tool that builds, pushes, and relocates container images.
@@ -36,7 +36,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 * Download the kp CLI for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
 
-* Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network
+* Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
 
 ## <a id='other-install'></a> Installing on TKG/GKE/AKS
 
