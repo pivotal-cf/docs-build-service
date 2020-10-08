@@ -126,7 +126,7 @@ Where:
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 #### <a id='other-ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -158,7 +158,7 @@ Where:
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 ### <a id='other-import'></a> Import Tanzu Build Service Dependencies
 
@@ -315,7 +315,7 @@ Where:
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 #### <a id='tkgi-ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -347,7 +347,7 @@ Where:
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 
 ### <a id='tkgi-import'></a> Import Tanzu Build Service Dependencies
@@ -565,7 +565,7 @@ Where:
 * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Secrets in Tanzu Build Service](secrets-in-tbs.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 #### <a id='offline-additional-config'></a> Additional Configuration
 
@@ -612,7 +612,7 @@ To manage Buildpack Stores, see [Managing Stores](managing-stores.html)
 
 In order to use Cluster Builders, such as the ones installed with Tanzu Build Service, we suggest to install Tanzu Build Service to a repository that is accessible by the nodes in the kubernetes cluster without credentials.
 
-If this is not desired, see [Using Synced Secrets to access Cluster Builders](secrets-in-tbs.html#sync-secrets).
+If this is not desired, see [When to use Synchronized Secrets](synced-secrets.html#sync-secrets).
 
 ## <a id='ensure-readable-run-image'></a> Ensuring the Run Image is Readable
 
