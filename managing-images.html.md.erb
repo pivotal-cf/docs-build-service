@@ -8,6 +8,54 @@ This topic contains the following sections:
 - [Images](#images)
 - [Builds](#builds)
 
+The `kp` CLI can be used to manage images and builds. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.1.3/docs/kp.md).
+
+```
+$ kp image
+Image commands
+
+Usage:
+  kp image [command]
+
+Aliases:
+  image, images, imgs, img
+
+Available Commands:
+  create      Create an image configuration
+  delete      Delete an image
+  list        List images
+  patch       Patch an existing image configuration
+  save        Create or patch an image configuration
+  status      Display status of an image
+  trigger     Trigger an image build
+
+Flags:
+  -h, --help   help for image
+
+Use "kp image [command] --help" for more information about a command.
+```
+
+```
+$ kp build
+Build Commands
+
+Usage:
+  kp build [command]
+
+Aliases:
+  build, builds, blds, bld
+
+Available Commands:
+  list        List builds for an image
+  logs        Tails logs for an image build
+  status      Display status for an image build
+
+Flags:
+  -h, --help   help for build
+
+Use "kp build [command] --help" for more information about a command.
+```
+
 # <a id='images'></a> Images
 
 Images provide a configuration for Tanzu Build Service to build and maintain a Docker image utilizing Tanzu, Paketo, and custom [Cloud Native Buildpacks](https://buildpacks.io).
