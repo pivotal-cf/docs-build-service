@@ -110,6 +110,7 @@ Where:
 * `cluster-builder`: (optional) Cluster Builder name to be used in the image. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
 * `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `git-repo` Git repository URL of the source code.
 * `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
@@ -138,6 +139,7 @@ Where:
 * `cluster-builder`: (optional) Cluster Builder name to be used in the image. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
 * `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `blob-url` URL of the source code blob file.
 
@@ -165,6 +167,7 @@ Where:
 * `cluster-builder`: (optional) Cluster Builder name to be used in the image. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
 * `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `source-path` Path to local source code.
 
@@ -259,6 +262,7 @@ Where:
 * `name`: The name of the image to patch.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
 * `git-repo` Git repository URL of the source code. Must select one of `git-repo`, `blob-url`, or `source-path`
 * `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
 * `blob-url` URL of the source code blob file. Must select one of `git-repo`, `blob-url`, or `source-path`
@@ -516,7 +520,7 @@ The following describes the fields in the example output:
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
 <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, <code>BUILDPACK</code>, <code>STACK</code>, and <code>TRIGGER</code>.</p>
-	    
+
 ## <a id='build-status'></a> Viewing Build Details for an Image
 
 To display retrieve a detailed Bill of Materials for a particular build:
@@ -563,7 +567,7 @@ The following describes the fields in the example output:
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
 <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, <code>BUILDPACK</code>, <code>STACK</code>, and <code>TRIGGER</code>.</p>
-	    
+
 * `Pod Name`: The name of the Pod being used for the Build.
 
 * `Builder`: The full image tag for the builder image used by the build.
