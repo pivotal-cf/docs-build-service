@@ -14,6 +14,53 @@ There are two types of Builders:
 
 <p class='note'><strong>Note:</strong> Only Build Service Admins can manage Cluster Builders.</p>
 
+The `kp` CLI can be used to manage builders and clusterbuilders. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.1.3/docs/kp.md).
+
+```
+$ kp builder
+Builder Commands
+
+Usage:
+  kp builder [command]
+
+Aliases:
+  builder, builders, bldrs, bldr
+
+Available Commands:
+  create      Create a builder
+  delete      Delete a builder
+  list        List available builders
+  patch       Patch an existing builder configuration
+  save        Create or patch a builder
+  status      Display status of a builder
+
+Flags:
+  -h, --help   help for builder
+
+Use "kp builder [command] --help" for more information about a command.
+```
+```
+$ kp clusterbuilder
+ClusterBuilder Commands
+
+Usage:
+  kp clusterbuilder [command]
+
+Aliases:
+  clusterbuilder, clusterbuilders, clstrbldrs, clstrbldr, cbldrs, cbldr, cbs, cb
+
+Available Commands:
+  create      Create a cluster builder
+  delete      Delete a cluster builder
+  list        List available cluster builders
+  patch       Patch an existing cluster builder configuration
+  save        Create or patch a cluster builder
+  status      Display cluster builder status
+
+Flags:
+  -h, --help   help for clusterbuilder
+```
+
 ## <a id='create-builder'></a> Creating a Builder
 
 Use the `kp` cli to create a Builder:

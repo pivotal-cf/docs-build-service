@@ -9,6 +9,31 @@ Build Service ships with a curated collection of Tanzu buildpacks for Java, Node
 
 In addition to supported Tanzu and Paketo buildpacks, custom buildpackages can be uploaded to Build Service stores.
 
+The `kp` CLI can be used to manage clusterstores. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.1.3/docs/kp.md).
+
+```
+$ kp clusterstore
+ClusterStore Commands
+
+Usage:
+  kp clusterstore [command]
+
+Aliases:
+  clusterstore, clusterstores, clstrcsrs, clstrcsr, csrs, csr
+
+Available Commands:
+  add         Add buildpackage(s) to cluster store
+  create      Create a cluster store
+  delete      Delete a cluster store
+  list        List cluster stores
+  remove      Remove buildpackage(s) from cluster store
+  save        Create or update a cluster store
+  status      Display cluster store status
+
+Flags:
+  -h, --help   help for clusterstore
+```
+
 ## <a id='buildpacks-buildpackages'></a> Creating Buildpacks and Buildpackages
 
 Documentation for creating buildpacks is available [here](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/).
