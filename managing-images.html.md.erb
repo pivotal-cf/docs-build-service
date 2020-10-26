@@ -153,23 +153,27 @@ To create an image using source code from a local machine run:
 
 	kp image create <name> \
 	  --tag <tag> \
+	  --local-path <source-path> \
 	  [--builder <builder> or --cluster-builder <cluster-builder>] \
 	  --namespace <namespace> \
 	  --env <env> \
-	  --wait \
-	  --local-path <source-path>
+	  --cache \
+	  --registry-ca-cert-path <path-to-ca-cert> \
+	  --registry-verify-certs
 
 Where:
 
 * `name`: The name of the image.
 * `tag`: The registry location where the image will be created.
+* `source-path` Path to local source code.
 * `builder`: (optional) Builder name to be used in the image. Cannot be used with `cluster-builder`.
 * `cluster-builder`: (optional) Cluster Builder name to be used in the image. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
 * `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
 * `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
-* `source-path` Path to local source code.
+* `registry-ca-cert-path` (optional) Add CA certificate for registry API
+* `registry-verify-certs` (optional) Set whether to verify server's certificate chain and host name (default true)
 
 
 ### <a id='buildpack-config'></a> Buildpack Configuration
