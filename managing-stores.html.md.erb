@@ -34,6 +34,8 @@ Flags:
   -h, --help   help for clusterstore
 ```
 
+<p class='note'><strong>Note:</strong> These docs assume kp cli version 0.1.3 from TBS release 1.0.3. If a feature is not working, you may need to upgrade your cli.</p>
+
 ## <a id='buildpacks-buildpackages'></a> Creating Buildpacks and Buildpackages
 
 Documentation for creating buildpacks is available [here](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/).
@@ -158,14 +160,14 @@ To view the buildpackages in a store:
 To view buildpackages & their individual buildpacks as well as display the order of meta-buildpacks:
 
     kp clusterstore status <store-name> --verbose
-    
+
 ## <a id='kpack-resources'></a> Migrating Buildpacks
 
-Build Service will never automatically remove buildpackages from the store unless you explicitly remove them. 
+Build Service will never automatically remove buildpackages from the store unless you explicitly remove them.
 In this way, users can continue to use older buildpacks until the operator is ready to migrate them.
 
 How you migrate is entirely dependent on the configuration of your Builder resources:
-    * Builders that do not provide a buildpack version will automatically update to the latest buildpack version if it is available. 
+    * Builders that do not provide a buildpack version will automatically update to the latest buildpack version if it is available.
     * Builders that explicitly specify a buildpack version will not update automatically.
 
 With the above in mind, migrating buildpackages in the store is as simple as `kp clusterstore add`ing newer buildpackages and `kp clusterstore remove`ing older buildpackages as necessary.
