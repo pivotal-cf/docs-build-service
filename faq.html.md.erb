@@ -157,6 +157,8 @@ ytt -f /tmp/values.yaml \
 
 You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code.
 
+<p class="note"><strong>Note:</strong> Make sure that you `docker login` to the image repository containing your kpack builder.</p>
+			
 ```
-pack build my-app --path <path/to/code> --builder <kpack-builder-image> --trust-builder
+pack build my-app --path ~/workspace/my-app --builder gcr.io/my-project/my-image:latest --trust-builder
 ```
