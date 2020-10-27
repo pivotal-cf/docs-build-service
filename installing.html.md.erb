@@ -177,6 +177,8 @@ When importing to a registry that uses a self-signed CA certificate:
 kp import -f /tmp/descriptor-<version>.yaml --registry-ca-cert-path <path-to-ca-cert>
 ```
 
+Using the `--show-changes` flag will give a summary of the resource changes for the import. You will also be asked to confirm the import. Confirmation can be skipped with `--force`.
+
 Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
 Currently, users can only access these images if they agree to the EULA for each dependency.
 Users must navigate to each of the dependency product pages in Tanzu Network and accept the EULA highlighted in yellow underneath the `Releases` dropdown.
@@ -385,6 +387,8 @@ When importing to a registry that uses a self-signed CA certificate:
 ```
 kp import -f /tmp/descriptor-<version>.yaml --registry-ca-cert-path <path-to-ca-cert>
 ```
+
+Using the `--show-changes` flag will give a summary of the resource changes for the import. You will also be asked to confirm the import. Confirmation can be skipped with `--force`.
 
 Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
 Currently, users can only access these images if they agree to the EULA for each dependency.
