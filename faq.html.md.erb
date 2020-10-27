@@ -3,7 +3,7 @@ title: Frequently Asked Questions
 owner: Build Service Team
 ---
 
-## How do Cloud Native Buildpacks (CNBs), kpack, and Tanzu Build Service overlap and differ?
+## <a id='faq-1'></a> How do Cloud Native Buildpacks (CNBs), kpack, and Tanzu Build Service overlap and differ?
 
 **CNBs** are build tools that adhere to the <a href="https://github.com/buildpacks/spec">CNB v3 Specification</a> and transform source code into an OCI compliant runnable image. The v3 specification, lifecycle, and local CLI (`pack`) are governed by the open source <a href="https://buildpacks.io">Cloud Native Buildpacks project.</a>
 
@@ -14,13 +14,13 @@ owner: Build Service Team
 
 ---
 
-## Why do I see two images in the image registry after a successful build?
+## <a id='faq-2'></a> Why do I see two images in the image registry after a successful build?
 
 By default Build Service will tag each built image twice. The first tag will be the configured image tag. The second tag will be a unique tag with the build number and build timestamp. The second tag is added to ensure that previous images are not deleted on registries that garbage collect untagged images.
 
 ---
 
-## How does TBS work in air gapped environments?
+## <a id='faq-3'></a> How does TBS work in air gapped environments?
 
 Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `kbld package` command can create a `.tar` file  composed of the kubernetes manifests and images required to successfully install Build Service.
 The `kbld unpackage` command ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
@@ -32,20 +32,20 @@ For more details on air-gapped builds, see [Offline Builds](managing-images.html
 
 ---
 
-## Is there documentation on supported Tanzu Buildpacks?
+## <a id='faq-4'></a> Is there documentation on supported Tanzu Buildpacks?
 
 Yes, documentation is available on [Tanzu Buildpacks Documenation](https://docs.pivotal.io/tanzu-buildpacks/).
 
 ---
 
-## Why do I get an X509 error from Build Service when trying to create an image in my registry?
+## <a id='faq-5'></a> Why do I get an X509 error from Build Service when trying to create an image in my registry?
 
 When interacting with a registry or a git repo that has been deployed using a self signed certificate, Build Service must be provided with the certificate during install time.
 Unfortunately, you will either need to target a registry that does not have self signed certificates or re-install Build Service to work with this registry.
 
 ---
 
-## How do I configure a secret to publish images to Dockerhub?
+## <a id='faq-6'></a> How do I configure a secret to publish images to Dockerhub?
 
 1. Create a dockerhub secret with the `kp` cli:
 
@@ -58,7 +58,7 @@ Unfortunately, you will either need to target a registry that does not have self
 
 ---
 
-## How can I configure an image to pull from a private GitHub repository?
+## <a id='faq-7'></a> How can I configure an image to pull from a private GitHub repository?
 
 1. Create a github secret with the `kp` cli:
 
@@ -81,7 +81,7 @@ Unfortunately, you will either need to target a registry that does not have self
 
 ---
 
-## Why do some builds fail with "Error: could not read run image: *"?
+## <a id='faq-8'></a> Why do some builds fail with "Error: could not read run image: *"?
 
 The run image must be publicly readable or readable with the registry credentials configured in a project/namespace.
 
@@ -92,7 +92,7 @@ This can be accomplished using `kp secret create`.
 
 ---
 
-## Why don't my image builds appear in my Harbor v1.X.X registry?
+## <a id='faq-9'></a> Why don't my image builds appear in my Harbor v1.X.X registry?
 
 There is a known bug in Harbor that, at times, prevents the UI from showing images.
 If you are unable to see a recently built image in the Harbor UI, try pulling
@@ -100,7 +100,7 @@ it using the `docker` CLI to verify that it exists.
 
 ---
 
-## How do I fix "unsupported status code 500" when creating a builder on my Harbor v2.X.X registry?
+## <a id='faq-10'></a> How do I fix "unsupported status code 500" when creating a builder on my Harbor v2.X.X registry?
 
 Some builders are very large and can overwhelm Harbor's default database connection.
 You can remediate this issue by increasing the `database.maxOpenConns` setting in the 
@@ -108,7 +108,8 @@ helm `values.yaml` file. Increase this value from 100 to 300.
 The exact setting can be found [here](https://github.com/goharbor/harbor-helm/blob/ab57e34774ad57fe6506ad5161b2d7b207e1dfd1/values.yaml#L689).
 
 ---
-## How do I configure credentials for using gcr as my installation registry?
+
+## <a id='faq-11'></a> How do I configure credentials for using gcr as my installation registry?
 
 You can use Google Container Registry for your Tanzu Build Service installation registry.
 
@@ -127,7 +128,7 @@ If you have trouble configuring the registry credentials for gcr when following 
 
 ---
 
-## Can I configure a proxy for my Tanzu Build Service?
+## <a id='faq-12'></a> Can I configure a proxy for my Tanzu Build Service?
 
 TBS can be configured with a proxy at [installation](installing.html) time by specifying additional parameters:
 
@@ -153,7 +154,7 @@ ytt -f /tmp/values.yaml \
 
 ---
 
-## How do I build my app locally using kpack builders?
+## <a id='faq-13'></a> How do I build my app locally using kpack builders?
 
 You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code. By using your kpack builder locally, you can guarentee that the buildpacks, stacks, and lifecycle used to build the image config will also be used by the pack CLI, resulting in a container image that is the exact same, whether it is built by `kpack` or `pack`.
 
@@ -162,3 +163,64 @@ You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpa
 ```
 pack build my-app --path ~/workspace/my-app --builder gcr.io/my-project/my-image:latest --trust-builder
 ```
+
+---
+
+## <a id='faq-14'></a> What can I do with the kp --dry-run and --output flags?
+
+From kp CLI v1.0.3+ the `--dry-run` and `--output` flags are made available to kp commands that create or update any kpack Kubernetes resources.
+
+The `--dry-run` flag lets you perform a quick validation with no side-effects as no objects are sent to the server.
+And the `--output` flag lets you view the resource in yaml or json format.
+
+The `--dry-run-with-image-upload` flag is similar to the `--dry-run` flag in that no kpack Kubernetes resources are updated.
+This flag is provided as a convenience for kp commands that can output Kubernetes resource with generated container image references.
+
+For example, consider the command below
+
+```
+$ kp clusterstack create test-stack \
+ --dry-run \
+ --output yaml \
+ --build-image gcr.io/paketo-buildpacks/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d \
+ --run-image gcr.io/paketo-buildpacks/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f
+
+Creating ClusterStack... (dry run)
+Uploading to 'gcr.io/my-project/my-repo'... (dry run)
+	Skipping 'gcr.io/my-project/my-repo/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d'
+	Skipping 'gcr.io/my-project/my-repo/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f'
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  creationTimestamp: null
+  name: test-stack
+spec:
+  buildImage:
+    image: gcr.io/my-project/my-repo/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d
+  id: io.buildpacks.stacks.bionic
+  runImage:
+    image: gcr.io/my-project/my-repo/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f
+status:
+  buildImage: {}
+  runImage: {}
+```
+
+The resource yaml output above has the relocated build and run image urls. However, the images were never uploaded.
+
+If you now apply the resource output using `kubectl apply -f` as shown below, then the resource will be created but will be faulty since the referenced images do not exist.
+
+```
+$ kp clusterstack create test-stack \
+ --dry-run \
+ --output yaml \
+ --build-image gcr.io/paketo-buildpacks/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d \
+ --run-image gcr.io/paketo-buildpacks/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f \
+ | kubectl apply -f -
+Creating ClusterStack... (dry run)
+Uploading to 'gcr.io/my-project/my-repo'... (dry run)
+	Skipping 'gcr.io/my-project/my-repo/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d'
+	Skipping 'gcr.io/my-project/my-repo/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f'
+clusterstack.kpack.io/test-stack created
+```
+
+Running the same command above with the `--dry-run-with-image-upload` flag (instead of `--dry-run`) ensures the created resource refers to images exist.
