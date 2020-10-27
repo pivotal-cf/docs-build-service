@@ -151,3 +151,12 @@ ytt -f /tmp/values.yaml \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
+---
+
+## How do I build my app locally using kpack builders?
+
+You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code.
+
+```
+pack build my-app --path <path/to/code> --builder <kpack-builder-image> --trust-builder
+```
