@@ -68,13 +68,13 @@ Use the `kp` cli to create a Builder:
 * Cluster Builder:
 
 	```
-    kp clusterbuilder create <name> --tag <tag> --order <order> --stack <stack> --store <store>
+    kp clusterbuilder create <name> --tag <tag> --order <order> --stack <stack> --store <store> --buildpack <buildpack>
     ```
 
 * Builder:
 
 	```
-    kp builder create <name> --tag <tag> --order <order> --stack <stack> --store <store> --namespace <namespace>
+    kp builder create <name> --tag <tag> --order <order> --stack <stack> --store <store> --namespace <namespace> --buildpack <buildpack>
     ```
 
 Where:
@@ -98,6 +98,7 @@ Where:
   - group:
 	- id: paketo-buildpacks/nodejs
   ```
+* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
 
 ## <a id='patch-builder'></a> Patching a Builder
 
@@ -106,13 +107,13 @@ You can update a Builder resource using the `kp` cli. To update a builder given 
 * Cluster Builder:
 
 	```
-    kp clusterbuilder patch <name> --order <order> --stack <stack> --store <store>
+    kp clusterbuilder patch <name> --order <order> --stack <stack> --store <store> --buildpack <buildpack>
     ```
 
 * Cluster Builder:
 
 	```
-    kp builder patch <name> --order <order> --stack <stack> --store <store> --namespace <namespace>
+    kp builder patch <name> --order <order> --stack <stack> --store <store> --namespace <namespace> --buildpack <buildpack>
     ```
 
 `kp ccb patch` and `kp cb patch` are respective aliases.
@@ -137,6 +138,7 @@ Where:
   - group:
 	- id: paketo-buildpacks/nodejs
   ```
+* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
 
 <p class='note'><strong>Note:</strong> The `tag` (location in a registry) of a builder cannot be modified. To change this field, you must create a new builder.</p>
 
