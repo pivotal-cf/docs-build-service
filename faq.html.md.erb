@@ -156,7 +156,7 @@ ytt -f /tmp/values.yaml \
 
 ## <a id='faq-13'></a> How do I build my app locally using kpack builders?
 
-You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code. By using your kpack builder locally, you can guarentee that the buildpacks, stacks, and lifecycle used to build the image config will also be used by the pack CLI, resulting in a container image that is the exact same, whether it is built by `kpack` or `pack`.
+You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code. By using your kpack builder locally, you can guarantee that the buildpacks, stacks, and lifecycle used to build the image config will also be used by the pack CLI, resulting in a container image that is the exact same, whether it is built by `kpack` or `pack`.
 
 <p class="note"><strong>Note:</strong> Make sure that you `docker login` to the image repository containing your kpack builder.</p>
 			
