@@ -31,6 +31,7 @@ Available Commands:
   create      Create a cluster stack
   delete      Delete a cluster stack
   list        List cluster stacks
+  save        Create or update a cluster stack
   status      Display cluster stack status
   update      Update a cluster stack
 
@@ -118,6 +119,10 @@ The run and build images provided during clusterstack update will be uploaded to
       -b ./local-build-image.tar \
       -r ./local-run-image.tar
     ```
+
+# <a id='save-stacks'></a> Create or Update ClusterStacks using Save
+
+Users can create or update a ClusterStack using the `save` command. The `kp clusterstack save` command is used exactly the same as `kp clusterstack create` and `kp clusterstack update`, but it will determine if a clusterstack needs to be created or updated.
 
 ## <a id='get-stack-status'></a> Get ClusterStack Status
 

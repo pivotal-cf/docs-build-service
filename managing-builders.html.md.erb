@@ -119,7 +119,7 @@ You can update a Builder resource using the `kp` cli. To update a builder given 
     kp clusterbuilder patch <name> --stack <stack> --store <store> --buildpack <buildpack>
     ```
 
-* Cluster Builder:
+* Builder:
 
 	```
     kp builder patch <name> --order <order> --stack <stack> --store <store> --namespace <namespace>
@@ -153,6 +153,53 @@ Where:
 * `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
 
 <p class='note'><strong>Note:</strong> The `tag` (location in a registry) of a builder cannot be modified. To change this field, you must create a new builder.</p>
+
+## <a id='save-builder'></a> Saving Builders
+
+Users can create or update a Builder/ClusterBuilder using the `save` command. The `kp builder/clusterbuilder save` command is used exactly the same as `kp builder/clusterbuilder create` and `kp builder/clusterbuilder update`, but it will determine if a builder/clusterbuilder needs to be created or updated.
+
+To save a Builder/ClusterBuilder:
+
+* Cluster Builder:
+
+	```
+    kp clusterbuilder save <name> --tag <tag> --order <order> --stack <stack> --store <store>
+    ```
+    ```
+    kp clusterbuilder save <name> --tag <tag> --stack <stack> --store <store> --buildpack <buildpack>
+    ```
+
+* Builder:
+
+	```
+    kp builder save <name> --tag <tag> --order <order> --stack <stack> --store <store> --namespace <namespace>
+    ```
+    ```
+    kp builder save <name> --tag <tag> --stack <stack> --store <store> --namespace <namespace> --buildpack <buildpack>
+    ```
+
+Where:
+
+* `name`: The name of the builder.
+* `tag`: The registry location where the builder will be created.
+* `stack`: The name of the stack to be used by the builder.
+* `store`: The name of the store containing the buildpacks that will be used by the builder.
+* `namespace` The kubernetes namespace for the builder (for Builders only)
+* `order`: The local path to the buildpack order YAML that the builder will use.
+  Sample order YAML files will be available on the [VMware Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies) page on Tanzu Network.
+  For more information about listing buildpacks in groups in the order YAML, see [builder.toml](https://buildpacks.io/docs/reference/builder-config/#order-_list-required_) in the Buildpacks.io documentation.
+
+  Example order YAML file that would be used by a builder designed to build NodeJS and Java apps:
+
+  ```
+  ---
+  - group:
+	- id: paketo-buildpacks/bellsoft-liberica
+	- id: paketo-buildpacks/gradle
+  - group:
+	- id: paketo-buildpacks/nodejs
+  ```
+* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
 
 ## <a id='delete-builder'></a> Deleting Builders
 
