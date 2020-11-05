@@ -50,6 +50,7 @@ To create an image using source code from a git repository run:
       [--custom-builder <custom-builder> or --custom-cluster-builder <custom-cluster-builder>] \
       --namespace <namespace> \
       --env <env> \
+      --sub-path <sub-path> \
       --wait \
       --git <git-repo> \
       --git-revision <git-revision>
@@ -62,6 +63,7 @@ Where:
 * `custom-cluster-builder`: (optional) Custom Cluster Builder name to be used in the image. Defaults to `default` when `custom-builder` is not set. Cannot be used with `custom-builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `sub-path` (optional): Build code at the sub path located within the source code directory.
 * `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `git-repo` Git repository URL of the source code.
 * `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
@@ -78,6 +80,7 @@ To create an image using source code from blob store:
 	  [--custom-builder <custom-builder> or --custom-cluster-builder <custom-cluster-builder>] \
 	  --namespace <namespace> \
 	  --env <env> \
+	  --sub-path <sub-path> \
 	  --wait \
 	  --blob <blob-url>
 
@@ -89,6 +92,7 @@ Where:
 * `custom-cluster-builder`: (optional) Custom Cluster Builder name to be used in the image. Defaults to `default` when `custom-builder` is not set. Cannot be used with `custom-builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `sub-path` (optional): Build code at the sub path located within the source code directory.
 * `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `blob-url` URL of the source code blob file.
 
