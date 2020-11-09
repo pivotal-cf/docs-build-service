@@ -3,15 +3,42 @@ title: Managing Stores
 owner: Build Service Team
 ---
 
-A Store provides a collection of buildpacks that can be utilized by Builders. Buildpacks are distributed and added to a store in buildpackages which are docker images containing one or more buildpacks.
+A Store is a cluster level resource that provides a collection of buildpacks that can be utilized by Builders. Buildpacks are distributed and added to a store in buildpackages which are docker images containing one or more buildpacks.
 
-Build Service ships with a curated collection of Tanzu buildpacks for Java, and Paketo buildpacks for Nodejs, go, PHP, nginx, httpd, and .NET Core. It is important to keep these buildpacks up-to-date. Updates to these buildpacks are provided on the [Tanzu Network Build Service Dependency](https://network.pivotal.io/products/tbs-dependencies/) page.
+Build Service ships with a curated collection of Tanzu buildpacks for Java, Nodejs, Go, PHP, nginx, and httpd and Paketo buildpacks for procfile, and .NET Core. It is important to keep these buildpacks up-to-date. Updates to these buildpacks are provided on [Tanzu Network](https://network.pivotal.io/).
 
 In addition to supported Tanzu and Paketo buildpacks, custom buildpackages can be uploaded to Build Service stores.
 
+The `kp` CLI can be used to manage clusterstores. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.1.3/docs/kp.md).
+
+```
+$ kp clusterstore
+ClusterStore Commands
+
+Usage:
+  kp clusterstore [command]
+
+Aliases:
+  clusterstore, clusterstores, clstrcsrs, clstrcsr, csrs, csr
+
+Available Commands:
+  add         Add buildpackage(s) to cluster store
+  create      Create a cluster store
+  delete      Delete a cluster store
+  list        List cluster stores
+  remove      Remove buildpackage(s) from cluster store
+  save        Create or update a cluster store
+  status      Display cluster store status
+
+Flags:
+  -h, --help   help for clusterstore
+```
+
+<p class='note'><strong>Note:</strong> These docs assume kp cli version 0.1.3 from TBS release 1.0.3. If a feature is not working, you may need to upgrade your cli.</p>
+
 ## <a id='buildpacks-buildpackages'></a> Creating Buildpacks and Buildpackages
 
-Documentation for creating buildpacks is available [here](https://buildpacks.io/docs/buildpack-author-guide/create-a-buildpack/).
+Documentation for creating buildpacks is available [here](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/).
 
 Documentation for creating buildpackages is available [here](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/).
 
@@ -21,43 +48,104 @@ Documentation for creating buildpackages is available [here](https://buildpacks.
 
 Users can view the existing stores with:
 
-    kp store list
+    kp clusterstore list
 
 ## <a id='create-store'></a> Creating a Store
 
 Tanzu Build Service ships with a `default` store containing all of the supported buildpacks. Users can create additional stores with:
 
 
-    kp store create <store-name> <buildpackage-1> <buildpackage-2> --default-repository <image-repository>
+    kp clusterstore create <store-name> -b <buildpackage-1> -b <buildpackage-2>
 
-Where `<image-repository>` is the Docker repository where the buildpackage images will be stored.
-This can be set to the same value used during installation for the `docker_repository` during the `duffle` install described in the [install docs](installing.html#other-install).
-
-<p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the registry used for the <code>default-repository</code> on the local machine.</p>
+<p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the registry used for installation on the local machine.</p>
 
 ## <a id='add-buildpackages-to-store'></a> Adding Buildpackages to a Store
 
-Users can add multiple buildpackages at a time from a registry or from a file on the local machine:
+Users can add multiple buildpackages at a time from a registry or from a file on the local machine.
+
+This command is useful for users that want to only consume certain buildpacks rather than update all dependencies with `kp import`.
 
 * If using a Docker registry:
 
     ```
-    kp store add <store-name> <buildpackage-1> <buildpackage-2> ...
+    kp clusterstore add <store-name> -b <buildpackage-1> -b <buildpackage-2> ...
     ```
 
-<p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to build service registry on the local machine.</p>
+<p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the registry used for installation on the local machine.</p>
 
 * If using local `.cnb` buildpackage files created as described in the [buildpackages docs](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/):
 
     ```
-    kp store add <store-name> <path-to-buildpackage-1>.cnb <path-to-buildpackage-2>.cnb ...
+    kp clusterstore add <store-name> -b <path-to-buildpackage-1>.cnb -b <path-to-buildpackage-2>.cnb ...
     ```
+
+### <a id='add-buildpackages-to-store-tanzu'></a> Adding Buildpackages to a Store from Tanzu Network
+
+Updated versions of all supported Buildpacks will be available on [Tanzu Network](https://network.pivotal.io) as registry images. Updated Buildpacks will be found in the following locations:
+
+* [Java](https://network.pivotal.io/products/tanzu-java-buildpack)
+* [NodeJS](https://network.pivotal.io/products/tanzu-nodejs-buildpack)
+* [Go](https://network.pivotal.io/products/tanzu-go-buildpack)
+* [PHP, .NET Core, nginx, httpd, procfile](https://network.pivotal.io/products/tbs-dependencies)
+
+Here is a list of how to update each buildpack that is included with Tanzu Build Service by default:
+
+```
+kp clusterstore add default registry.pivotal.io/tanzu-java-buildpack/java:<version>
+kp clusterstore add default registry.pivotal.io/tanzu-nodejs-buildpack/nodejs:<version>
+kp clusterstore add default registry.pivotal.io/tanzu-go-buildpack/go:<version>
+kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_dotnet-core:<version>
+kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_php:<version>
+kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_nginx:<version>
+kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_httpd:<version>
+kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_procfile:<version>
+```
+
+### <a id='add-buildpackages-to-store-offline'></a> Offline Adding Buildpackages to a Store from Tanzu Network
+
+If your Tanzu Build Service installation is in an offline/air-gapped environment, you can update stores with the following offline workflow:
+
+1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
+
+2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
+
+3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.pivotal.io/products/kbld) page.
+
+4. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
+
+```
+docker login registry.pivotal.io
+
+kbld package -f descriptor-<version>.yaml \
+  --output /tmp/packaged-dependencies.tar
+```
+
+5. Move the output file `packaged-dependencies.tar` to a machine that has access to the "offline" environment
+
+6. Upload the dependency images to the registry used to deploy Tanzu Build Service:
+
+```
+docker login <build-service-registry>
+
+kbld unpackage -f descriptor-<version>.yaml \
+  --input /tmp/packaged-dependencies.tar \
+  --repository <IMAGE-REPOSITORY> \
+  --lock-output /tmp/dependencies-relocated.lock
+```
+
+Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
+
+7. Now that dependencies are relocated to the internal registry, you can use the following command to update the necessary resources:
+
+```
+kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
+```
 
 ## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a Store
 
 Users can remove a buildpackage from a store:
 
-    kp store remove <store-name> <buildpackage>
+    kp clusterstore remove <store-name> -b <buildpackage>
 
 <p class='note'><strong>Note:</strong> Buildpackages must be removed from stores by full image reference. The <code>&lt;buildpackage&gt;</code> args should include their digests and will look like <code>registry.io/repository@sha256:<sha256></code>.</p>
 
@@ -67,12 +155,27 @@ Users can use the `kp` CLI to get details about a store including buildpackages 
 
 To view the buildpackages in a store:
 
-    kp store status <store-name>
+    kp clusterstore status <store-name>
 
 To view buildpackages & their individual buildpacks as well as display the order of meta-buildpacks:
 
-    kp store status <store-name> --verbose
+    kp clusterstore status <store-name> --verbose
+
+## <a id='kpack-resources'></a> Migrating Buildpacks
+
+Build Service will never automatically remove buildpackages from the store unless you explicitly remove them.
+In this way, users can continue to use older buildpacks until the operator is ready to migrate them.
+
+How you migrate is entirely dependent on the configuration of your Builder resources:
+    * Builders that do not provide a buildpack version will automatically update to the latest buildpack version if it is available.
+    * Builders that explicitly specify a buildpack version will not update automatically.
+
+With the above in mind, migrating buildpackages in the store is as simple as `kp clusterstore add`ing newer buildpackages and `kp clusterstore remove`ing older buildpackages as necessary.
+
+If you'd like fine-grained control over buildpack updates, you can create multiple stores to manage buildpack versions.
+Then, you can point individual builders at the desired store. Each store can be updated as needed
+without affecting other builders or fanning out large, sweeping changes.
 
 ## <a id='kpack-resources'></a> Corresponding kpack Resource
 
-All Build Service builders utilize cluster scoped [Store Resources](https://github.com/pivotal/kpack/blob/master/docs/custombuilders.md#store).
+All Build Service builders utilize cluster scoped [Store Resources](https://github.com/pivotal/kpack/blob/master/docs/builders.md#store).
