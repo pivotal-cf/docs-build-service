@@ -100,6 +100,7 @@ To create an image using source code from a git repository run:
       [--builder <builder> or --cluster-builder <cluster-builder>] \
       --namespace <namespace> \
       --env <env> \
+      --sub-path <sub-path> \
       --wait \
       --git <git-repo> \
       --git-revision <git-revision>
@@ -112,8 +113,9 @@ Where:
 * `cluster-builder`: (optional) Cluster Builder name to be used in the image. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `sub-path` (optional): Build code at the sub path located within the source code directory.
 * `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
-* `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
+* `wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `git-repo` Git repository URL of the source code.
 * `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
 
@@ -130,6 +132,7 @@ To create an image using source code from blob store:
 	  [--builder <builder> or --cluster-builder <cluster-builder>] \
 	  --namespace <namespace> \
 	  --env <env> \
+	  --sub-path <sub-path> \
 	  --wait \
 	  --blob <blob-url>
 
@@ -141,8 +144,9 @@ Where:
 * `cluster-builder`: (optional) Cluster Builder name to be used in the image. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace`: (optional) The Kubernetes namespace for the image. Defaults to the local Kubernetes current-context namespace.
 * `env` (optional): Image environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `sub-path` (optional): Build code at the sub path located within the source code directory.
 * `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
-* `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
+* `wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
 * `blob-url` URL of the source code blob file.
 
 <p class='note'><strong>Note:</strong> The source code file in the blob store must be publicly viewable or the <code>blob-url</code> must contain the basic authentication credentials.</p>
