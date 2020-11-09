@@ -181,6 +181,13 @@ Where:
 * `registry-ca-cert-path` (optional) Add CA certificate for registry API
 * `registry-verify-certs` (optional) Set whether to verify server's certificate chain and host name (default true)
 
+## <a id='save-image'></a> Creating/Patching an Image using Save
+
+Users can create or patch an Image using the `save` command. The `kp image save` command is used exactly the same as `kp image create` or `kp image patch`, but it will determine if a image needs to be created or patched.
+
+    ```
+    kp image save <store-name> -b <buildpackage-1> -b <buildpackage-2>
+    ```
 
 ### <a id='buildpack-config'></a> Buildpack Configuration
 

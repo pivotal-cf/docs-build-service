@@ -54,10 +54,19 @@ Users can view the existing stores with:
 
 Tanzu Build Service ships with a `default` store containing all of the supported buildpacks. Users can create additional stores with:
 
-
+    ```
     kp clusterstore create <store-name> -b <buildpackage-1> -b <buildpackage-2>
+    ```
 
 <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the registry used for installation on the local machine.</p>
+
+## <a id='save-store'></a> Creating/Updating a Store using Save
+
+Users can create or update a ClusterStore using the `save` command. The `kp clusterstore save` command is used exactly the same as `kp clusterstore create`, but it will determine if a clusterstore needs to be created or updated.
+
+    ```
+    kp clusterstore save <store-name> -b <buildpackage-1> -b <buildpackage-2>
+    ```
 
 ## <a id='add-buildpackages-to-store'></a> Adding Buildpackages to a Store
 
