@@ -44,31 +44,31 @@ Documentation for creating buildpackages is available [here](https://buildpacks.
 
 <p class='note'><strong>Note:</strong> Only Build Service Admins can perform store commands.</p>
 
-## <a id='list-stores'></a> Listing Stores
+## <a id='list-stores'></a> Listing ClusterStores
 
 Users can view the existing stores with:
 
     kp clusterstore list
 
-## <a id='create-store'></a> Creating a Store
+## <a id='create-store'></a> Creating a ClusterStore
 
 Tanzu Build Service ships with a `default` store containing all of the supported buildpacks. Users can create additional stores with:
 
-    ```
-    kp clusterstore create <store-name> -b <buildpackage-1> -b <buildpackage-2>
-    ```
+```
+kp clusterstore create <store-name> -b <buildpackage-1> -b <buildpackage-2>
+```
 
 <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the registry used for installation on the local machine.</p>
 
-## <a id='save-store'></a> Creating/Updating a Store using Save
+## <a id='save-store'></a> Saving a ClusterStore
 
 Users can create or update a ClusterStore using the `save` command. The `kp clusterstore save` command is used exactly the same as `kp clusterstore create`, but it will determine if a clusterstore needs to be created or updated.
 
-    ```
-    kp clusterstore save <store-name> -b <buildpackage-1> -b <buildpackage-2>
-    ```
+```
+kp clusterstore save <store-name> -b <buildpackage-1> -b <buildpackage-2>
+```
 
-## <a id='add-buildpackages-to-store'></a> Adding Buildpackages to a Store
+## <a id='add-buildpackages-to-store'></a> Adding Buildpackages to a ClusterStore
 
 Users can add multiple buildpackages at a time from a registry or from a file on the local machine.
 
@@ -88,7 +88,7 @@ This command is useful for users that want to only consume certain buildpacks ra
     kp clusterstore add <store-name> -b <path-to-buildpackage-1>.cnb -b <path-to-buildpackage-2>.cnb ...
     ```
 
-### <a id='add-buildpackages-to-store-tanzu'></a> Adding Buildpackages to a Store from Tanzu Network
+### <a id='add-buildpackages-to-store-tanzu'></a> Adding Buildpackages to a ClusterStore from Tanzu Network
 
 Updated versions of all supported Buildpacks will be available on [Tanzu Network](https://network.pivotal.io) as registry images. Updated Buildpacks will be found in the following locations:
 
@@ -110,7 +110,7 @@ kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpack
 kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_procfile:<version>
 ```
 
-### <a id='add-buildpackages-to-store-offline'></a> Offline Adding Buildpackages to a Store from Tanzu Network
+### <a id='add-buildpackages-to-store-offline'></a> Offline Adding Buildpackages to a ClusterStore from Tanzu Network
 
 If your Tanzu Build Service installation is in an offline/air-gapped environment, you can update stores with the following offline workflow:
 
@@ -150,7 +150,7 @@ Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. 
 kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
 ```
 
-## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a Store
+## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a ClusterStore
 
 Users can remove a buildpackage from a store:
 
@@ -158,7 +158,7 @@ Users can remove a buildpackage from a store:
 
 <p class='note'><strong>Note:</strong> Buildpackages must be removed from stores by full image reference. The <code>&lt;buildpackage&gt;</code> args should include their digests and will look like <code>registry.io/repository@sha256:<sha256></code>.</p>
 
-## <a id='show-buildpackages-in-store'></a> Store Status
+## <a id='show-buildpackages-in-store'></a> Get ClusterStore Status
 
 Users can use the `kp` CLI to get details about a store including buildpackages and their buildpacks, as well as meta-buildpacks. [Meta-buildpacks](https://buildpacks.io/docs/concepts/components/buildpack/#meta-buildpack) are buildpacks that indicate the order that other buildpacks run:
 
