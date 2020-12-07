@@ -12,13 +12,16 @@ The installation instructions are divided between the TKGI installation, which u
 
 ## <a id='upgrade'></a> Upgrade path
 
-Follow below install instructions using the latest binaries available on TanzuNet. 
+Follow below install instructions using the latest binaries available on TanzuNet.
 
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install Build Service, you must:
 
 * Have access to the Kubernetes cluster satisfying the [minimum required permissions](#install-rbac).
+
+* Have access to a container registry to install Tanzu Build Service and store the application images that will be created.
+  * TBS uses ~5GB of registry space for installation, this does not include the space that will be used for application images.
 
 * Ensure your Kubernetes cluster is configured with default `StorageClass`.
 Tanzu Build Service will default to using 2G of cache if a default `StorageClass` is defined.
