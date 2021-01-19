@@ -6,6 +6,7 @@ owner: Core Dependencies Team
 A CustomStack is a resource that allows users to create a customized [ClusterStack](managing-stacks.html) from Ubuntu 18.04 (Bionic Beaver) based OCI images.
 
 CustomStacks can be used to:
+
 * Convert a pre-existing base image that you'd like to use with TBS into a ClusterStack resource.
 * Add required stack metadata to base images.
 * Add CA certificates to build and/or run image.
@@ -14,79 +15,69 @@ CustomStacks can be used to:
 
 ## <a id='creating-a-customstack'></a> Creating a CustomStack
 
-A CustomStack is created by running `kubectl apply` with a resource configuration file:
+A CustomStack is created by running `kubectl apply` with a resource configuration file. The following defines the relevant fields of the CustomStack resource spec in more detail:
+
+* `source`: The location of base images used for building the stack. See more info in [Source Configuration](#source-config).
+* `destination`: The location to publish built images and optional ClusterStack. See more info in [Destination Configuration](#destination-config).
+* `caCerts`: References to config maps of CA certificates to add to one or both of the stack images.
+* `packages`: List of packages to install on one or both of the stack images. A list of all available packages can be found [here](https://packages.ubuntu.com/bionic/allpackages).
+* `mixins`: List of mixin labels to add to one or both of the stack images. Information on the mixins concept can be found [here](https://buildpacks.io/docs/concepts/components/stack/#mixins).
+* `service-account-name`: Name of service account with secret containing credentials to push to registry.
+* `user`: User and group ID of the CNB user
+  * Not required if the user is already present in metadata.
+  * If the user and/or group ID do not exist on the image, they will be created.
+
+### <a id='source-config'></a> Source Configuration
+
+The `source` field describes the base images for the CustomStack. It can be configured in exactly one of the following ways:
+
+* Registry Images
+
+  ```yaml
+  source:
+    registryImages:
+      build:
+        image: <build-base-image>
+      run:
+        image: <run-base-image>
+  ```
+
+  * `build-base-image`: The fully qualified reference of the build base image.
+  * `run-base-image`: The fully qualified reference of the run base image.
+
+* Stack
+
+  ```yaml
+  stack:
+    name: <cluster-stack-name>
+    apiVersion: kpack.io/v1alpha1
+    kind: ClusterStack
+  ```
+
+  * `cluster-stack-name`: Name of ClusterStack to base CustomStack images on.
+
+### <a id='destination-config'></a> Destination Configuration
+
+The `destination` field describes where the built images will be published and if a ClusterStack should be created.
 
 ```yaml
-apiVersion: stacks.stacks-operator.tanzu.vmware.com/v1alpha1
-kind: CustomStack
-metadata:
-  name: <name>
-spec:
+destination:
   build:
-    image: <build-base-image>
-    outputTag: <output-build-image-tag>
+    tag: <output-build-image-tag>
   run:
-    image: <run-base-image>
-    outputTag: <output-run-image-tag>
-  caCerts:
-    buildRef:
-      name: <build-ca-certs-config-map>
-    runRef:
-      name: <run-ca-certs-config-map>
-  packages:
-    - name: <package>
-      phase: <build/run>
-  mixins:
-    - name: <mixin>
-      phase: <build/run>
-  kpackStack:
-    name: <cluster-stack-name>
-    apiVersion: clusterstacks.kpack.io/v1alpha1
+    tag: <output-run-image-tag>
+  stack: # Optional
+    name: <output-cluster-stack-name>
+    apiVersion: kpack.io/v1alpha1
     kind: ClusterStack
-  serviceAccountName: <service-account-name>
-  user:
-    userID: <user-id>
-    groupID: <group-id>
 ```
 
-Where:
-
-* `name`: The name of the CustomStack.
-* `build-base-image`: The fully qualified reference of the build base image.
 * `output-build-image-tag`: The registry location where the build image will be created.
-* `run-base-image`: The fully qualified reference of the run base image.
 * `output-run-image-tag`: The registry location where the run image will be created.
-* `build-ca-certs-config-map`: Reference to the config map with ca-certs to add to the build image.
-* `run-ca-certs-config-map`: Reference to the config map with ca-certs to add to the run image.
-* `package`: Name of a package to add to one or both of the stack images.
-	* A list of all available packages can be found [here](https://packages.ubuntu.com/bionic/allpackages).
-* `build/run`: (optional) Which image to add the package to. If omitted, package will be added to both images.
-* `mixin`: Name of a mixin label to add to one or both of the stack images.
-	* Information on the mixins concept can be found [here](https://buildpacks.io/docs/concepts/components/stack/#mixins).
-* `build/run`: (optional) Which image to add the package to. If omitted, package will be added to both images.
-* `cluster-stack-name`: Name of ClusterStack to create with CustomStack images
-* `service-account-name`: Name of service account with secret containing creds to push to registry.
-* `user-id`: CNB User ID to add to image metadata
-	* Not required if one is already present in metadata.
-	* If the User ID does not exist on the image, it will be created.
-* `group-id`: CNB Group ID to add to image metadata.
-	* Not required if one is already present in metadata.
-	* If the Group ID does not exist on the image, it will be created.
+* `output-cluster-stack-name`: Name of ClusterStack to create with CustomStack images
 
-## <a id='debugging-customstacks'></a> Debugging CustomStacks
+### <a id='example-registry-images'></a> Example CustomStack from Registry Images
 
-When a CustomStack is created, a pod is created in the same namespace which will modify the base image and push the resulting stack image to the registry. The pod will be named `stack-pod-<customstack-name>-<number>`, where:
-* `customstack-name`: The name of your CustomStack
-* `number`: The revision of your CustomStack. This will be incremented by one each time a new spec is applied.
-
-The ten latest pods are kept around for debugging purposes. To debug a failing CustomStack, check the logs of the corresponding pod: `kubectl logs <pod-name> -c <create-build-image/create-run-image>`, where:
-* `pod-name`: The name of the pod
-* `create-build-image/create-run-image`: The container whose logs you would like to see.
-	* `create-build-image` for logs related to creating the build image.
-	* `create-run-image` for logs related to create the run image.
-
-
-## <a id='example'></a> Example CustomStack
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -117,36 +108,125 @@ kind: CustomStack
 metadata:
   name: stack-sample
 spec:
-  build:
-    image: paketobuildpacks/build@sha256:ae88191cc5bfd0dcd2938954f20d5df5060a562af8e3d65a92a815612054537c
-    outputTag: my.registry.io/final-build-image
-  run:
-    image: paketobuildpacks/run@sha256:48f67dcb3f2b27403de80193e34abd3172b3fbdfdd87e452721aba90ea68fc66
-    outputTag: my.registry.io/final-run-image
-  caCerts:
-    buildRef:
+  source:
+    registryImages:
+      build:
+        image: paketobuildpacks/build@sha256:ae88191cc5bfd0dcd2938954f20d5df5060a562af8e3d65a92a815612054537c
+      run:
+        image: paketobuildpacks/run@sha256:48f67dcb3f2b27403de80193e34abd3172b3fbdfdd87e452721aba90ea68fc66
+  destination:
+    build:
+      tag: my.registry.io/final-build-image
+    run:
+      tag: my.registry.io/final-run-image
+    stack: # Optional
+      name: stack-sample-cluster-stack
+      apiVersion: kpack.io/v1alpha1
+      kind: ClusterStack
+  caCerts: # Optional
+    buildRef: # Optional
       name: build-ca-certs
-    runRef:
+    runRef: # Optional
       name: run-ca-certs
-  packages:
+  packages: # Optional
     - name: cowsay
     - name: cowsay-off
     - name: fortune
       phase: build
     - name: rolldice
       phase: run
-  mixins:
+  mixins: # Optional
     - name: set=build-utils
       phase: build
     - name: set=run-utils
       phase: run
     - name: set=shared-utils
-  kpackStack:
-    name: stack-sample-cluster-stack
-    apiVersion: clusterstacks.kpack.io/v1alpha1
-    kind: ClusterStack
   serviceAccountName: default
-  user:
+  user: # Optional
     userID: 1000
     groupID: 1000
 ```
+
+### <a id='example-registry-images'></a> Example CustomStack from ClusterStack
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: build-ca-certs
+data:
+  cert-1: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+  cert-2: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: run-ca-certs
+data:
+  cert-3: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+---
+apiVersion: stacks.stacks-operator.tanzu.vmware.com/v1alpha1
+kind: CustomStack
+metadata:
+  name: stack-sample
+spec:
+  source:
+    stack:
+      name: stack-sample-cluster-stack
+      apiVersion: kpack.io/v1alpha1
+      kind: ClusterStack
+  destination:
+    build:
+      tag: my.registry.io/final-build-image
+    run:
+      tag: my.registry.io/final-run-image
+    stack: # Optional
+      name: final-stack-sample-cluster-stack
+      apiVersion: kpack.io/v1alpha1
+      kind: ClusterStack
+  caCerts: # Optional
+    buildRef: # Optional
+      name: build-ca-certs
+    runRef: # Optional
+      name: run-ca-certs
+  packages: # Optional
+    - name: cowsay
+    - name: cowsay-off
+    - name: fortune
+      phase: build # Optional
+    - name: rolldice
+      phase: run # Optional
+  mixins: # Optional
+    - name: set=build-utils
+      phase: build # Optional
+    - name: set=run-utils
+      phase: run # Optional
+    - name: set=shared-utils
+  serviceAccountName: default
+  user: # Optional
+    userID: 1000 # Optional
+    groupID: 1000 # Optional
+```
+
+## <a id='debugging-customstacks'></a> Debugging CustomStacks
+
+When a CustomStack is created, a pod is created in the same namespace which will modify the base image and push the resulting stack image to the registry. The pod will be named `stack-pod-<customstack-name>-<number>`, where:
+
+* `customstack-name`: The name of your CustomStack
+* `number`: The revision of your CustomStack. This will be incremented by one each time a new spec is applied.
+
+The ten latest pods are kept around for debugging purposes. To debug a failing CustomStack, check the logs of the corresponding pod: `kubectl logs <pod-name> -c <create-build-image/create-run-image>`, where:
+
+* `pod-name`: The name of the pod
+* `create-build-image/create-run-image`: The container whose logs you would like to see.
+	* `create-build-image` for logs related to creating the build image.
+	* `create-run-image` for logs related to create the run image.
