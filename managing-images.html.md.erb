@@ -457,6 +457,13 @@ status:
 
 If further debugging is required, inspect the image's latest Build status discussed in [Viewing Build Details for an Image](#build-status).
 
+
+## <a id='image-signing'></a> Signing Images
+
+Build Services images can be signed by a provisioned [Notary](https://github.com/theupdateframework/notary) server. Information on enabling image signing is captured [here](https://github.com/pivotal/kpack/blob/master/docs/image.md#notary-configuration).
+
+<p class='note'><strong>Note:</strong> Image signing is not supported through the kp CLI.</p>
+
 ## <a id='service-bindings'></a> Image Service Bindings
 
 Tanzu Build Service supports application service bindings as described in the Cloud Native Buildpack [Service Bindings specification](https://github.com/buildpacks/spec/blob/main/extensions/bindings.md).
