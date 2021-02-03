@@ -300,10 +300,31 @@ To list all the image configurations in a Kubernetes namespace:
 The following is an example of the output for this command:
 
 ```
-NAME           READY    LATEST IMAGE
-first-image    True     first/image:tag
-second-image   True     second/image:tag
-first-image    False    third/image:tag
+NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
+test-image1     True      CONFIG           first/image:tag      example1
+test-image2     True      BUILDPACK        second/image:tag     example1
+```
+
+### <a id='filter-images'></a> Filter Images
+
+Users can further filter the list of Images by applying the `--filter` flag and specifying a filter and value. This command is useful for traversing large number of Image configurations by narrowing the list to only display Images that possess certain attributes.
+
+```
+$ kp image list --filter ready=false -A
+
+NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
+test-image1     True      CONFIG           first/image:tag      example1
+test-image2     True      BUILDPACK        second/image:tag     example1
+test-image3     True      STACK            third/image:tag      example3
+```
+
+See below for the current supported filters and values:
+
+```
+builder=string
+clusterbuilder=string
+latest-reason=commit, trigger, config, stack, buildpack
+ready=true, false, unknown
 ```
 
 ## <a id='rebuild-image'></a> Image Rebuilds
