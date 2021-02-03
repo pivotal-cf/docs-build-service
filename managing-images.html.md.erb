@@ -529,7 +529,7 @@ data:
 
 The procedures in this section describe how to view information and logs for image builds using the `kp` CLI.
 
-## <a id='list-builds'></a> Listing Builds for an Image
+## <a id='list-builds'></a> Listing Builds
 
 Build Service stores the ten most recent successful builds and the ten most recent failed builds.
 
@@ -537,15 +537,17 @@ To see a the list of builds for an image run:
 
 	kp build list <image-name> --namespace <namespace>
 
+If the `namespace` is not specified, it defaults to the kubernetes current-context namespace. And if the `image-name` is not specified, the builds for all the images in your namespace are listed.
+
 The following is an example of the output for this command:
 
 ```
-BUILD    STATUS    IMAGE                           STARTED                FINISHED               REASON
-1        SUCCESS   gcr.io/myapp@sha256:some-sha1   2019-09-09 21:55:27    2019-07-08 21:55:54    CONFIG
-2        SUCCESS   gcr.io/myapp@sha256:some-sha2   2019-09-09 21:56:55    2019-07-08 21:57:40    COMMIT
-3        SUCCESS   gcr.io/myapp@sha256:some-sha3   2019-09-09 21:57:55    2019-07-08 21:58:40    STACK
-4        FAILURE   gcr.io/myapp@sha256:some-sha4   2019-09-09 21:58:55    2019-07-08 21:59:40    CONFIG+
-5        BUILDING  gcr.io/myapp@sha256:some-sha5   2019-09-09 21:59:55    --                     BUILDPACK
+BUILD    STATUS    IMAGE                           REASON
+1        SUCCESS   gcr.io/myapp@sha256:some-sha1   CONFIG
+2        SUCCESS   gcr.io/myapp@sha256:some-sha2   COMMIT
+3        SUCCESS   gcr.io/myapp@sha256:some-sha3   STACK
+4        FAILURE   gcr.io/myapp@sha256:some-sha4   CONFIG+
+5        BUILDING  gcr.io/myapp@sha256:some-sha5   BUILDPACK
 ```
 
 The following describes the fields in the example output:
@@ -555,10 +557,6 @@ The following describes the fields in the example output:
 * `STATUS`: Describes the status of a previous build image.
 
 * `IMAGE`: The full image reference for the app image produced by the build.
-
-* `STARTED`: Describes when a build started.
-
-* `FINISHED`: Describes when a build finished.
 
 * `REASON`: Describes why an image rebuild occurred. These reasons include:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
@@ -584,17 +582,27 @@ The following is an example of the output for this command:
 
 ```
 Image:      gcr.io/myapp@sha256:f87b614257af05c3301c1554c4f15131793caec3adf55e45d2c612e90445765a
-Status:           SUCCESS
-Build Reasons:    CONFIG
+Status:     SUCCESS
+Reason:     CONFIG
+            resources
+	        - source: {}
+	        + source:
+	        +   git:
+	        +     revision: 948b2eff6a21580a44a0f4d8c609a2af45359d41
+	        +     url: https://github.com/paketo-buildpacks/samples
+	        +   subPath: go/mod
 
-Pod Name:    build-pod-xyz
+Started:    2021-02-02 18:34:33
+Finished:   2021-02-02 18:41:03
+
+Pod Name:   build-pod-xyz
 
 Builder:    gcr.io/my-builder:base@sha256:grtewwads0asdvf09asdf
 Run Image:  gcr.io/base-image:run@sha256:asdas098asdas
 
-Source:      Git
-Url:         http://github.com/myapp
-Revision:    ad123ad
+Source:     Git
+Url:        http://github.com/myapp
+Revision:   ad123ad
 
 BUILDPACK ID        BUILDPACK VERSION
 io.java.etc         123
@@ -607,14 +615,16 @@ The following describes the fields in the example output:
 
 * `Status`: Describes the status of a previous build image.
 
-* `Build Reasons`: Describes why an image rebuild occurred. These reasons include:
+* `Reason`: Describes why an image build occurred and the change diff. The reason could be one or more  of these:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
     * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder.
     * `STACK`: Occurs when a new base OS image (called a `run image`) is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
-<p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, <code>BUILDPACK</code>, <code>STACK</code>, and <code>TRIGGER</code>.</p>
+* `Started`: When a build started.
+
+* `Finished`: When a build finished.
 
 * `Pod Name`: The name of the Pod being used for the Build.
 
@@ -638,7 +648,7 @@ Here is an example output:
 ```
 Image:            --
 Status:           BUILDING
-Build Reasons:    CONFIG
+Reason:           CONFIG
 Status Reason:    ImagePullBackOff
 Status Message:   A container image currently cannot be pulled: Back-off pulling image "gcr.io/my-builder:base@sha256:grtewwads0asdvf09asdf"
 
@@ -677,122 +687,132 @@ The following is an example of the output of the command:
 
 ```
 ===> PREPARE
-Loading secret for "gcr.io" from secret "some-creds" at location "/var/build-secrets/some-creds"
-Successfully pulled gcr.io/test-app-source@sha256:d6ddb6d02e07b2a40022929ca83d73482ae1aff99edefc10c76f43ff57d3ef40 in path "/workspace"
+Build reason(s): CONFIG
+CONFIG:
+	resources: {}
+	- source: {}
+	+ source:
+	+   git:
+	+     revision: 446dbda043ca103d33e2cad389d43f289e63f647
+	+     url: https://github.com/some-org/some-repo
+Loading secret for "gcr.io" from secret "gcr" at location "/var/build-secrets/gcr"
+Cloning "https://github.com/some-org/some-repo" @ "446dbda043ca103d33e2cad389d43f289e63f647"...
+Successfully cloned "https://github.com/some-org/some-repo" @ "446dbda043ca103d33e2cad389d43f289e63f647" in path "/workspace"
 ===> DETECT
-6 of 32 buildpacks participating
-paketo-buildpacks/bellsoft-liberica 2.7.3
-paketo-buildpacks/maven             1.4.3
-paketo-buildpacks/executable-jar    1.2.5
-paketo-buildpacks/apache-tomcat     1.2.2
-paketo-buildpacks/dist-zip          1.3.3
-paketo-buildpacks/spring-boot       1.5.5
+tanzu-buildpacks/node-engine 0.1.2
+tanzu-buildpacks/npm-install 0.1.1
+tanzu-buildpacks/npm-start   0.0.2
 ===> ANALYZE
 Previous image with name "gcr.io/test-app" not found
 ===> RESTORE
 ===> BUILD
+Tanzu Node Engine Buildpack 0.1.2
+  Resolving Node Engine version
+    Candidate version sources (in priority order):
+                -> ""
+      <unknown> -> "*"
 
-Paketo BellSoft Liberica Buildpack 2.7.3
-  https://github.com/paketo-buildpacks/bellsoft-liberica
-  Build Configuration:
-    $BP_JVM_VERSION              11.* (default)            the Java version
-  Launch Configuration:
-    $BPL_JVM_HEAD_ROOM           0 (default)               the headroom in memory calculation
-    $BPL_JVM_LOADED_CLASS_COUNT  35% of classes (default)  the number of loaded classes in memory calculation
-    $BPL_JVM_THREAD_COUNT        250 (default)             the number of threads in memory calculation
-  BellSoft Liberica JDK 11.0.7: Contributing to layer
-    Downloading from https://github.com/bell-sw/Liberica/releases/download/11.0.7+10/bellsoft-jdk11.0.7+10-linux-amd64.tar.gz
-    Verifying checksum
-    Expanding to /layers/paketo-buildpacks_bellsoft-liberica/jdk
-    Adding 134 container CA certificates to JVM truststore
-    Writing env.build/JAVA_HOME.override
-    Writing env.build/JDK_HOME.override
-  BellSoft Liberica JRE 11.0.7: Contributing to layer
-    Downloading from https://github.com/bell-sw/Liberica/releases/download/11.0.7+10/bellsoft-jre11.0.7+10-linux-amd64.tar.gz
-    Verifying checksum
-    Expanding to /layers/paketo-buildpacks_bellsoft-liberica/jre
-    Writing env.launch/JAVA_HOME.override
-    Writing env.launch/MALLOC_ARENA_MAX.override
-    Writing profile.d/active-processor-count.sh
-  Memory Calculator 4.0.0: Contributing to layer
-    Downloading from https://github.com/cloudfoundry/java-buildpack-memory-calculator/releases/download/v4.0.0/memory-calculator-4.0.0.tgz
-    Verifying checksum
-    Expanding to /layers/paketo-buildpacks_bellsoft-liberica/memory-calculator
-    Writing profile.d/memory-calculator.sh
-  Class Counter: Contributing to layer
-    Copying to /layers/paketo-buildpacks_bellsoft-liberica/class-counter
-  JVMKill Agent 1.16.0: Contributing to layer
-    Downloading from https://github.com/cloudfoundry/jvmkill/releases/download/v1.16.0.RELEASE/jvmkill-1.16.0-RELEASE.so
-    Verifying checksum
-    Copying to /layers/paketo-buildpacks_bellsoft-liberica/jvmkill
-    Writing env.launch/JAVA_OPTS.append
-  Link-Local DNS: Contributing to layer
-    Copying to /layers/paketo-buildpacks_bellsoft-liberica/link-local-dns
-    Writing profile.d/link-local-dns.sh
-  Java Security Properties: Contributing to layer
-    Writing env.launch/JAVA_OPTS.append
-    Writing env.launch/JAVA_SECURITY_PROPERTIES.override
-  Security Providers Configurer: Contributing to layer
-    Copying to /layers/paketo-buildpacks_bellsoft-liberica/security-providers-configurer
-    Writing profile.d/security-providers-classpath.sh
-    Writing profile.d/security-providers-configurer.sh
-  OpenSSL Certificate Loader: Contributing to layer
-    Copying to /layers/paketo-buildpacks_bellsoft-liberica/openssl-security-provider
-    Writing profile.d/openssl-certificate-loader.sh
+    Selected Node Engine version (using ): 14.15.1
 
-Paketo Maven Buildpack 1.4.3
-  https://github.com/paketo-buildpacks/maven
-  Build Configuration:
-    $BP_MAVEN_BUILD_ARGUMENTS  -Dmaven.test.skip=true package (default)  the arguments to pass to Maven
-    $BP_MAVEN_BUILT_ARTIFACT   target/*.[jw]ar (default)                 the built application artifact explicitly.  Supersedes $BP_MAVEN_BUILT_MODULE
-    $BP_MAVEN_BUILT_MODULE      (default)                                the module to find application artifact in
-    Creating cache directory /home/vcap/.m2
-  Compiled Application: Contributing to layer
-    Executing mvnw -Dmaven.test.skip=true package
-[INFO] --- spring-boot-maven-plugin:2.3.0.RELEASE:repackage (repackage) @ spring-petclinic ---
-[INFO] Replacing main artifact with repackaged archive
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  03:10 min
-[INFO] Finished at: 2020-06-09T21:35:17Z
-[INFO] ------------------------------------------------------------------------
-  Removing source code
+  Executing build process
+    Installing Node Engine 14.15.1
+      Completed in 2.495s
 
-Paketo Executable JAR Buildpack 1.2.5
-    Writing env.launch/CLASSPATH
-  Process types:
-    executable-jar: java -cp "${CLASSPATH}" ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher
-    task:           java -cp "${CLASSPATH}" ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher
-    web:            java -cp "${CLASSPATH}" ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher
+  Configuring environment
+    NODE_ENV     -> "production"
+    NODE_HOME    -> "/layers/tanzu-buildpacks_node-engine/node"
+    NODE_VERBOSE -> "false"
 
-Paketo Spring Boot Buildpack 1.5.5
-  Image labels:
-    org.opencontainers.image.title
-    org.opencontainers.image.version
-    org.springframework.boot.spring-configuration-metadata.json
-    org.springframework.boot.version
+    Writing profile.d/0_memory_available.sh
+      Calculates available memory based on container limits at launch time.
+      Made available in the MEMORY_AVAILABLE environment variable.
+
+Tanzu NPM Install Buildpack 0.1.1
+  Resolving installation process
+    Process inputs:
+      node_modules      -> "Not found"
+      npm-cache         -> "Not found"
+      package-lock.json -> "Not found"
+
+    Selected NPM build process: 'npm install'
+
+  Executing build process
+    Running 'npm install --unsafe-perm --cache /layers/tanzu-buildpacks_npm-install/npm-cache'
+      Completed in 3.591s
+
+  Configuring environment
+    NPM_CONFIG_LOGLEVEL   -> "error"
+    NPM_CONFIG_PRODUCTION -> "true"
+    PATH                  -> "$PATH:/layers/tanzu-buildpacks_npm-install/modules/node_modules/.bin"
+
+Tanzu NPM Start Buildpack 0.0.2
+  Assigning launch processes
+    web: node server.js
 ===> EXPORT
-Adding layer 'launcher'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:class-counter'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:java-security-properties'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:jre'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:jvmkill'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:link-local-dns'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:memory-calculator'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:openssl-security-provider'
-Adding layer 'paketo-buildpacks/bellsoft-liberica:security-providers-configurer'
-Adding layer 'paketo-buildpacks/executable-jar:class-path'
+Adding layer 'tanzu-buildpacks/node-engine:node'
+Adding layer 'tanzu-buildpacks/npm-install:modules'
+Adding layer 'tanzu-buildpacks/npm-install:npm-cache'
 Adding 1/1 app layer(s)
+Adding layer 'launcher'
 Adding layer 'config'
-*** Images (sha256:af858b3972b567fffa5792a9bed924c3638aba5eab4593c5a43364a67871efdc):
+Adding label 'io.buildpacks.lifecycle.metadata'
+Adding label 'io.buildpacks.build.metadata'
+Adding label 'io.buildpacks.project.metadata'
+*** Images (sha256:0abdbaf1f25c3c13cdb918d06906670b84dd531bc7301177b11284dac68bdb9c):
       gcr.io/test-app
-      gcr.io/test-app:b1.20200609.213101
-Adding cache layer 'paketo-buildpacks/bellsoft-liberica:jdk'
-Adding cache layer 'paketo-buildpacks/maven:application'
-Adding cache layer 'paketo-buildpacks/maven:cache'
+      gcr.io/test-app:b1.20210203.225422
+Adding cache layer 'tanzu-buildpacks/node-engine:node'
+Adding cache layer 'tanzu-buildpacks/npm-install:modules'
+Adding cache layer 'tanzu-buildpacks/npm-install:npm-cache'
 ===> COMPLETION
 Build successful
+```
+## <a id='build-status'></a> Viewing Bill of Materials
+
+The kp cli allows you to view the bill of materials in an image built by a Build.
+
+```
+kp build status <image-name> --bom
+```
+For generating the bill of materials, the kp CLI will read metadata from the image (generated by the build) in the registry.
+
+<p class="note"><strong>Note:</strong> You must have credentials to access the image registry on your machine.</p>
+
+As an example:
+
+```
+$ kp build status --bom my-app-image | jq
+[
+  {
+    "buildpack": {
+      "id": "tanzu-buildpacks/node-engine",
+      "version": "0.1.2"
+    },
+    "metadata": {
+      "licenses": [],
+      "name": "Node Engine",
+      "sha256": "b981046a0ea3d5594a7f04fae3afdfa1983bc65f4e26e768b38a2d67057ac75c",
+      "stacks": [
+        "io.buildpacks.stacks.bionic",
+        "org.cloudfoundry.stacks.cflinuxfs3"
+      ],
+      "uri": "file:///dependencies/b981046a0ea3d5594a7f04fae3afdfa1983bc65f4e26e768b38a2d67057ac75c",
+      "version": "14.15.1"
+    },
+    "name": "node",
+    "version": "14.15.1"
+  },
+  {
+    "buildpack": {
+      "id": "tanzu-buildpacks/npm-install",
+      "version": "0.1.1"
+    },
+    "metadata": {
+      "launch": true
+    },
+    "name": "node_modules"
+  }
+]
 ```
 
 ## <a id='offline-builds'></a> Offline Builds
