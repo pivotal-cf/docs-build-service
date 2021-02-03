@@ -20,7 +20,8 @@ the source for this page in GitHub" at the bottom of the topic.
 | **Branch Name** | **Content** | **Location** |
 |-----------------|-------------|--------------|
 | `master` | DO NOT USE | |
-| `v1.0`   | Tanzu Build Service 1.0 pre-release  | https://docs-pcf-staging.cfapps.io/build-service/1-0/ |
+| `v1.1`   | Tanzu Build Service 1.1 pre-release  | https://docs-pcf-staging.cfapps.io/build-service/1-1/ |
+| `v1.0`   | Tanzu Build Service 1.0    | https://docs.pivotal.io/build-service/1-0/ |
 | `v0.2.0` | Tanzu Build Service 0.2.0  | https://docs.pivotal.io/build-service/0-2-0/ |
 | `v0.1.0` | Tanzu Build Service 0.1.0  | https://docs.pivotal.io/build-service/0-1-0/ |
 | `v0.0.4` | Tanzu Build Service 0.0.4  | https://docs.pivotal.io/build-service/0-0-4/ |
