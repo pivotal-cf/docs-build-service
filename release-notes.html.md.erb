@@ -2,6 +2,59 @@
 title: Release Notes
 owner: Build Service Team
 ---
+## <a id="1-1-0"></a> v1.1.0
+
+**Release Date: February 05, 2021**
+
+**1.1.0** represents the second minor release of Tanzu Build Service.
+
+This release includes the 0.2.0 release of kpack
+
+* Image signing with Notary V1
+* Includes [Lifecycle 0.10.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.10.2)
+* Add Windows support (**Beta**)
+* Improved logging for Image builds
+    * Display Build reason and change diff
+    * Log fetching source
+    * More descriptive errors
+* Allow source images to contain zip, tar, and tar.gz files
+* Dedupe build secrets (if service account has repeats)
+* Improved validation when Image cache size is specified
+
+This release includes the 0.2.0 release of kpack-cli
+
+* Filter option for Image list
+* Display builds across images for Build list
+* New command to update Lifecycle
+* Option to view Bill of Materials for Build status
+* Remove Buildpackage from ClusterStore using Buildpackage Id and version
+* Import exits with an error if the resulting builders are not ready
+* Print status message when ClusterStores or ClusterStacks are not ready
+* Display version in detection order of ClusterBuilder and Builder status
+* Display Build reason and changes for Build status
+* Handle registry secrets created with repo path
+* Fix registry issue when running on Windows
+* Fix for Stack upload failing on a Windows machine
+
+### Product Snapshot
+
+Tanzu Build Service 1.0.4 ships with the following components:
+
+* [kpack 0.2.0](https://github.com/pivotal/kpack/releases/tag/v0.2.0)
+* [kpack cli v0.2.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.2.0)
+* [CNB lifecycle v0.10.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.10.2)
+
+Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
+
+### Product Dependencies
+
+Build Service can be installed on any Kubernetes cluster (v1.16 or later).
+
+### Upgrade Path
+
+v1.0.* can be upgraded to v1.1.0. Please follow the [install](installing.html) process to upgrade.
+
+
 ## <a id="1-0-4"></a> v1.0.4
 
 **Release Date: January 12, 2021**
