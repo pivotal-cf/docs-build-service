@@ -152,11 +152,14 @@ kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp impor
 
 ## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a ClusterStore
 
-Users can remove a buildpackage from a store:
+Users can remove a buildpackage from a ClusterStore by referencing the buildpackage id and version.
 
-    kp clusterstore remove <store-name> -b <buildpackage>
+    kp clusterstore remove <store> -b <buildpackage-id>@<buildpackage-version>
 
-<p class='note'><strong>Note:</strong> Buildpackages must be removed from stores by full image reference. The <code>&lt;buildpackage&gt;</code> args should include their digests and will look like <code>registry.io/repository@sha256:<sha256></code>.</p>
+Examples:
+
+    kp clusterstore remove my-store -b buildpackage@1.0.0
+    kp clusterstore remove my-store -b buildpackage@1.0.0 -b other-buildpackage@2.0.0
 
 ## <a id='show-buildpackages-in-store'></a> Get ClusterStore Status
 
