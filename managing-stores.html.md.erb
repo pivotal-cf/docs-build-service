@@ -58,6 +58,16 @@ Tanzu Build Service ships with a `default` store containing all of the supported
 kp clusterstore create <store-name> -b <buildpackage-1> -b <buildpackage-2>
 ```
 
+Examples:
+
+```
+kp clusterstore create my-store -b my-registry.com/my-buildpackage
+kp clusterstore create my-store -b my-registry.com/my-buildpackage -b my-registry.com/my-other-buildpackage
+kp clusterstore create my-store -b ../path/to/my-local-buildpackage.cnb
+```
+
+Buildpackages will be uploaded to the registry used during installation.
+
 <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the registry used for installation on the local machine.</p>
 
 ## <a id='save-store'></a> Saving a ClusterStore
@@ -152,7 +162,7 @@ kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp impor
 
 ## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a ClusterStore
 
-Users can remove a buildpackage from a ClusterStore by referencing the buildpackage id and version.
+Users can remove a buildpackage from a ClusterStore by referencing the buildpackage Id and version.
 
     kp clusterstore remove <store> -b <buildpackage-id>@<buildpackage-version>
 
@@ -160,6 +170,8 @@ Examples:
 
     kp clusterstore remove my-store -b buildpackage@1.0.0
     kp clusterstore remove my-store -b buildpackage@1.0.0 -b other-buildpackage@2.0.0
+
+The ClusterStore status shows the list of buildpackage Id and version
 
 ## <a id='show-buildpackages-in-store'></a> Get ClusterStore Status
 
@@ -169,7 +181,45 @@ To view the buildpackages in a store:
 
     kp clusterstore status <store-name>
 
-To view buildpackages & their individual buildpacks as well as display the order of meta-buildpacks:
+Example:
+
+```
+$kp clusterstore status default
+
+Status:    Ready
+
+BUILDPACKAGE ID                       VERSION    HOMEPAGE
+paketo-buildpacks/go                  0.1.3      https://github.com/paketo-buildpacks/go
+paketo-buildpacks/procfile            2.0.2      https://github.com/paketo-buildpacks/procfile
+paketo-buildpacks/procfile            3.0.0      https://github.com/paketo-buildpacks/procfile
+tanzu-buildpacks/dotnet-core          0.0.4
+tanzu-buildpacks/dotnet-core          0.0.7
+tanzu-buildpacks/dotnet-core          0.0.6
+tanzu-buildpacks/go                   1.0.6
+tanzu-buildpacks/go                   1.0.7
+tanzu-buildpacks/go                   1.0.9
+tanzu-buildpacks/go                   1.0.5
+tanzu-buildpacks/httpd                0.0.38
+tanzu-buildpacks/httpd                0.0.39
+tanzu-buildpacks/httpd                0.0.40
+tanzu-buildpacks/java                 3.8.0      https://github.com/pivotal-cf/tanzu-java
+tanzu-buildpacks/java                 3.5.0      https://github.com/pivotal-cf/tanzu-java
+tanzu-buildpacks/java                 4.1.0      https://github.com/pivotal-cf/tanzu-java
+tanzu-buildpacks/java                 4.0.0      https://github.com/pivotal-cf/tanzu-java
+tanzu-buildpacks/java-native-image    3.6.0      https://github.com/pivotal-cf/tanzu-java-native-image
+tanzu-buildpacks/java-native-image    3.9.0      https://github.com/pivotal-cf/tanzu-java-native-image
+tanzu-buildpacks/java-native-image    3.4.2      https://github.com/pivotal-cf/tanzu-java-native-image
+tanzu-buildpacks/java-native-image    3.10.0     https://github.com/pivotal-cf/tanzu-java-native-image
+tanzu-buildpacks/nginx                0.0.48
+tanzu-buildpacks/nginx                0.0.46
+tanzu-buildpacks/nodejs               1.1.0
+tanzu-buildpacks/nodejs               1.2.3
+tanzu-buildpacks/nodejs               1.2.2
+tanzu-buildpacks/php                  0.0.3
+tanzu-buildpacks/php                  0.0.5
+```
+
+To view buildpackages & their individual buildpacks as well as display the order of meta-buildpacks use the `--verbose` flag
 
     kp clusterstore status <store-name> --verbose
 

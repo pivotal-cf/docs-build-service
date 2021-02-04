@@ -237,6 +237,46 @@ To get builder details:
     kp builder status <builder-name> --namespace <namespace>
     ```
 
+Example:
+
+```
+$ kp clusterbuilder status tiny
+
+Status:       Ready
+Image:        gcr.io/my-repo/tiny@sha256:07d94db2e3e9f43cba67c389f1c83e4eac821aa83084a88136ed8d431b37f008
+Stack:        io.paketo.stacks.tiny
+Run Image:    gcr.io/cf-build-service-dev-219913/ssuresh/install/run@sha256:e9159f0ef23c28b943cfb1b5d5be9638b67211f6ff0bd3fae35ff4b499136152
+
+BUILDPACK ID                                  VERSION    HOMEPAGE
+paketo-buildpacks/graalvm                     4.0.0      https://github.com/paketo-buildpacks/graalvm
+tanzu-buildpacks/go-dist                      0.1.3
+paketo-buildpacks/gradle                      3.5.0      https://github.com/paketo-buildpacks/gradle
+paketo-buildpacks/sbt                         3.6.0      https://github.com/paketo-buildpacks/sbt
+paketo-buildpacks/maven                       3.2.1      https://github.com/paketo-buildpacks/maven
+tanzu-buildpacks/dep                          0.0.10
+paketo-buildpacks/spring-boot                 3.5.0      https://github.com/paketo-buildpacks/spring-boot
+paketo-buildpacks/leiningen                   1.2.1      https://github.com/paketo-buildpacks/leiningen
+paketo-buildpacks/spring-boot-native-image    2.0.0      https://github.com/paketo-buildpacks/spring-boot-native-image
+paketo-buildpacks/executable-jar              3.1.3      https://github.com/paketo-buildpacks/executable-jar
+tanzu-buildpacks/go-build                     0.0.23
+paketo-buildpacks/environment-variables       2.1.2      https://github.com/paketo-buildpacks/environment-variables
+paketo-buildpacks/procfile                    3.0.0      https://github.com/paketo-buildpacks/procfile
+paketo-buildpacks/image-labels                2.0.6      https://github.com/paketo-buildpacks/image-labels
+tanzu-buildpacks/dep-ensure                   0.0.29
+tanzu-buildpacks/go-mod-vendor                0.0.26
+tanzu-buildpacks/java-native-image            3.10.0     https://github.com/pivotal-cf/tanzu-java-native-image
+tanzu-buildpacks/go                           1.0.9
+
+
+DETECTION ORDER
+Group #1
+  tanzu-buildpacks/go@1.0.9
+Group #2
+  tanzu-buildpacks/java-native-image@3.10.0
+Group #3
+  paketo-buildpacks/procfile@3.0.0
+```
+
 ## <a id='list-builders'></a> Listing Builders
 
 To list all builders available to the current user:
