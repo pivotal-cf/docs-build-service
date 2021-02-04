@@ -208,6 +208,7 @@ Other optional parameters can be added using the `-v` flag:
 * `http_proxy`: The HTTP proxy to use for network traffic.
 * `https_proxy`: The HTTPS proxy to use for network traffic.
 * `no_proxy`: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
+* `disable_smart_warmer`: Accepts "true" or "false" to disable or enable preloading of ClusterBuilder images. Defaults to "false".
 
 <p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the kubernetes API server will also flow through the proxy server.
 This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.
@@ -371,6 +372,7 @@ Other optional parameters can be added using the `-v` flag:
 * `http_proxy`: The HTTP proxy to use for network traffic.
 * `https_proxy`: The HTTPS proxy to use for network traffic.
 * `no_proxy`: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
+* `disable_smart_warmer`: Accepts "true" or "false" to disable or enable preloading of ClusterBuilder images. Defaults to "false".
 
 <p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the kubernetes API server will also flow through the proxy server.
 This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.
@@ -588,6 +590,7 @@ Other optional parameters can be added using the `-v` flag:
 
 * `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
 * `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
+* `disable_smart_warmer`: Accepts "true" or "false" to disable or enable preloading of ClusterBuilder images. Defaults to "false".
 
 ## <a id='verify-installation'></a> Verify Installation
 
