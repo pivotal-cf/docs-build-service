@@ -339,7 +339,7 @@ where the contents of order.yaml file is
 
 ## <a id='update-lifecycle'></a> Update Lifecycle
 
-All builders make use of a lifecycle. A lifecycle orchestrates buildpack execution, then assembles the resulting artifacts into a final app image. Within Build Service, it will be uploaded to the canonical registry. More information on lifecycles can be found [here](https://buildpacks.io/docs/concepts/components/lifecycle/).
+All builders make use of a lifecycle. A lifecycle orchestrates buildpack execution, then assembles the resulting artifacts into a final app image. Within Build Service, it will be uploaded to the canonical registry, which is the docker-repository specified during TBS install. More information on lifecycles can be found [here](https://buildpacks.io/docs/concepts/components/lifecycle/).
 
 To update the lifecycle that will be used by builders:
 
