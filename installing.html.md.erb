@@ -613,6 +613,28 @@ full       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
 tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
 ```
 
+## <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
+
+To upgrade Tanzu Build Service to a newer version, run the same commands as installation. Re-importing dependencies is not required for upgrading TBS.
+
+1. Relocate the images with `kbld`:
+
+```
+kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
+```
+
+2. Run the `ytt`/`kapp` command to install:
+
+```
+ytt -f /tmp/values.yaml \
+    -f /tmp/manifests/ \
+	-v docker_repository="<IMAGE-REPOSITORY>" \
+	-v docker_username="<REGISTRY-USERNAME>" \
+	-v docker_password="<REGISTRY-PASSWORD>" \
+	| kbld -f /tmp/images-relocated.lock -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
 ## <a id='update-deps'></a> Updating Build Service Dependencies
 
 Use the following documentation to keep applications patched and up-to-date with Tanzu Build Service:
