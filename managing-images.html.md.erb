@@ -847,6 +847,7 @@ Tanzu Build Service supports [Notary](https://github.com/theupdateframework/nota
 Images signed with Notary require using `kubectl` instead of `kp`.
 
 Prerequisites:
+
 - [notary cli](https://github.com/theupdateframework/notary/releases)
 - A notary server accessible by the Tanzu Build Service cluster
 
@@ -870,7 +871,8 @@ You will be prompted to enter a `<notary-targets-passphrase>`:
 Enter passphrase for targets key with ID <target-hash>:
 ```
 
-**Where**:
+Where:
+
 - `<notary-root-passphrase>` is a secure passphrase (this is the root passphrase and should be secure and stored. This is used to generate and rotate other keys.)
 - `<notary-snapshot-passphrase>` is a secure passphrase (one per image)
 - `<notary-targets-passphrase>` is a secure passphrase for the targets (one per image)
@@ -883,11 +885,13 @@ Enter passphrase for targets key with ID <target-hash>:
 ### <a id='notary-secret'></a> Create a Secret to be used for TBS Image Signing
 
 Run the following:
+
 ```
 kubectl create secret generic <notary-secret-name> --from-literal=password=<notary-targets-passphrase> --from-file=~/.notary/private/<target-hash>.key --namespace <image-namespace>
 ```
 
-**Where**:
+Where:
+
 - `<notary-secret-name>` is the arbitrary name of the notary secret
 - `<notary-targets-passphrase>` is the passphrase used in the previous step
 - `<target-hash>` is the hash from the previous step
@@ -895,7 +899,9 @@ kubectl create secret generic <notary-secret-name> --from-literal=password=<nota
 
 ### <a id='notary-image'></a> Create an Image that will be Signed by Notary
 
-TBS will sign images when the `spec.notary` key is populated. This configuration cannot be set by `kp` cli, `kubectl` must be used to create the Image.
+TBS will sign images when the `spec.notary` key is populated.
+
+This configuration cannot be set by `kp` cli, `kubectl` must be used to create the Image.
 
 Example image.yaml:
 
@@ -919,7 +925,8 @@ spec:
 status: {}
 ```
 
-**Where**:
+Where:
+
 - `<image-namespace>` is the namespace used for the secret created in the above step
 - `<notary-server-url>` is the notary server url used in the first step
 - `<notary-secret-name>` is the secret name created in the previous step
