@@ -589,24 +589,6 @@ Other optional parameters can be added using the `-v` flag:
 * `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
 * `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
 
-## <a id='windows-installation'></a> Installing Windows Components (Beta)
-
-Tanzu Build Service supports building [.NET Framework](https://dotnet.microsoft.com/learn/dotnet/what-is-dotnet-framework) application images. This is currently beta functionality. Building .NET Framework images will require a Kubernetes Cluster with windows nodes provisioned.
-
-After the windows nodes are provisioned, the Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) can be used to build .NET Framework applications and keep them patched. These must be imported with the `kp` cli and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page:
-
-```
-kp import -f /tmp/windows-descriptor-<version>.yaml
-```
-
-<p class="note"><strong>Note:</strong> The following features are not yet supported on windows nodes of Tanzu Build Service: volume caching, preloading of ClusterBuilder images, self-signed registry certificate support. </p>
-
-### <a id='windows-build-scheduling'></a> Scheduling Windows Builds
-
-An IAAS may provision Windows nodes with predefined [kubernetes taints](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/). To counteract this default behavior, pods that build .NET Framework application images are applied with tolerations for taints applied uniformly across all windows nodes.
-
-In the event that taints are not applied uniformly across all windows nodes (ex. one or more windows nodes have a different set of taints than the rest of the windows nodes), no tolerations are applied and build pods will not be scheduled.
-
 ## <a id='verify-installation'></a> Verify Installation
 
 Verify your Build Service installation by first targeting the cluster Build Service has been installed on.
