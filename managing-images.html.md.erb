@@ -774,3 +774,88 @@ Tanzu Build Service supports offline/air-gapped builds with Tanzu Buildpacks. Of
 When using Tanzu Buildpacks the build will execute as an offline build. For details on how to configure buildpacks, see [Buildpack Configuration in Images](#buildpack-config-use-cases).
 
 <p class='note'><strong>Note:</strong> Offline builds only ensure buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.</p>
+
+## <a id='notary'></a> Image Signing with Notary
+
+Tanzu Build Service supports [Notary](https://github.com/theupdateframework/notary) image signing.
+
+Images signed with Notary require using `kubectl` instead of `kp`.
+
+Prerequisites:
+- [notary cli](https://github.com/theupdateframework/notary/releases)
+- A notary server accessible by the Tanzu Build Service cluster
+
+### <a id='notary-keys'></a> Generate Notary Signing Keys
+
+Only one root signing key is required. Each image that will be signed by notary will require a target and snapshot signing key.
+
+Run the following commands. You will be asked to provide the registry credentials for the `<image-repository>`:
+
+```
+export NOTARY_ROOT_PASSPHRASE=<notary-root-passphrase>
+export NOTARY_SNAPSHOT_PASSPHRASE=<notary-snapshot-passphrase>
+notary -s <notary-server-url> init <image-repository>
+notary -s <notary-server-url> key rotate <image-repository> snapshot -r
+notary -s <notary-server-url> publish <image-repository>
+```
+
+You will be prompted to enter a `<notary-targets-passphrase>`:
+
+```
+Enter passphrase for targets key with ID <target-hash>:
+```
+
+**Where**:
+- `<notary-root-passphrase>` is a secure passphrase (this is the root passphrase and should be secure and stored. This is used to generate and rotate other keys.)
+- `<notary-snapshot-passphrase>` is a secure passphrase (one per image)
+- `<notary-targets-passphrase>` is a secure passphrase for the targets (one per image)
+- `<notary-server-url>` is the notary server url
+- `<image-repository>` is the repository for the image that will be built by Tanzu Build Service.
+- `<target-hash>` is the hash for the target signing key.
+
+<p class='note'><strong>Note:</strong> All passphrases can be entered manually via prompts. Some are set as env vars in the example command for simplicity. </p>
+
+### <a id='notary-secret'></a> Create a Secret to be used for TBS Image Signing
+
+Run the following:
+```
+kubectl create secret generic <notary-secret-name> --from-literal=password=<notary-targets-passphrase> --from-file=~/.notary/private/<target-hash>.key --namespace <image-namespace>
+```
+
+**Where**:
+- `<notary-secret-name>` is the arbitrary name of the notary secret
+- `<notary-targets-passphrase>` is the passphrase used in the previous step
+- `<target-hash>` is the hash from the previous step
+- `<image-namespace>` is the namespace where the TBS image will be created
+
+### <a id='notary-image'></a> Create an Image that will be Signed by Notary
+
+TBS will sign images when the `spec.notary` key is populated. This configuration cannot be set by `kp` cli, `kubectl` must be used to create the Image.
+
+Example image.yaml:
+
+```
+apiVersion: kpack.io/v1alpha1
+kind: Image
+metadata:
+  name: my-notary-image
+  namespace: <image-namespace>
+spec:
+  notary:
+    v1:
+      url: <notary-server-url>
+      secretRef:
+        name: <notary-secret-name>
+  serviceAccount: default
+  source:
+    git:
+      url: github.com/my-git-repo
+  tag: <image-repository>
+status: {}
+```
+
+**Where**:
+- `<image-namespace>` is the namespace used for the secret created in the above step
+- `<notary-server-url>` is the notary server url used in the first step
+- `<notary-secret-name>` is the secret name created in the previous step
+- `<image-repository>` is the image repository used in the first step
