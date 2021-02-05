@@ -1,22 +1,40 @@
----
-title: Release Notes
-owner: Build Service Team
----
-## <a id="1-0-4"></a> v1.0.4
+## <a id="1-1-0"></a> v1.1.0
 
-**Release Date: January 12, 2021**
+**Release Date: February 05, 2021**
 
-**1.0.4** represents the third GA patch release of Tanzu Build Service.
+**1.1.0** represents the second minor GA release of Tanzu Build Service.
 
-This release includes the 0.1.5 release of kpack which provides [Lifecycle 0.10.1](https://github.com/buildpacks/lifecycle/releases/tag/v0.10.1) and support for 0.5 Buildpack API. Some buildpacks may require the 0.5 Buildpack API.
-    
+This release includes a few notable new features:
+
+* Windows .NET Framework images can be built on clusters with windows nodes.
+* Image resources can be configured to sign images with Notary.
+* The kp cli can upgrade the version of the lifecycle.
+* Improved logging for Image builds
+    * Display Build reason change diff
+    * Log fetching source
+    * More descriptive errors
+
+This release includes the 0.2.0 release of kpack.
+
+* Image resources can be configured to sign images with Notary.
+* Build logs will display a diff explaining why the build was scheduled.
+* The lifecycle used by kpack can be updated without a controller restart.
+
+This release includes the 0.2.0 release of kpack-cli
+
+- kp import supports v1alpha3 descriptors
+- kpack lifecycle image can be updated.
+- `kp import` will wait for relevant resources to resolve before exiting.
+- `kp image list` Image list can be filtered.
+
 ### Product Snapshot
 
 Tanzu Build Service 1.0.4 ships with the following components:
 
-* [kpack 0.1.5](https://github.com/pivotal/kpack/releases/tag/v0.1.5)
-* [CNB lifecycle v0.10.1](https://github.com/buildpacks/lifecycle/releases/tag/v0.10.1)	
-* [kp cli v0.1.3](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.1.3)
+* [kpack 0.2.0](https://github.com/pivotal/kpack/releases/tag/v0.2.0)
+* [kpack cli v0.2.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.2.0)
+* [CNB lifecycle v0.10.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.10.2)
+* [Stacks Operator v0.0.3]
 
 Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
 
@@ -26,122 +44,4 @@ Build Service can be installed on any Kubernetes cluster (v1.16 or later).
 
 ### Upgrade Path
 
-v1.0.* can be upgraded to v1.0.4. Please follow the [install](installing.html) process to upgrade.
-
-
-## <a id="1-0-3"></a> v1.0.3
-
-**Release Date: October 28, 2020**
-
-**1.0.3** represents the second GA patch release of Tanzu Build Service.
-
-This release includes the 0.1.3 release of kpack which provides a fix for an intermittent pod already exists build error. 
-
-This release includes the 0.1.3 release of the kp cli, which includes improved functionality:
-    
-* Show summary of changes before importing when using --show-changes flag
-* Allow configuring cache size for images 
-* Add --dry-run/--dry-run-with-image-upload and --output feature
-* Add ability to set ca cert or skip tls for registry commands
-* Add save command to create or update a resource
-    
-### Product Snapshot
-
-Tanzu Build Service 1.0.3 ships with the following components:
-
-* [kpack 0.1.3](https://github.com/pivotal/kpack/releases/tag/v0.1.3)
-* [CNB lifecycle v0.9.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.2)	
-* [kp cli v0.1.3](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.1.3)
-
-Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
-
-### Product Dependencies
-
-Build Service can be installed on any Kubernetes cluster (v1.16 or later).
-
-### Upgrade Path
-
-v1.0.1 and v1.0.2 can be upgraded to v1.0.3. Please follow the [install](installing.html) process to upgrade from v1.0.2 or v1.0.1.
-
-
-## <a id="1-0-1"></a> v1.0.2
-
-**Release Date: August 27, 2020**
-
-**1.0.2** represents the first GA patch release of Tanzu Build Service.
-
-This release includes an updated kp cli which will provide better user feedback when performing `kp import`
-
-This release includes an update to kpack v0.1.2 which fixes an issue that prevented buildpacks from using the 0.3 and 0.4 buildpack apis. 
-
-### Product Snapshot
-
-Tanzu Build Service 1.0.2 ships with the following components:
-
-* [kpack 0.1.2](https://github.com/pivotal/kpack/releases/tag/v0.1.2)
-* [CNB lifecycle v0.9.1](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.1)	
-* [kp cli v0.1.1](https://network.pivotal.io/products/build-service#/releases/728511)
-
-Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
-
-### Product Dependencies
-
-Build Service can be installed on any Kubernetes cluster (v1.16 or later).
-
-
-### Upgrade Path
-
-v1.0.1 can be upgraded to v1.0.2. Please follow the [install](installing.html) process to upgrade from v1.0.1.
-
-## <a id="1-0-1"></a> v1.0.1
-
-**Release Date: August 19, 2020**
-
-**1.0.1** represents the first GA release of the Tanzu Build Service.
-
-This release includes a new [install](installing.html) process that does not depend on duffle or the docker daemon. 
-
-Notable improvements in the install experience:
-
-* The Tanzu Build Service installation uses the modular [Carvel](https://carvel.dev/) tooling to template and install.
-	* `kbld` is used to relocate images.
-	* `ytt` is used to template kubernetes installation manifests.
-	* `kapp` is used to apply the kubernetes configuration and process updates.
-* The installation and relocation of buildpack and stack dependencies is accomplished separately via the `kp` cli with the new `import` command.
-
-This release includes the 0.1.0 release of kpack which incorporates a new more consistent api within the kpack.io api group. Notably, the CustomBuilder and CustomClusterBuilder resources have been renamed to Builder and ClusterBuilder and the Stack and Store have been renamed to ClusterStack and ClusterStore.  
-
-The Project functionality in previous versions of Tanzu Build Service has been removed to allow users to configure RBAC and namespaces externally from TBS. 
-
-### Product Snapshot
-
-Tanzu Build Service 1.0.1 ships with the following components:
-
-* [kpack 0.1.1](https://github.com/pivotal/kpack/releases/tag/v0.1.0)
-* [CNB lifecycle v0.9.1](https://github.com/buildpacks/lifecycle/releases/tag/v0.9.1)	
-* [kp cli v0.1.0](https://network.pivotal.io/products/build-service#/releases/716705)
-
-Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
-
-### Product Dependencies
-
-Build Service can be installed on any Kubernetes cluster (v1.16 or later).
-
-### Breaking Changes
-
-* Tanzu Build Service now require Kubernetes api v1.16 or later
-* All kpack resources were moved to the kpack.io api group
-* CustomBuilders were renamed to Builders in the kpack api and in the kp cli
-* CustomClusterBuilders were renamed to ClusterBuilders in the kpack api and in the kp cli
-* Stacks were renamed to ClusterStacks in the kpack api and in the kp cli
-* Stores were renamed to ClusterStores in the kpack api and in the kp cli
-* Project functionality has been removed. 
-
-### Security Fixes
-
-* Secret Syncing functionality is not enabled by default and is only available to users that explicitly [opt in](managing-secrets.html).
-
-
-### Upgrade Path
-
-No supported upgrade paths.
+v1.0.* can be upgraded to v1.1.0. Please follow the [install](installing.html) process to upgrade.

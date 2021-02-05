@@ -1,0 +1,21 @@
+---
+title: Installing Windows Components (Beta)
+owner: Build Service Team
+---
+
+<p class="note warning"><strong>Warning:</strong> This feature is in Beta.</p>
+
+
+Tanzu Build Service supports building [.NET Framework](https://dotnet.microsoft.com/learn/dotnet/what-is-dotnet-framework) application images. Building .NET Framework images will require a Kubernetes Cluster with windows nodes provisioned.
+
+After the windows nodes are provisioned, the Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) can be used to build .NET Framework applications and keep them patched. These must be imported with the `kp` cli and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page:
+
+```
+kp import -f /tmp/windows-descriptor-<version>.yaml
+```
+
+The following features are not yet supported on windows nodes of Tanzu Build Service
+
+* Caching of build artifacts (which reduces the time of subsequent builds)
+* Preloading of ClusterBuilder images
+* Self-signed registry certificate
