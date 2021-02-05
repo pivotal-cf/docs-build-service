@@ -297,13 +297,28 @@ To list all the image configurations in a Kubernetes namespace:
 
     kp image list --namespace <namespace>
 
-The following is an example of the output for this command:
+Example
+```
+$ kp image list -n example1
 
-```
 NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
-test-image1     True      CONFIG           first/image:tag      example1
-test-image2     True      BUILDPACK        second/image:tag     example1
+test-image1     True      CONFIG           first/image:sha      example1
+test-image2     False     BUILDPACK        second/image:sha     example1
 ```
+
+To list all the image configurations across all Kubernetes namespaces:
+
+    kp image list --all-namespaces
+
+Example
+```
+$ kp image list -A
+
+NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
+test-image1     True      CONFIG           first/image:sha      example1
+test-image2     True      BUILDPACK        second/image:sha     example1
+test-image3     True      BUILDPACK        third/image:sha      example2
+test-image4     False     CONFIG           fourth/image:sha     example2
 
 ### <a id='filter-images'></a> Filter Images
 
@@ -313,9 +328,8 @@ Users can further filter the list of Images by applying the `--filter` flag and 
 $ kp image list --filter ready=false -A
 
 NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
-test-image1     True      CONFIG           first/image:tag      example1
-test-image2     True      BUILDPACK        second/image:tag     example1
-test-image3     True      STACK            third/image:tag      example3
+test-image2     False     BUILDPACK        second/image:sha     example1
+test-image4     False     CONFIG           fourth/image:sha     example2
 ```
 
 See below for the current supported filters and values:
