@@ -298,6 +298,7 @@ To list all the image configurations in a Kubernetes namespace:
     kp image list --namespace <namespace>
 
 Example
+
 ```
 $ kp image list -n example1
 
@@ -311,6 +312,7 @@ To list all the image configurations across all Kubernetes namespaces:
     kp image list --all-namespaces
 
 Example
+
 ```
 $ kp image list -A
 
@@ -319,6 +321,7 @@ test-image1     True      CONFIG           first/image:sha      example1
 test-image2     True      BUILDPACK        second/image:sha     example1
 test-image3     True      BUILDPACK        third/image:sha      example2
 test-image4     False     CONFIG           fourth/image:sha     example2
+```
 
 ### <a id='filter-images'></a> Filter Images
 
