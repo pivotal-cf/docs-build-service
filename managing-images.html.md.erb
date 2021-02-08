@@ -887,7 +887,10 @@ Where:
 Run the following:
 
 ```
-kubectl create secret generic <notary-secret-name> --from-literal=password=<notary-targets-passphrase> --from-file=~/.notary/private/<target-hash>.key --namespace <image-namespace>
+kubectl create secret generic <notary-secret-name> \
+	--from-literal=password=<notary-targets-passphrase> \
+	--from-file=~/.notary/private/<target-hash>.key \
+	--namespace <image-namespace>
 ```
 
 Where:
