@@ -5,29 +5,6 @@ owner: Build Service Team
 
 This topic describes how to install and configure Tanzu Build Service.
 
-## <a id='supported'></a> Compatibility Notes
-
-Build Service can be installed on any Kubernetes cluster (v1.16 or later) and with any container registry with some exceptions.
-
-If your scenario is not listed here, it is likely the environment is supported.
-
-#### Containerd 1.4.1
-
-Clusters running with Containerd 1.4.1 are not compatible with TBS.
-
-Notably, TKG 1.2.1 uses this version of Containerd, a different TKG version must be used.
-
-#### Azure Devops for git repositories
-
-Azure Devops cannot be used as a git repository with TBS. This can be worked-around by using the `--local-path` source type
-with the `kp` cli which will use your registry to store the source code.
-
-This is expected to be fixed in upcoming releases.
-
-#### ECR Registry
-
-ECR is supported but requires manually creating each repository that TBS will use. With other registries, the repositories will be created automatically.
-
 ## <a id='prerequisites'></a> Prerequisites
 
 Before you install Build Service, you must:
@@ -37,7 +14,7 @@ Before you install Build Service, you must:
 * Have access to the Kubernetes cluster satisfying the [minimum required permissions](#install-rbac).
 
 * Have access to a container registry to install Tanzu Build Service and store the application images that will be created.
-  * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported  
+  * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported
   * TBS uses ~5GB of registry space for installation, this does not include the space that will be used for application images.
 
 * Ensure your Kubernetes cluster is configured with default `StorageClass`.
@@ -61,9 +38,11 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
 	* These docs assume kp cli v0.2.* from TBS release v1.1.*. If a feature is not working, you may need to upgrade your cli.
 
-* The `docker` CLI to authenticate with registries.
+* Download the `docker` CLI to authenticate with registries.
 
 * Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
+
+<p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1 are not compatible with TBS. Notably, TKG 1.2.1 uses this version of Containerd, a different TKG version must be used.</p>
 
 ## <a id='install'></a> Installing
 

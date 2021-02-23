@@ -103,7 +103,7 @@ it using the `docker` CLI to verify that it exists.
 ## <a id='faq-10'></a> How do I fix "unsupported status code 500" when creating a builder on my Harbor v2.X.X registry?
 
 Some builders are very large and can overwhelm Harbor's default database connection.
-You can remediate this issue by increasing the `database.maxOpenConns` setting in the 
+You can remediate this issue by increasing the `database.maxOpenConns` setting in the
 helm `values.yaml` file. Increase this value from 100 to 300.
 The exact setting can be found [here](https://github.com/goharbor/harbor-helm/blob/ab57e34774ad57fe6506ad5161b2d7b207e1dfd1/values.yaml#L689).
 
@@ -159,7 +159,7 @@ ytt -f /tmp/values.yaml \
 You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code. By using your kpack builder locally, you can guarantee that the buildpacks, stacks, and lifecycle used to build the image config will also be used by the pack CLI, resulting in a container image that is the exact same, whether it is built by `kpack` or `pack`.
 
 <p class="note"><strong>Note:</strong> Make sure that you `docker login` to the image repository containing your kpack builder.</p>
-			
+
 ```
 pack build my-app --path ~/workspace/my-app --builder gcr.io/my-project/my-image:latest --trust-builder
 ```
@@ -224,3 +224,14 @@ clusterstack.kpack.io/test-stack created
 ```
 
 Running the same command above with the `--dry-run-with-image-upload` flag (instead of `--dry-run`) ensures the created resource refers to images exist.
+
+## <a id='faq-14'></a> Does TBS support Azure Devops for git repositories
+
+Azure Devops cannot be used as a git repository with TBS. This can be worked-around by using the `--local-path` source type
+with the `kp` cli which will use your registry to store the source code.
+
+This is expected to be fixed in upcoming releases.
+
+## <a id='faq-15'></a> Why do I get a "repository does not exist" error when I use ECR Registry?
+
+ECR is supported but requires manually creating each repository that TBS will use. With other registries, the repositories will be created automatically.
