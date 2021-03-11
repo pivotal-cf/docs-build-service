@@ -42,6 +42,13 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 * Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
 
+* In order to pull the images specified in the above Descriptor file, users must navigate to the following dependencies pages in Tanzu Network and accept all EULAs highlighted in yellow.
+
+1. [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
+1. [Buildpacks for VMware Tanzu](https://network.pivotal.io/products/tanzu-buildpacks-suite)
+1. [Stacks for VMware Tanzu](https://network.pivotal.io/products/tanzu-stacks-suite)
+		
+		
 <p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1 are not compatible with TBS. Notably, TKG 1.2.1 uses this version of Containerd, a different TKG version must be used.</p>
 
 ## <a id='install'></a> Installing
@@ -183,13 +190,7 @@ kp import -f /tmp/descriptor-<version>.yaml --registry-ca-cert-path <path-to-ca-
 Using the `--show-changes` flag will give a summary of the resource changes for the import. You will also be asked to confirm the import. Confirmation can be skipped with `--force`.
 
 Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
-Users can only access these images if they agree to the dependency EULAs.
-
-Users must navigate to the following dependencies pages in Tanzu Network and accept all EULAs highlighted in yellow.
-
-1. [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/)
-1. [Buildpacks for VMware Tanzu](https://network.pivotal.io/products/tanzu-buildpacks-suite)
-1. [Stacks for VMware Tanzu](https://network.pivotal.io/products/tanzu-stacks-suite)
+Users can only access these images if they agree to the dependency EULAs.  Links to the necessary EULAs are called out in the "prerequisites" section at the top of the page.
 
 <p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>
 
