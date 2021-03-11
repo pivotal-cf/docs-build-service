@@ -240,7 +240,7 @@ ECR is supported but requires manually creating each repository that TBS will us
 
 Like many Kubernetes native products, operating TBS involves orchestrating resources that depend on each other to function.  If a resource is in a "not ready" state it is likely that there is a problem with one of the resources it depends on.
 
-If you are encountering a failed `build`, check and see which builder it uses and then check the status of that builder for additional information that could help you troubleshoot the problem.
+If you are encountering a not ready `Image`, check and see which builder it uses and then check the status of that builder for additional information that could help you troubleshoot the problem.
 ```
 $ kp image status <image-name>
 			
