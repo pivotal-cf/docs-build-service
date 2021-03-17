@@ -99,12 +99,10 @@ Where:
   Example order YAML file that would be used by a builder designed to build NodeJS and Java apps:
 
   ```
-  ---
   - group:
-	- id: paketo-buildpacks/bellsoft-liberica
-	- id: paketo-buildpacks/gradle
+	- id: tanzu-buildpacks/nodejs
   - group:
-	- id: paketo-buildpacks/nodejs
+	- id: tanzu-buildpacks/java
   ```
 * `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
 
@@ -314,25 +312,12 @@ kp cb create pinned \
 where the contents of order.yaml file is
 
 ```
----
 - group:
-  - id: tanzu-buildpacks/httpd
-    version: 0.0.23
-  - id: tanzu-buildpacks/nginx
-    version: 0.0.29
-  - id: tanzu-buildpacks/php-composer
-    version: 0.0.15
-  - id: tanzu-buildpacks/php-dist
-    version: 0.0.28
-  - id: tanzu-buildpacks/php-web
-    version: 0.0.11
+  - id: tanzu-buildpacks/php
+    version: 0.0.5
 - group:
-  - id: tanzu-buildpacks/node-engine
-    version: 0.0.42
-  - id: tanzu-buildpacks/npm
-    version: 0.0.39
-  - id: tanzu-buildpacks/yarn-install
-    version: 0.0.34
+  - id: tanzu-buildpacks/nodejs
+    version: 1.3.0
 ```
 
 <p class='note'><strong>Note:</strong> When a buildpack version is pinned, Images that use the Builder will not initiate new Builds due to new Buildpack versions. For best practice, only pin a buildpack version when necessary. </p>
