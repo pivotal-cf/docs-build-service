@@ -122,7 +122,7 @@ Where:
 
 Users can patch their existing images with the `kp` CLI. Running a patch will trigger a new build of the image if any of the build inputs are changed.
 	    
-<p class='note'><strong>Note:</strong>For handling source code changes in the Tanzu Build Service process, we recommend utilizing the `kp image patch` command within a CI/CD pipeline to update the source code referenced in the image configuration.</p>
+<p class='note'><strong>Note:</strong>For handling source code changes in the Tanzu Build Service process, we recommend utilizing the `kp image save --wait` command within a CI/CD pipeline to update the source code referenced in the image configuration.</p>
 This can be accomplished by updating the `--git-revision` field with a new commit ID.  For many TBS customers this commit ID references source code that has undergone unit testing, so that they can be confident that the resulting image can be deployed or promoted to higher level environments. 
 
 Patch images with the following commands:
