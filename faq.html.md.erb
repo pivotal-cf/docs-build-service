@@ -235,7 +235,7 @@ This is expected to be fixed in upcoming releases.
 ## <a id='faq-15'></a> Why do I get a "repository does not exist" error when I use ECR Registry?
 
 ECR is supported but requires manually creating each repository that TBS will use. With other registries, the repositories will be created automatically.
-			
+
 ## <a id='faq-16'></a> How do I troubleshoot a failed build?
 
 Like many Kubernetes native products, operating TBS involves orchestrating resources that depend on each other to function.  If a resource is in a "not ready" state it is likely that there is a problem with one of the resources it depends on.
@@ -243,22 +243,49 @@ Like many Kubernetes native products, operating TBS involves orchestrating resou
 If you are encountering a not ready `Image`, check and see which builder it uses and then check the status of that builder for additional information that could help you troubleshoot the problem.
 ```
 $ kp image status <image-name>
-			
+
 $ kp clusterbuilder status <clusterbuilder-name>
 ```
-			
-Similarly, if a builder resource is in a "not ready" state, it is possible that there is a problem with the `clusterstack` or `clusterstore` resources it is referencing. 
-			
+
+Similarly, if a builder resource is in a "not ready" state, it is possible that there is a problem with the `clusterstack` or `clusterstore` resources it is referencing.
+
 ```
 $ kp clusterstack status <clusterstack-name> --verbose
-			
-$ kp clusterstore status <clusterstore-name> --verbose			
+
+$ kp clusterstore status <clusterstore-name> --verbose
 ```
-			
+
 All Build Service concepts are also Kubernetes resources.  Therefore, customers can interact with them using the `kubectl` CLI to see all the information that can be provided by the Kubernetes API.
 
-```			
+```
 $ kubectl describe image <image-name>
-			
+
 $ kubectl describe clusterbuilder <clusterbuilder-name>
 ```
+
+## <a id='faq-17'></a> How do I troubleshoot an UNAUTHENTICATED error?
+
+**During `kbld relocate`**
+
+1. Ensure you are logged in locally to both registries with:
+
+```
+docker logout registry.pivotal.io && docker login registry.pivotal.io
+docker logout <tbs-registry> && docker login <tbs-registry>
+```
+
+2. On linux, if you have installed `docker` with `snap` you will need to copy `/root/snap/docker/471/.docker/config.json` to `~/.docker/config.json` which is where `kbld` is looking for the docker credentials
+3. Ensure your credentials have write access to your registry with `docker push <registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
+
+**During `kp import`**
+
+1. Ensure you are logged in locally to both registries with:
+
+```
+docker logout registry.pivotal.io && docker login registry.pivotal.io
+docker logout <tbs-registry> && docker login <tbs-registry>
+```
+
+2. Ensure the credentials used to install TBS have write access to your registry as they sometimes differ from local credentials
+  - Use `docker login <tbs-registry>` using the credentials used to install TBS with `ytt/kapp`
+  - Try to `docker push <tbs-registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
