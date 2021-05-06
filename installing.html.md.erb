@@ -314,6 +314,44 @@ For example:
 * Artifactory `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
 * Harbor `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
+### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
+
+Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+
+```
+ytt -f /tmp/values.yaml \
+	-f /tmp/manifests/ \
+	-f <PATH-TO-CA> \
+	-v docker_repository="<IMAGE-REPOSITORY>" \
+	-v docker_username="<REGISTRY-USERNAME>" \
+	-v docker_password="<REGISTRY-PASSWORD>" \
+	| kbld -f /tmp/images-relocated.lock -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
+Where:
+
+* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
+* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+    <p class="note">
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+    <br>
+    <br>
+    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+    </p>
+* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+   as the username when using JSON key file authentication.
+* `REGISTRY-PASSWORD` is the password you use to access the registry.
+    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+
+#### <a id='offline-additional-config'></a> Additional Configuration
+
+Other optional parameters can be added using the `-v` flag:
+
+* `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
+* `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
+
 ### <a id='offline-import'></a> Import Tanzu Build Service Dependencies (Air-Gapped)
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
@@ -361,44 +399,6 @@ Use the following command with `kbld` and the `kp` CLI:
 ```
 kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f - --registry-ca-cert-path <path-to-ca-cert>
 ```
-
-#### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
-
-Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
-
-```
-ytt -f /tmp/values.yaml \
-	-f /tmp/manifests/ \
-	-f <PATH-TO-CA> \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-
-Where:
-
-* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
-* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
-    <br>
-    <br>
-    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
-    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
-
-#### <a id='offline-additional-config'></a> Additional Configuration
-
-Other optional parameters can be added using the `-v` flag:
-
-* `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
-* `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
 
 ## <a id='verify-installation'></a> Verify Installation
 
