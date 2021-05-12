@@ -1,0 +1,80 @@
+---
+title: Using Tanzu Build Service in CI
+owner: Build Service Team
+---
+
+This topic describes how to best leverage Tanzu Build Service in a Continuous Integration context to build applications and keep them up-to-date at scale.
+
+# <a id='using'></a> Using TBS in CI/CD
+
+<img src="images/ci_flow_full.jpg">
+
+This example shows using an Image resource with git source in a development-to-production CI/CD pipeline flow.
+
+Let's split this up into each step.
+
+## 1. Run unit tests & merge to branch
+
+<img src="images/ci_flow_step1.jpg">
+
+This step shows a typical initial unit testing CI flow.
+
+1. Developer pushes code to feature branch
+2. CI/CD runs unit tests on that branch
+3. Once tests have passed, the feature branch is merged to release branch (Git Branch A)
+
+## 2. Update Tanzu Build Service Image Configuration in CI/CD
+
+<img src="images/ci_flow_step2.jpg">
+
+After unit tests pass, CI/CD must tell TBS to build the registry image using the git commit that passed tests.
+
+Ex.
+
+Jenkins job that runs the following after unit tests with the successful `<git-commit>`:
+
+```
+kp image save my-image --git-revision <git-commit>
+```
+
+## 3. Tanzu Build Service builds the OCI registry image using the git commit
+
+<img src="images/ci_flow_step3.jpg">
+
+Here TBS works its magic and builds a new registry image using the git commit set in the previous step and the latest app dependencies (Stacks & Buildpacks).
+
+## 4. Tanzu Build Service pushes the built image to your registry
+
+<img src="images/ci_flow_step4.jpg">
+
+After the build finishes, TBS writes the resulting image to a container registry such as Harbor.
+
+This image reference can be found with:
+
+```
+kp image status <image-name>
+```
+
+or
+
+```
+kp build status <image-name> -b <build-number>
+```
+
+## 5. Using CI/CD, deploy the built image to a Dev/QA Kubernetes cluster
+
+<img src="images/ci_flow_step5.jpg">
+
+Now that the image is available in your registry, it can be deployed to any kubernetes cluster. In this example, it is deployed to a Dev Cluster for acceptance testing and QA/manual approval.
+
+There are a couple of ways to trigger this job:
+
+- Using registry webhooks (such as Harbor's) to trigger a CI/CD job
+- If you are using Concourse CI: the [Concourse kpack Resource](https://github.com/vmware-tanzu/concourse-kpack-resource)
+- Write your own polling mechanism to check for new images in your registry
+
+## 6. Once the app has been vetted, deploy to production!
+
+<img src="images/ci_flow_step6.jpg">
+
+The same way the image was deployed to the Dev Cluster, the image can be pushed to production.
