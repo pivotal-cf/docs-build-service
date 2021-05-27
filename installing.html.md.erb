@@ -53,6 +53,8 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 <p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1 are not compatible with TBS. Notably, TKG 1.2.1 uses this version of Containerd, a different TKG version must be used.</p>
 
+<p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20 are not compatible with TBS. A TKGs patch is expected to fix this. In the meantime, we recommend running k8s 1.19 when using TKGs.</p>
+
 ## <a id='install'></a> Installing
 
 Create a kubernetes cluster where you would like to install build service and target the cluster as follows:
