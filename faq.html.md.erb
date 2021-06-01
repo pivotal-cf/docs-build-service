@@ -292,7 +292,7 @@ docker logout <tbs-registry> && docker login <tbs-registry>
 
 ## <a id='faq-18'></a> How do I check what version of TBS I am using?
 **After successfully installing tanzu-build-service**
-In terminal run the command `$ kubectl get configMap build-service-version -n <build-service-namespace> -o yaml`
+In terminal run the command `kubectl describe configMap build-service-version -n build-service`
 
 Under the `data` header you will see the version of TBS you are currently using.
 EX:
