@@ -289,7 +289,19 @@ docker logout <tbs-registry> && docker login <tbs-registry>
 2. Ensure the credentials used to install TBS have write access to your registry as they sometimes differ from local credentials
   - Use `docker login <tbs-registry>` using the credentials used to install TBS with `ytt/kapp`
   - Try to `docker push <tbs-registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
-			
-## <a id='faq-17'></a> Why does TBS leave behind pods after builds on my Cluster?
+
+## <a id='faq-18'></a> Why does TBS leave behind pods after builds on my Cluster?
 			
 All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This is not currently supported in the `kp` CLI, but users can apply yaml configuration using `kubectl` to update these fields.  Follow [this link](https://github.com/pivotal/kpack/blob/main/docs/image.md) for documentation.  
+
+## <a id='faq-19'></a> How do I check what version of TBS I am using?
+**After successfully installing tanzu-build-service**
+In terminal run the command `kubectl describe configMap build-service-version -n build-service`
+
+Under the `data` field you will see the version of TBS you are currently using.
+EX:
+```
+    data:
+      version: 1.2.0
+```
+<p class="note"><strong>Note:</strong> This will only work for TBS versions 1.2 and above</p>
