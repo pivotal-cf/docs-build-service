@@ -21,7 +21,8 @@ the source for this page in GitHub" at the bottom of the topic.
 | **Branch Name** | **Content** | **Location** |
 |-----------------|-------------|--------------|
 | `master` | DO NOT USE | |
-| `v1.1`   | Tanzu Build Service 1.1 pre-release  | https://docs-pcf-staging.cfapps.io/build-service/1-1/ |
+| `v1.2`   | Tanzu Build Service 1.2    | https://docs.pivotal.io/build-service/1-2/ |
+| `v1.1`   | Tanzu Build Service 1.1    | https://docs.pivotal.io/build-service/1-1/ |
 | `v1.0`   | Tanzu Build Service 1.0    | https://docs.pivotal.io/build-service/1-0/ |
 
 ## Where is the book repository?
