@@ -22,17 +22,13 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Download three [Carvel](https://carvel.dev/) CLIs for your operating system. These tools will facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
   - [kapp](https://network.pivotal.io/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
   - [ytt](https://network.pivotal.io/products/ytt/) is a templating tool that understands YAML structure.
-  - [kbld](https://network.pivotal.io/products/kbld/) is tool that builds, pushes, and relocates container images.
+  - [kbld](https://network.pivotal.io/products/kbld/) is needed to map relocated images to k8s config.
+  - [imgpkg](https://network.pivotal.io/products/imgpkg/) is tool that relocates container images and pulls the release configuration files.
 
-* Download the Build Service Bundle from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
-  * Unarchive the Build Service Bundle file:
-
-	```
-	tar xvf build-service-<version>.tar -C /tmp
-	```
+* Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
-	* These docs assume kp cli v0.2.* from TBS release v1.1.*. If a feature is not working, you may need to upgrade your cli.
+	* These docs assume kp cli v0.3.* from TBS release v1.2.*. If a feature is not working, you may need to upgrade your cli.
 
 * Download the `docker` cli to authenticate with registries.
 
@@ -42,6 +38,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 For this example setup, we will make the following assumptions:
 
+* You are installing TBS 1.2.0
 * You are using a registry named `my.registry.io` with credentials
   * Username: `my-user`
   * Password: `my-password`
@@ -67,26 +64,30 @@ docker login my.registry.io --tlscacert /tmp/ca.crt
 docker login registry.pivotal.io
 ```
 
-3. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
+3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my.registry.io/tbs --registry-ca-cert-path /tmp/ca.crt
+imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo my.registry.io/tbs --registry-ca-cert-path /tmp/ca.crt
 ```
 
-<p class="note"><strong>Note:</strong> The flag argument <code>--lock-output /tmp/images-relocated.lock</code> creates a file that will be used for installation</code>.</p>
+4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
+
+```
+imgpkg pull -b "my.registry.io/tbs:1.2.0" -o /tmp/bundle
+```
 
 ### <a id='install'></a> Install Tanzu Build Service
 
 Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
-ytt -f /tmp/values.yaml \
-    -f /tmp/manifests/ \
+ytt -f /tmp/bundle/values.yaml \
+    -f /tmp/bundle/config/ \
     -f /tmp/ca.crt \
 	-v docker_repository="my.registry.io/tbs" \
 	-v docker_username="my-user" \
 	-v docker_password="my-password" \
-	| kbld -f /tmp/images-relocated.lock -f- \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 

@@ -22,9 +22,11 @@ By default Build Service will tag each built image twice. The first tag will be 
 
 ## <a id='faq-3'></a> How does TBS work in air gapped environments?
 
-Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `kbld package` command can create a `.tar` file  composed of the kubernetes manifests and images required to successfully install Build Service.
-The `kbld unpackage` command ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
-executing the `install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
+Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `imgpkg copy` command can create a `.tar` file  composed of the kubernetes config and images required to successfully install Build Service.
+The `imgpkg copy` command also ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
+executing the `kapp install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
+
+Currently, `kbld package` and `kbld unpackage` must be used to import dependencies to an air-gapped environment.
 
 For more details on air-gapped installation, see [Installation to Air-Gapped Environment](installing.html#offline-installation).
 
@@ -117,12 +119,12 @@ If you have trouble configuring the registry credentials for gcr when following 
 
 	registry_name="_json_key"
 	registry_password="$(cat /path/to/gcp/service/account/key.json)"
-	ytt -f /tmp/values.yaml \
-		-f /tmp/manifests/ \
+	ytt -f /tmp/bundle/values.yaml \
+		-f /tmp/bundle/config/ \
 		-v docker_repository="<IMAGE-REPOSITORY>" \
 		-v docker_username="$registry_name" \
 		-v docker_password="$registry_password>" \
-		| kbld -f /tmp/images-relocated.lock -f- \
+		| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 		| kapp deploy -a tanzu-build-service -f- -y
 
 
@@ -140,15 +142,15 @@ TBS can be configured with a proxy at [installation](installing.html) time by sp
 This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.</p>
 
 ```
-ytt -f /tmp/values.yaml \
-	-f /tmp/manifests/ \
+ytt -f /tmp/bundle/values.yaml \
+	-f /tmp/bundle/config/ \
 	-v docker_repository="<IMAGE-REPOSITORY>" \
 	-v docker_username="<REGISTRY-USERNAME>" \
 	-v docker_password="<REGISTRY-PASSWORD>" \
 	-v http_proxy="<HTTP-PROXY-URL>" \
 	-v https_proxy="<HTTPS-PROXY-URL>" \
 	-v no_proxy="<KUBERNETES-API-SERVER-URL>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
@@ -265,7 +267,7 @@ $ kubectl describe clusterbuilder <clusterbuilder-name>
 
 ## <a id='faq-17'></a> How do I troubleshoot an UNAUTHENTICATED error?
 
-**During `kbld relocate`**
+**During `imgpkg copy`**
 
 1. Ensure you are logged in locally to both registries with:
 
@@ -274,7 +276,7 @@ docker logout registry.pivotal.io && docker login registry.pivotal.io
 docker logout <tbs-registry> && docker login <tbs-registry>
 ```
 
-2. On linux, if you have installed `docker` with `snap` you will need to copy `/root/snap/docker/471/.docker/config.json` to `~/.docker/config.json` which is where `kbld` is looking for the docker credentials
+2. On linux, if you have installed `docker` with `snap` you will need to copy `/root/snap/docker/471/.docker/config.json` to `~/.docker/config.json` which is where `imgpkg` is looking for the docker credentials
 3. Ensure your credentials have write access to your registry with `docker push <registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
 
 **During `kp import`**
@@ -290,9 +292,10 @@ docker logout <tbs-registry> && docker login <tbs-registry>
   - Use `docker login <tbs-registry>` using the credentials used to install TBS with `ytt/kapp`
   - Try to `docker push <tbs-registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
 
+<<<<<<< HEAD
 ## <a id='faq-18'></a> Why does TBS leave behind pods after builds on my Cluster?
-			
-All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This is not currently supported in the `kp` CLI, but users can apply yaml configuration using `kubectl` to update these fields.  Follow [this link](https://github.com/pivotal/kpack/blob/main/docs/image.md) for documentation.  
+
+All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This is not currently supported in the `kp` CLI, but users can apply yaml configuration using `kubectl` to update these fields.  Follow [this link](https://github.com/pivotal/kpack/blob/main/docs/image.md) for documentation.
 
 ## <a id='faq-19'></a> How do I check what version of TBS I am using?
 **After successfully installing tanzu-build-service**

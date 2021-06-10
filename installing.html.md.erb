@@ -26,10 +26,11 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
-* Download three [Carvel](https://carvel.dev/) CLIs for your operating system. These tools will facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
+* Download four [Carvel](https://carvel.dev/) CLIs for your operating system. These tools will facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
   - [kapp](https://network.pivotal.io/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
   - [ytt](https://network.pivotal.io/products/ytt/) is a templating tool that understands YAML structure.
-  - [kbld](https://network.pivotal.io/products/kbld/) is tool that builds, pushes, and relocates container images.
+  - [kbld](https://network.pivotal.io/products/kbld/) is needed to map relocated images to k8s config.
+  - [imgpkg](https://network.pivotal.io/products/imgpkg/) is tool that relocates container images and pulls the release configuration files.
 
 * Navigate to the following pages in Tanzu Network and accept all EULAs highlighted in yellow.
   - [Tanzu Build Service](https://network.pivotal.io/products/build-service/)
@@ -37,15 +38,10 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
   - [Buildpacks for VMware Tanzu](https://network.pivotal.io/products/tanzu-buildpacks-suite)
   - [Stacks for VMware Tanzu](https://network.pivotal.io/products/tanzu-stacks-suite)
 
-* Download the Build Service Bundle from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
-  * Unarchive the Build Service Bundle file:
-
-	```
-	tar xvf build-service-<version>.tar -C /tmp
-	```
+* Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
-	* These docs assume kp cli v0.2.* from TBS release v1.1.*. If a feature is not working, you may need to upgrade your cli.
+	* These docs assume kp cli v0.3.* from TBS release v1.2.*. If a feature is not working, you may need to upgrade your cli.
 
 * Download the `docker` CLI to authenticate with registries.
 
@@ -81,15 +77,13 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 docker login registry.pivotal.io
 ```
 
-3. Relocate the images with the [Carvel](https://carvel.dev/) tool `kbld` by running:
+3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
+imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-repo <IMAGE-REPOSITORY>
 ```
 
-Where `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-
-<p class="note"><strong>Note:</strong> The flag argument <code>--lock-output /tmp/images-relocated.lock</code> creates a file that will be used for installation</code>.</p>
+Where `TBS-VERSION` is the version of Tanzu Build Service you want to install and `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
 
 <p class="note">
 <strong>Note:</strong> When relocating, the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
@@ -97,15 +91,15 @@ For example, <code>IMAGE-REGISTRY/build-service</code>.
 <br>
 <br>
 <strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub repository and an
-image name that kbld will use for relocation. For example, <code>my-dockerhub-account/build-service</code>.
+image name that imgpkg will use for relocation. For example, <code>my-dockerhub-account/build-service</code>.
 </p>
 
 For example:
 
-* Dockerhub `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service`
-* GCR `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service`
-* Artifactory `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service`
-* Harbor `kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service`
+* Dockerhub `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo my-dockerhub-account/build-service`
+* GCR `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo gcr.io/my-project/build-service`
+* Artifactory `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo artifactory.com/my-project/build-service`
+* Harbor `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo harbor.io/my-project/build-service`
 
 ### <a id='install'></a> Install Tanzu Build Service
 
@@ -116,15 +110,23 @@ There are two ways to install Tanzu Build Service:
 
 #### <a id='install-no-ca'></a> Install Tanzu Build Service Public Registry
 
-Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+1. Pull the Tanzu Build Service bundle image locally using `imgpkg`:
 
 ```
-ytt -f /tmp/values.yaml \
-    -f /tmp/manifests/ \
+imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
+```
+
+Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
+
+2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+
+```
+ytt -f /tmp/bundle/values.yaml \
+    -f /tmp/config/config/ \
 	-v docker_repository="<IMAGE-REPOSITORY>" \
 	-v docker_username="<REGISTRY-USERNAME>" \
 	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
@@ -132,7 +134,7 @@ Where:
 
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
     <br>
     <br>
     <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
@@ -149,13 +151,13 @@ To install Tanzu Build Service with an internal registry that requires providing
 installation command with the CA certificate file passed in with a `-f` flag:
 
 ```
-ytt -f /tmp/values.yaml \
-	-f /tmp/manifests/ \
+ytt -f /tmp/bundle/values.yaml \
+	-f /tmp/config/config/ \
 	-f <PATH-TO-CA> \
 	-v docker_repository="<IMAGE-REPOSITORY>" \
 	-v docker_username="<REGISTRY-USERNAME>" \
 	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
@@ -164,7 +166,7 @@ Where:
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
     <br>
     <br>
     <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
@@ -273,21 +275,21 @@ Where `IMAGE-REGISTRY` is the name of the image registry where you want to store
 docker login registry.pivotal.io
 ```
 
-3. Package the images in a file on your local machine with the [Carvel](https://carvel.dev/) tool `kbld` by running:
+3. Copy the Tanzu Build Service bundle to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-kbld package -f /tmp/images.lock --output /tmp/packaged-images.tar
+imgpkg copy -b registry.pivotal.io/build-service/bundle:<TBS-VERSION> --to-tar=/tmp/tanzu-build-service.tar
 ```
 
-4. Move the output file `packaged-images.tar` to a machine that has access to the air-gapped environment.
+Where `TBS-VERSION` is the version of Tanzu Build Service you want to install.
+
+4. Move the output file `tanzu-build-service.tar` to a machine that has access to the air-gapped environment.
 
 5. Unpackage the images from your local machine to the internal registry:
 
 ```
-kbld unpackage -f /tmp/images.lock \
-  --input /tmp/packaged-images.tar \
-  --repository <IMAGE-REPOSITORY> \
-  --lock-output /tmp/images-relocated.lock \
+imgpkg copy --tar /tmp/tanzu-build-service.tar \
+  --to-repo=<IMAGE-REPOSITORY>
   --registry-ca-cert-path <PATH-TO-CA>
 ```
 
@@ -296,9 +298,6 @@ Where:
 * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
 * `PATH-TO-CA` is the path to the registry CA certificate file.
 
-<p class="note"><strong>Note:</strong> The flag argument `--lock-output /tmp/images-relocated.lock`
- creates a file that will be used for installation</code>.</p>
-
 <p class="note">
 <strong>Note:</strong> When relocating to a registry that is not Dockerhub,
 the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
@@ -306,28 +305,38 @@ For example, <code>IMAGE-REGISTRY/build-service</code>.
 <br>
 <br>
 <strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub repository and an
-image name that kbld will use for relocation. For example, <code>my-dockerhub-account/build-service</code>.
+image name that imgpkg will use for relocation. For example, <code>my-dockerhub-account/build-service</code>.
 </p>
 
 For example:
 
-* Dockerhub `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository my-dockerhub-account/build-service --registry-ca-cert-path ca.crt`
-* GCR `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository gcr.io/my-project/build-service --registry-ca-cert-path ca.crt`
-* Artifactory `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
-* Harbor `kbld unpackage -f /tmp/images.lock --input /tmp/packaged-images.tar --lock-output /tmp/images-relocated.lock --repository harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
+* Dockerhub `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=my-dockerhub-account/build-service --registry-ca-cert-path ca.crt`
+* GCR `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=gcr.io/my-project/build-service --registry-ca-cert-path ca.crt`
+* Artifactory `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
+* Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
 ### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
 
-Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+Once the images have been relocated, installation is the same as a regular install.
+
+1. Pull the Tanzu Build Service bundle image locally using `imgpkg`:
 
 ```
-ytt -f /tmp/values.yaml \
-	-f /tmp/manifests/ \
-	-f <PATH-TO-CA> \
+imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
+```
+
+Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
+
+2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+
+```
+ytt -f /tmp/bundle/values.yaml \
+    -f /tmp/config/config/ \
+    -f <PATH-TO-CA> \
 	-v docker_repository="<IMAGE-REPOSITORY>" \
 	-v docker_username="<REGISTRY-USERNAME>" \
 	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
@@ -336,7 +345,7 @@ Where:
 * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
 * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
     <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during kbld relocation command.
+    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
     <br>
     <br>
     <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
@@ -362,7 +371,7 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 
 #### <a id='offline-import-relocate'></a> Relocate Tanzu Build Service Dependency Images (Air-Gapped)
 
-To import these dependencies into an air-gapped environment, they must first be relocated to the internal registry. Use `kbld` to perform this relocation similarly to installation:
+To import these dependencies into an air-gapped environment, they must first be relocated to the internal registry. Use `kbld` to perform this relocation (not `imgpkg`):
 
 1. Download the dependency images locally:
 
@@ -430,21 +439,27 @@ tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
 
 To upgrade Tanzu Build Service to a newer version, run the same commands as installation. Re-importing dependencies is not required for upgrading TBS.
 
-Relocate the images with `kbld`:
+1. Relocate the images with `imgpkg`:
 
 ```
-kbld relocate -f /tmp/images.lock --lock-output /tmp/images-relocated.lock --repository <IMAGE-REPOSITORY>
+imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-repo <IMAGE-REPOSITORY>
 ```
 
-Run the `ytt`/`kapp` command to install:
+2. Pull the Tanzu Build Service bundle image locally using `imgpkg`:
 
 ```
-ytt -f /tmp/values.yaml \
-    -f /tmp/manifests/ \
+imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
+```
+
+3. Run the `ytt`/`kapp` command to install:
+
+```
+ytt -f /tmp/bundle/values.yaml \
+    -f /tmp/config/config/ \
 	-v docker_repository="<IMAGE-REPOSITORY>" \
 	-v docker_username="<REGISTRY-USERNAME>" \
 	-v docker_password="<REGISTRY-PASSWORD>" \
-	| kbld -f /tmp/images-relocated.lock -f- \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
