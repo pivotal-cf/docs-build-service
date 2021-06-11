@@ -14,6 +14,34 @@ You can use the `kp` CLI to update any resource. The help text is published [her
 
 ## <a id='online-update'></a> Updating Dependencies
 
+### <a id='dependency-updater'></a> Automatically Update Dependencies
+
+Tanzu Build Service 1.2 ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes. 
+
+You can run `kubectl get TanzuNetDependencyUpdater -A` to check if you have a TanzuNetDependencyUpdater set up already. If you have one, there is nothing you need to do to manage your dependencies in TBS. 
+
+If you would like to enable this feature after install, you can create the following resources:
+
+1. A secret with you TanzuNet credentials (`kp secret create dependency-updater-secret --registry registry.pivotal.io --registry-user <TANZUNET_USERNAME>`) in the namespace where you would like your dependency updater to be in. 
+2. A service account that contains that secret. (If the secret was created using `kp`, it will automatically be added to the `default` service account in that namespace.
+3. A `TanzuNetDependencyUpdater` resource:
+
+```
+---
+apiVersion: buildservice.tanzu.vmware.com/v1alpha1
+kind: TanzuNetDependencyUpdater
+metadata:
+  name: dependency-updater
+  namespace: <NAMESPACE>
+spec:
+  serviceAccountName: <SERVICE-ACCOUNT>
+  productSlug: tbs-dependencies
+  checkEvery: 1m
+``` 
+- The `productSlug` field corresponds to the product name in TanzuNet
+- The `checkEvery` field is the frequency that the updater will check for new descriptor file releases
+- The `serviceAccountName` field is the name of the service accoutn from step 2
+
 ### <a id='online-bulk-update'></a> Bulk Update
 
 <p class="note"><strong>Note:</strong> If you want to be alerted when a new descriptor file is published, we recommend using an RSS reader and watching the Tanzu Build Service Dependencies TanzuNet feed for updates https://network.pivotal.io/rss </p>

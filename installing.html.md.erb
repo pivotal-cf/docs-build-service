@@ -118,7 +118,24 @@ imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
 
 Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
 
-2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
+2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters:
+
+Tanzu Build Service 1.2 ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes. To enable this feature, pass in your TanzuNet credentials when running the install command below:
+
+```
+ytt -f /tmp/bundle/values.yaml \
+    -f /tmp/config/config/ \
+	-v docker_repository="<IMAGE-REPOSITORY>" \
+	-v docker_username="<REGISTRY-USERNAME>" \
+	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v tanzunet_username="<TANZUNET-USERNAME>" \
+	-v tanzunet_password="<TANZUNET-PASSWORD>" \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+You can check the status of the DependencyUpdater by running `kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml` 
+
+Alternatively, if you prefer to manage dependencies yourself, simply leave the TanzuNet credentials out of the install.
 
 ```
 ytt -f /tmp/bundle/values.yaml \
@@ -144,6 +161,9 @@ Where:
    as the username when using JSON key file authentication.
 * `REGISTRY-PASSWORD` is the password you use to access the registry.
     <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+* `TANZUNET-USERNAME` is the username you use to access [TanzuNet]("https://network.pivotal.io")
+* `TANZUNET-PASSWORD` is the password you use to access [TanzuNet]("https://network.pivotal.io")
+
 
 #### <a id='ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -178,6 +198,8 @@ Where:
     <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 ### <a id='import'></a> Import Tanzu Build Service Dependencies
+
+<p class="note"><strong>Note:</strong> Tanzu Build Service 1.2 ships with a automatic dependency updater. If you have enabled this feature during install, you can skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
@@ -247,6 +269,8 @@ To configure UAA as an OIDC provider for your TKGI deployment:
 1. In the OpsManager Installation Dashboard, click **Review Pending Changes**, then **Apply Changes**.
 
 ## <a id='offline-installation'></a> Installation to Air-Gapped Environment
+	
+<p class="note"><strong>Note:</strong> The TanzuNetDependencyUpdater cannot be used in air-gapped environments. Do not include Tanzu Net credentials for air-gapped installations.</p>
 
 Tanzu Build Service can be installed to a Kubernetes Cluster and registry that are air-gapped from external traffic.
 
@@ -316,6 +340,8 @@ For example:
 * Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
 ### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
+	
+<p class="note"><strong>Note:</strong> The TanzuNetDependencyUpdater cannot be used in air-gapped environments. Do not include Tanzu Net credentials for air-gapped installations.</p>
 
 Once the images have been relocated, installation is the same as a regular install.
 
@@ -451,7 +477,25 @@ imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-rep
 imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
 ```
 
-3. Run the `ytt`/`kapp` command to install:
+3. Run the `ytt`/`kapp` commands to install:
+
+Tanzu Build Service 1.2 ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes. To enable this feature, pass in your TanzuNet credentials when running the install command below:
+
+```
+ytt -f /tmp/bundle/values.yaml \
+    -f /tmp/config/config/ \
+	-v docker_repository="<IMAGE-REPOSITORY>" \
+	-v docker_username="<REGISTRY-USERNAME>" \
+	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v tanzunet_username="<TANZUNET-USERNAME>" \
+	-v tanzunet_password="<TANZUNET-PASSWORD>" \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
+You can check the status of the DependencyUpdater by running `kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml` 
+
+Alternatively, if you prefer to manage dependencies yourself, simply leave the credentials out of the install.
 
 ```
 ytt -f /tmp/bundle/values.yaml \
@@ -464,6 +508,8 @@ ytt -f /tmp/bundle/values.yaml \
 ```
 
 ## <a id='update-deps'></a> Updating Build Service Dependencies
+
+<p class="note"><strong>Note:</strong> If you enabled the TanzuNetDependencyUpdater during install (This can be verified by running `kubectl get TanzuNetDependencyUpdater -A` you do not need to do anything to manage your TBS dependencies </p>
 
 Use the following documentation to keep applications patched and up-to-date with Tanzu Build Service:
 
