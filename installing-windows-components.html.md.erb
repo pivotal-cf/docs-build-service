@@ -14,8 +14,7 @@ To set up Tanzu Build Service for Windows-based builds, please follow the follow
 <p class='note'><strong>Note:</strong> TBS on Windows does not currently support self-signed registry certificates. Please use a public registry or a non-self-signed cert. </p>
 
 2. Ensure you have a Kubernetes cluster with Windows nodes provisioned
-
-3. Import the Tanzu Build Service Windows Dependencies. 
+3. Import the Tanzu Build Service Windows Dependencies
 
 The Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) can be used to build .NET Framework applications and keep them patched. These must be imported with the `kp` cli and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page:
 
