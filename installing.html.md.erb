@@ -508,6 +508,14 @@ ytt -f /tmp/bundle/values.yaml \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 
+## <a id='uninstall-tbs'></a> Uninstalling Tanzu Build Service
+
+To uninstall Tanzu Build Service simply run the following `kapp` command:
+
+`kapp delete -a tanzu-build-service`
+
+<p class="note"><strong>Note:</strong> All Tanzu Build Service resources will be deleted. Registry images created by TBS will not be deleted. </p>
+
 ## <a id='update-deps'></a> Updating Build Service Dependencies
 
 <p class="note"><strong>Note:</strong> If you enabled the TanzuNetDependencyUpdater during install (This can be verified by running `kubectl get TanzuNetDependencyUpdater -A` you do not need to do anything to manage your TBS dependencies </p>
