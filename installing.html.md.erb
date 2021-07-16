@@ -102,6 +102,14 @@ For example:
 * Artifactory `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo artifactory.com/my-project/build-service`
 * Harbor `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo harbor.io/my-project/build-service`
 
+<p class="note">
+<strong>Note:</strong> During relocation, imgpkg will report the following:
+<br>
+<code>Skipped layer due to it being non-distributable. If you would like to include non-distributable layers, use the --include-non-distributable flag</code>.
+<br>
+This is due to windows-based images shipped with TBS and can be ignored. For more details see the faq.
+</p>
+
 ### <a id='install'></a> Install Tanzu Build Service
 
 There are two ways to install Tanzu Build Service:
