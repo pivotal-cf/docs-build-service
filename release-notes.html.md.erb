@@ -3,6 +3,26 @@ title: Release Notes
 owner: Build Service Team
 ---
 
+## <a id="1-2-2"></a> v1.2.2
+
+**Release Date: July 20, 2021**
+
+Fixed kp issues:
+- Fix bug that prevented `kp import` from reading the descriptor from stdin. 
+- Fix bug that incorrectly uploaded unrecognized jars with `--local-path`
+- Fix possible nil pointer dereference on `kp image status`
+
+New Stacks Operator release with patched base stack images
+
+### Product Snapshot
+
+Tanzu Build Service 1.2.2 ships with the following components:
+
+* [kpack 0.3.1](https://github.com/pivotal/kpack/releases/tag/v0.3.1)
+* [kpack cli v0.3.1](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.3.1)
+* [CNB lifecycle v0.11.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.11.3)
+* [Stacks Operator v0.0.6](https://github.com/pivotal/stacks-operator/releases/tag/v0.0.6)
+
 ## <a id="1-2-1"></a> v1.2.1
 
 **Release Date: June 17, 2021**
