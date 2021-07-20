@@ -38,7 +38,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 For this example setup, we will make the following assumptions:
 
-* You are installing TBS 1.2.0
+* You are installing TBS 1.2.1 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page to find the most up-to-date version).
 * You are using a registry named `my.registry.io` with credentials
   * Username: `my-user`
   * Password: `my-password`
@@ -67,13 +67,13 @@ docker login registry.pivotal.io
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo my.registry.io/tbs --registry-ca-cert-path /tmp/ca.crt
+imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.1" --to-repo my.registry.io/tbs --registry-ca-cert-path /tmp/ca.crt
 ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
 ```
-imgpkg pull -b "my.registry.io/tbs:1.2.0" -o /tmp/bundle
+imgpkg pull -b "my.registry.io/tbs:1.2.1" -o /tmp/bundle
 ```
 
 ### <a id='install'></a> Install Tanzu Build Service
