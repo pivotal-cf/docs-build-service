@@ -97,10 +97,10 @@ image name that imgpkg will use for relocation. For example, <code>my-dockerhub-
 
 For example:
 
-* Dockerhub `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo my-dockerhub-account/build-service`
-* GCR `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo gcr.io/my-project/build-service`
-* Artifactory `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo artifactory.com/my-project/build-service`
-* Harbor `imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.0" --to-repo harbor.io/my-project/build-service`
+* Dockerhub `imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-repo my-dockerhub-account/build-service`
+* GCR `imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-repo gcr.io/my-project/build-service`
+* Artifactory `imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-repo artifactory.com/my-project/build-service`
+* Harbor `imgpkg copy -b "registry.pivotal.io/build-service/bundle:<TBS-VERSION>" --to-repo harbor.io/my-project/build-service`
 
 <p class="note">
 <strong>Note:</strong> During relocation, imgpkg will report the following:
