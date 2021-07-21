@@ -84,9 +84,9 @@ Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install
 ytt -f /tmp/bundle/values.yaml \
     -f /tmp/bundle/config/ \
     -f /tmp/ca.crt \
-	-v docker_repository="my.registry.io/tbs" \
-	-v docker_username="my-user" \
-	-v docker_password="my-password" \
+	-v docker_repository='my.registry.io/tbs' \
+	-v docker_username='my-user' \
+	-v docker_password='my-password' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
