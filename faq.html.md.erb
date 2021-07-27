@@ -121,9 +121,9 @@ If you have trouble configuring the registry credentials for gcr when following 
 	registry_password="$(cat /path/to/gcp/service/account/key.json)"
 	ytt -f /tmp/bundle/values.yaml \
 		-f /tmp/bundle/config/ \
-		-v docker_repository="<IMAGE-REPOSITORY>" \
+		-v docker_repository='<IMAGE-REPOSITORY>' \
 		-v docker_username="$registry_name" \
-		-v docker_password="$registry_password>" \
+		-v docker_password="$registry_password" \
 		| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 		| kapp deploy -a tanzu-build-service -f- -y
 
@@ -144,12 +144,12 @@ This is a known limitation and can be circumvented by using <code>no_proxy</code
 ```
 ytt -f /tmp/bundle/values.yaml \
 	-f /tmp/bundle/config/ \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
-	-v http_proxy="<HTTP-PROXY-URL>" \
-	-v https_proxy="<HTTPS-PROXY-URL>" \
-	-v no_proxy="<KUBERNETES-API-SERVER-URL>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
+	-v http_proxy='<HTTP-PROXY-URL>' \
+	-v https_proxy='<HTTPS-PROXY-URL>' \
+	-v no_proxy='<KUBERNETES-API-SERVER-URL>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```

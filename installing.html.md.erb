@@ -134,11 +134,11 @@ Tanzu Build Service 1.2 ships with a dependency updater that can update ClusterS
 ```
 ytt -f /tmp/bundle/values.yaml \
     -f /tmp/bundle/config/ \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
-	-v tanzunet_username="<TANZUNET-USERNAME>" \
-	-v tanzunet_password="<TANZUNET-PASSWORD>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
+	-v tanzunet_username='<TANZUNET-USERNAME>' \
+	-v tanzunet_password='<TANZUNET-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -149,9 +149,9 @@ Alternatively, if you prefer to manage dependencies yourself, simply leave the T
 ```
 ytt -f /tmp/bundle/values.yaml \
     -f /tmp/bundle/config/ \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -183,9 +183,9 @@ installation command with the CA certificate file passed in with a `-f` flag:
 ytt -f /tmp/bundle/values.yaml \
 	-f /tmp/bundle/config/ \
 	-f <PATH-TO-CA> \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -368,9 +368,9 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
 ytt -f /tmp/bundle/values.yaml \
     -f /tmp/bundle/config/ \
     -f <PATH-TO-CA> \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -493,11 +493,11 @@ Tanzu Build Service 1.2 ships with a dependency updater that can update ClusterS
 ```
 ytt -f /tmp/bundle/values.yaml \
     -f /tmp/bundle/config/ \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
-	-v tanzunet_username="<TANZUNET-USERNAME>" \
-	-v tanzunet_password="<TANZUNET-PASSWORD>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
+	-v tanzunet_username='<TANZUNET-USERNAME>' \
+	-v tanzunet_password='<TANZUNET-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -509,9 +509,9 @@ Alternatively, if you prefer to manage dependencies yourself, simply leave the c
 ```
 ytt -f /tmp/bundle/values.yaml \
     -f /tmp/bundle/config/ \
-	-v docker_repository="<IMAGE-REPOSITORY>" \
-	-v docker_username="<REGISTRY-USERNAME>" \
-	-v docker_password="<REGISTRY-PASSWORD>" \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
