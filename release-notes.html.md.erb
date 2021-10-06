@@ -1,83 +1,39 @@
 ---
-title: Release Notes
+title: TBS Release Notes
 owner: Build Service Team
 ---
 
-## <a id="1-2-2"></a> v1.2.2
+## <a id="1-3-0"></a> v1.3.0
 
-**Release Date: July 20, 2021**
+**Release Date: October 1, 2021**
 
-Fixed kp issues:
-- Fix bug that prevented `kp import` from reading the descriptor from stdin. 
-- Fix bug that incorrectly uploaded unrecognized jars with `--local-path`
-- Fix possible nil pointer dereference on `kp image status`
-
-New Stacks Operator release with patched base stack images
-
-### Product Snapshot
-
-Tanzu Build Service 1.2.2 ships with the following components:
-
-* [kpack 0.3.1](https://github.com/pivotal/kpack/releases/tag/v0.3.1)
-* [kpack cli v0.3.1](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.3.1)
-* [CNB lifecycle v0.11.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.11.3)
-* [Stacks Operator v0.0.6](https://github.com/pivotal/stacks-operator/releases/tag/v0.0.6)
-
-## <a id="1-2-1"></a> v1.2.1
-
-**Release Date: June 17, 2021**
-
-* Relaxed Image name validation to fix an issue that could prevent TBS from building existing images.
-
-### Product Snapshot
-
-Tanzu Build Service 1.2.1 ships with the following components:
-
-* [kpack 0.3.1](https://github.com/pivotal/kpack/releases/tag/v0.3.1)
-* [kpack cli v0.3.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.3.0)
-* [CNB lifecycle v0.11.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.11.3)
-* [Stacks Operator v0.0.4]
-
-
-## <a id="1-2-0"></a> v1.2.0
-
-**Release Date: June 11, 2021**
-
-**1.2.0** represents the third minor GA release of Tanzu Build Service.
+**1.3.0** represents the fourth minor GA release of Tanzu Build Service.
 
 This release includes a few notable new features:
 
-* TanzuNet DependencyUpdater which will allow your Tanzu Build Service Cluster to automatically update its dependencies when new dependency descriptors are published to TanzuNet
-* Add support Azure Devops and TFS git repos
-* Installation utilizes the imgpkg bundle and imgpkg cli
-* Support for [project.toml descriptor](https://buildpacks.io/docs/app-developer-guide/using-project-descriptor/)
-
-### Bug Fixes
-
-* TBS will run windows build pods on a cluster installed with a CA cert
-* Notary will sign images when configured with git secrets
-* Increased Memory limits to prevent OOM errors
+* Support for cosign image signing for images built with TBS
+* Support for kubernetes service bindings
+* Includes kpack v1alpha2 resources
 
 ### Breaking Changes
 
 * Installation has changed, see installation docs for new process using `imgpkg`
-* `kp` cli will default branches to `main` instead of `master`
 
 ### Product Snapshot
 
-Tanzu Build Service 1.2.0 ships with the following components:
+Tanzu Build Service 1.3.0 ships with the following components:
 
-* [kpack 0.3.0](https://github.com/pivotal/kpack/releases/tag/v0.3.0)
-* [kpack cli v0.3.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.3.0)
-* [CNB lifecycle v0.11.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.11.3)
-* [Stacks Operator v0.0.4]
+* [kpack 0.4.0](https://github.com/pivotal/kpack/releases/tag/v0.4.0)
+* [kpack cli v0.4.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.4.0)
+* [CNB lifecycle v0.11.4](https://github.com/buildpacks/lifecycle/releases/tag/v0.11.4)
+* [Stacks Operator v0.0.7](https://github.com/pivotal/stacks-operator/releases/tag/v0.0.7)
 
 Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
 
 ### Product Dependencies
 
-Build Service can be installed on any Kubernetes cluster (v1.18 or later).
+Build Service can be installed on any Kubernetes cluster (v1.19 or later).
 
 ### Upgrade Path
 
-v1.1.* can be upgraded to v1.2.*. Please follow the [install](installing.html) process to upgrade.
+v1.2.* can be upgraded to v1.3.*. Please follow the [install](installing.html) process to upgrade.

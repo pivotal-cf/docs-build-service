@@ -5,7 +5,7 @@ owner: Build Service Team
 
 A Store is a cluster level resource that provides a collection of buildpacks that can be utilized by Builders. Buildpacks are distributed and added to a store in buildpackages which are docker images containing one or more buildpacks.
 
-Build Service ships with a curated collection of Tanzu buildpacks for Java, Nodejs, Go, PHP, nginx, and httpd and Paketo buildpacks for procfile, and .NET Core. Detailed documentation about the buildpacks that are installed with TBS can be found [here](https://docs.pivotal.io/tanzu-buildpacks/). It is important to keep these buildpacks up-to-date. Updates to these buildpacks are provided on [Tanzu Network](https://network.pivotal.io/).
+Build Service ships with a curated collection of Tanzu buildpacks for Java, Nodejs, Go, PHP, nginx, and httpd and Paketo buildpacks for procfile, and .NET Core. Detailed documentation about the buildpacks that are installed with TBS can be found [here](https://docs.pivotal.io/tanzu-buildpacks/). It is important to keep these buildpacks up-to-date. Updates to these buildpacks are provided on [Tanzu Network](https://network.tanzu.vmware.com/).
 
 In addition to supported Tanzu and Paketo buildpacks, custom buildpackages can be uploaded to Build Service stores.
 
@@ -34,7 +34,7 @@ Flags:
   -h, --help   help for clusterstore
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.3.* from TBS release v1.2.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.3.*. If a feature is not working, you may need to upgrade your cli.</p>
 
 ## <a id='buildpacks-buildpackages'></a> Creating Buildpacks and Buildpackages
 
@@ -100,40 +100,40 @@ This command is useful for users that want to only consume certain buildpacks ra
 
 ### <a id='add-buildpackages-to-store-tanzu'></a> Adding Buildpackages to a ClusterStore from Tanzu Network
 
-Updated versions of all supported Buildpacks will be available on [Tanzu Network](https://network.pivotal.io) as registry images. Updated Buildpacks will be found in the following locations:
+Updated versions of all supported Buildpacks will be available on [Tanzu Network](https://network.tanzu.vmware.com) as registry images. Updated Buildpacks will be found in the following locations:
 
-* [Java](https://network.pivotal.io/products/tanzu-java-buildpack)
-* [NodeJS](https://network.pivotal.io/products/tanzu-nodejs-buildpack)
-* [Go](https://network.pivotal.io/products/tanzu-go-buildpack)
-* [PHP, .NET Core, nginx, httpd, procfile](https://network.pivotal.io/products/tbs-dependencies)
+* [Java](https://network.tanzu.vmware.com/products/tanzu-java-buildpack)
+* [NodeJS](https://network.tanzu.vmware.com/products/tanzu-nodejs-buildpack)
+* [Go](https://network.tanzu.vmware.com/products/tanzu-go-buildpack)
+* [PHP, .NET Core, nginx, httpd, procfile](https://network.tanzu.vmware.com/products/tbs-dependencies)
 
 Here is a list of how to update each buildpack that is included with Tanzu Build Service by default:
 
 ```
-kp clusterstore add default registry.pivotal.io/tanzu-java-buildpack/java:<version>
-kp clusterstore add default registry.pivotal.io/tanzu-nodejs-buildpack/nodejs:<version>
-kp clusterstore add default registry.pivotal.io/tanzu-go-buildpack/go:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_dotnet-core:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_php:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_nginx:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/tanzu-buildpacks_httpd:<version>
-kp clusterstore add default registry.pivotal.io/tbs-dependencies/paketo-buildpacks_procfile:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-java-buildpack/java:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-nodejs-buildpack/nodejs:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-go-buildpack/go:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/paketo-buildpacks_dotnet-core:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_php:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_nginx:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_httpd:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/paketo-buildpacks_procfile:<version>
 ```
 
 ### <a id='add-buildpackages-to-store-offline'></a> Offline Adding Buildpackages to a ClusterStore from Tanzu Network
 
 If your Tanzu Build Service installation is in an offline/air-gapped environment, you can update stores with the following offline workflow:
 
-1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
+1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
+2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service) page.
 
-3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.pivotal.io/products/kbld) page.
+3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.tanzu.vmware.com/products/kbld) page.
 
 4. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
 
 ```
-docker login registry.pivotal.io
+docker login registry.tanzu.vmware.com
 
 kbld package -f descriptor-<version>.yaml \
   --output /tmp/packaged-dependencies.tar

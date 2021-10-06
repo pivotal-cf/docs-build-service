@@ -269,7 +269,7 @@ $ kubectl describe clusterbuilder <clusterbuilder-name>
 1. Ensure you are logged in locally to both registries with:
 
 ```
-docker logout registry.pivotal.io && docker login registry.pivotal.io
+docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
 docker logout <tbs-registry> && docker login <tbs-registry>
 ```
 
@@ -281,7 +281,7 @@ docker logout <tbs-registry> && docker login <tbs-registry>
 1. Ensure you are logged in locally to both registries with:
 
 ```
-docker logout registry.pivotal.io && docker login registry.pivotal.io
+docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
 docker logout <tbs-registry> && docker login <tbs-registry>
 ```
 
@@ -301,7 +301,7 @@ Under the `data` field you will see the version of TBS you are currently using.
 EX:
 ```
     data:
-      version: 1.2.0
+      version: 1.3.0
 ```
 <p class="note"><strong>Note:</strong> This will only work for TBS versions 1.2 and above</p>
 

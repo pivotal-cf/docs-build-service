@@ -366,13 +366,13 @@ For more information, see [Patching Images](#patch-images).
 Build Service auto-rebuilds images when one or more of the following build inputs change:
 
 * New buildpack versions are made available via updates to a Cluster Store.
-    - New Buildpack versions are made available on [Tanzu Network](https://network.pivotal.io/).
+    - New Buildpack versions are made available on [Tanzu Network](https://network.tanzu.vmware.com/).
     - To update buildpacks, you must add new buildpack versions from Tanzu Network to a Cluster Store. See [Updating Build Service Dependencies](updating-deps.html) for more details.
 
 * There is a new commit on a branch or tag Tanzu Build Service is tracking.
 
 * There is a new Cluster Stack (ie. base OS image) available, such as `full`, `tiny`, or `base`.
-	- New Stack versions are made available on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies) page on Tanzu Network.
+	- New Stack versions are made available on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
     - You can get updates to Stacks from the Tanzu Network Registry by using the `kp` CLI. See [Updating Build Service Dependencies](updating-deps.html) for more details.
 
 ### <a id='trigger-rebuild-image'></a> Trigger an Image Rebuild
@@ -479,23 +479,20 @@ If further debugging is required, inspect the image's latest Build status discus
 
 ## <a id='service-bindings'></a> Image Service Bindings
 
-Tanzu Build Service supports application service bindings as described in the Cloud Native Buildpack [Service Bindings specification](https://github.com/buildpacks/spec/blob/main/extensions/bindings.md).
+Tanzu Build Service supports application service bindings as described in the Kubernetes [Service Bindings specification](https://github.com/servicebinding/spec).
 
 The `kp` CLI does not currently support creating service bindings, you should use `kubectl`.
 
 ### <a id='service-bindings'></a> Creating an Image with Service Bindings
 
-To create a service binding in your application image, you must create the following:
+To create a service binding in your application image, you must create *either* of the following:
 
-* A Kubernetes Secret containing the service binding data
-  * The Secret `stringData` field must contain key-value pairs of `<binding file name>:<binding data>`. For each key-value pair, a file will be created that is accessible during build.
-* A Kubernetes ConfigMap containing the metadata for the service binding
-  * The ConfigMap must have the fields `data.kind` and `data.provider` populated. The buildpacks used to build the image will handle the service bindings based on these fields.
-* A Tanzu Build Service Image referencing that Secret and ConfigMap in the `spec.build.bindings` field.
+* A [Provisioned Service](https://github.com/servicebinding/spec#provisioned-service)
+* A Kubernetes Secret that follows the guidelines provided in [Well-known Secret Entry](https://github.com/servicebinding/spec#provisioned-service)
 
 <p class='note'><strong>Note:</strong> Check the desired buildpack documentation for details on the service bindings it supports. To find buildpack docs, see [Store Status](managing-stores.html#show-buildpackages-in-store).</p>
 
-The following is an example that can be used with `kubectl apply`. It creates a `settings.xml` service binding for a maven app.
+The following is an example that can be used with `kubectl apply`. It creates a `production-db` service binding for a maven app.
 
 Example:
 
@@ -514,28 +511,22 @@ spec:
       url: https://github.com/buildpack/sample-java-app.git
       revision: 0eccc6c2f01d9f055087ebbf03526ed0623e014a
   build:
-    bindings:
-    - name: settings
-      secretRef:
-        name: settings-xml
-      metadataRef:
-        name: settings-binding-metadata
+    services:
+    - name: production-db-secret
+      kind: Secret
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: settings-xml
-type: Opaque
+  name: production-db-secret
+type: servicebinding.io/mysql
 stringData:
-  settings.xml: <settings>...</settings>
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: settings-binding-metadata
-data:
-  kind: maven
-  provider: sample
+  type: mysql
+  provider: bitnami
+  host: localhost
+  port: 3306
+  username: root
+  password: root
 ```
 
 # <a id='builds'></a> Builds
@@ -836,97 +827,86 @@ When using Tanzu Buildpacks the build will execute as an offline build. For deta
 
 <p class='note'><strong>Note:</strong> Offline builds only ensure buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.</p>
 
-## <a id='notary'></a> Image Signing with Notary
+## <a id='cosign'></a> Image Signing with cosign
 
-Tanzu Build Service supports [Notary](https://github.com/theupdateframework/notary) image signing.
+Tanzu Build Service supports [cosign](https://github.com/sigstore/cosign) image signing.
 
-Images signed with Notary require using `kubectl` instead of `kp`.
+Images signed with cosign require using `kubectl` instead of `kp`.
 
-Prerequisites:
+#### Cosign Signing Secret
+Images can be signed with cosign when a cosign formatted secret is added to the service account used to build the image.
+The secret can be added using the cosign CLI or manually.
 
-- [notary cli](https://github.com/theupdateframework/notary/releases)
-- A notary server accessible by the Tanzu Build Service cluster
+To create a cosign signing secret through the cosign CLI, when targetted to the Kubernetes cluster, use:
+`cosign generate-key-pair k8s://[NAMESPACE]/[NAME]`
 
-### <a id='notary-keys'></a> Generate Notary Signing Keys
-
-Only one root signing key is required. Each image that will be signed by notary will require a target and snapshot signing key.
-
-Run the following commands. You will be asked to provide the registry credentials for the `<image-repository>`:
-
+Alternatively, create the cosign secret and provide your own cosign key files manually to Kubernetes by running the following command:
+```shell script
+% kubectl create secret generic <secret-name> --from-literal=cosign.password=<password> --from-file=</path/to/cosign.key>
 ```
-export NOTARY_ROOT_PASSPHRASE=<notary-root-passphrase>
-export NOTARY_SNAPSHOT_PASSPHRASE=<notary-snapshot-passphrase>
-notary -s <notary-server-url> init <image-repository>
-notary -s <notary-server-url> key rotate <image-repository> snapshot -r
-notary -s <notary-server-url> publish <image-repository>
-```
+- `<secret-name>`: The name of the secret. Ensure that the secret is created in the same namespace as the eventual image config.
+- `<password>`: The password provided to encrypt the private key. If not present, an empty password will be used.
+- `</path/to/cosign.key>`: The cosign private key file generated with `cosign generate-key-pair`.
 
-You will be prompted to enter a `<notary-targets-passphrase>`:
+After adding the cosign secret, the secret must be added to the list of `secrets` attached to the service account resource that is building the image.
 
-```
-Enter passphrase for targets key with ID <target-hash>:
-```
-
-Where:
-
-- `<notary-root-passphrase>` is a secure passphrase (this is the root passphrase and should be secure and stored. This is used to generate and rotate other keys.)
-- `<notary-snapshot-passphrase>` is a secure passphrase (one per image)
-- `<notary-targets-passphrase>` is a secure passphrase for the targets (one per image)
-- `<notary-server-url>` is the notary server url
-- `<image-repository>` is the repository for the image that will be built by Tanzu Build Service.
-- `<target-hash>` is the hash for the target signing key.
-
-<p class='note'><strong>Note:</strong> All passphrases can be entered manually via prompts. Some are set as env vars in the example command for simplicity. </p>
-
-### <a id='notary-secret'></a> Create a Secret to be used for TBS Image Signing
-
-Run the following:
-
-```
-kubectl create secret generic <notary-secret-name> \
-	--from-literal=password=<notary-targets-passphrase> \
-	--from-file=~/.notary/private/<target-hash>.key \
-	--namespace <image-namespace>
+#### Adding Cosign Annotations
+By default, the build number and build timestamp information will be added to the cosign signing annotations. Users can specify additional cosign annotations under the spec key.
+```yaml
+cosign:
+  annotations:
+  - name: "annotationName"
+    value: "annotationValue"
 ```
 
-Where:
-
-- `<notary-secret-name>` is the arbitrary name of the notary secret
-- `<notary-targets-passphrase>` is the passphrase used in the previous step
-- `<target-hash>` is the hash from the previous step
-- `<image-namespace>` is the namespace where the TBS image will be created
-
-### <a id='notary-image'></a> Create an Image that will be Signed by Notary
-
-TBS will sign images when the `spec.notary` key is populated.
-
-This configuration cannot be set by `kp` cli, `kubectl` must be used to create the Image.
-
-Example image.yaml:
-
+One way these annotations can be viewed is through verifying cosign signatures. The annotations will be under the `optional` key in the verified JSON response. For example, this can be done with:
+```bash
+% cosign verify -key /path/to/cosign.pub registry.example.com/project/image@sha256:<DIGEST>
 ```
-apiVersion: kpack.io/v1alpha1
-kind: Image
+
+Which provides a JSON response similar to:
+```json
+{
+  "critical": {
+    "identity": {
+      "docker-reference": "registry.example.com/project/image"
+    }, "image": {
+      "docker-manifest-digest": "sha256:<DIGEST>"
+    }, "type": "cosign container image signature"
+  }, "optional": {
+    "buildNumber": "1",
+    "buildTimestamp": "20210827.175240",
+    "annotationName": "annotationValue"
+  }
+}
+```
+
+#### Push Cosign Signature to a Different Location
+Cosign signatures can be pushed to a different registry from where the image is located. To enable this, add the corresponding annotation to the cosign secret resource.
+```
 metadata:
-  name: my-notary-image
-  namespace: <image-namespace>
-spec:
-  notary:
-    v1:
-      url: <notary-server-url>
-      secretRef:
-        name: <notary-secret-name>
-  serviceAccount: default
-  source:
-    git:
-      url: github.com/my-git-repo
-  tag: <image-repository>
-status: {}
+  name: ...
+  namespace: ...
+  annotations:
+    kpack.io/cosign.repository: other.registry.com/project/image
+data:
+  cosign.key: ...
+  cosign.password: ...
 ```
+This will be equivalent to setting `COSIGN_REPOSITORY` as specified in cosign [Specifying Registry](https://github.com/sigstore/cosign#specifying-registry)
 
-Where:
+The same service account that has that cosign secret attached, and would be used for signing and building the image, would require that the registry credentials for this other repository be placed under the listed `secrets` and is not required to be listed in `imagePullSecrets`. It should be noted that if you wish to push the signatures to the same registry but a different path from the image, the credential used must have access to both paths. You cannot use two separate credentials for the same registry with different paths.
 
-- `<image-namespace>` is the namespace used for the secret created in the above step
-- `<notary-server-url>` is the notary server url used in the first step
-- `<notary-secret-name>` is the secret name created in the previous step
-- `<image-repository>` is the image repository used in the first step
+#### Cosign Legacy Docker Media Types
+To sign images in a registry that does not fully support OCI media types, legacy equivalents can be used by adding the corresponding annotation to the cosign secret resource:
+```
+metadata:
+  name: ...
+  namespace: ...
+  annotations:
+    kpack.io/cosign.docker-media-types: "1"
+data:
+  cosign.key: ...
+  cosign.password: ...
+```
+This will be equivalent to setting `COSIGN_DOCKER_MEDIA_TYPES=1` as specified in the cosign [registry-support](https://github.com/sigstore/cosign#registry-support)
