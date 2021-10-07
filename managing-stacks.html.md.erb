@@ -5,7 +5,7 @@ owner: Build Service Team
 
 A ClusterStack is a cluster scoped resource that provides the build and run images for the [Cloud Native Buildpack stack](https://buildpacks.io/docs/concepts/components/stack/) that will be used in a [Builder](managing-builders.html).
 
-Most users automatically configure three ClusterStack resources via the TBS installation process.  These ClusterStacks are referenced in three corresponding ClusterBuilder resources.  
+Most users automatically configure three ClusterStack resources via the TBS installation process.  These ClusterStacks are referenced in three corresponding ClusterBuilder resources.
 
 Additional information about security and patching cadence for these stacks and their ideal use cases can be found [here](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). More detailed release notes for the stacks can be accessed by following the links in the table below.
 
@@ -42,7 +42,7 @@ Flags:
 Use "kp clusterstack [command] --help" for more information about a command.
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.2.* from TBS release v1.1.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.3.*. If a feature is not working, you may need to upgrade your cli.</p>
 
 <p class='note'><strong>Note:</strong> Only Build Service Admins (i.e. users with the <code>pb-admin-role</code> kubernetes ClusterRole) can perform clusterstack commands.</p>
 
