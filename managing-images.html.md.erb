@@ -280,7 +280,7 @@ Where:
 <p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
 <p class='note'><strong>Note:</strong> The <code>tag</code> location in a registry and <code>name</code> of an image resource cannot be modified. To change these fields, you must create a new image resource.</p>
 
-## <a id='save-image'></a> Saving Images Resources
+## <a id='save-image'></a> Saving Image Resources
 
 Users can create or patch an Image Resource using the `save` command. The `kp image save` command is used exactly the same as `kp image create` or `kp image patch`, but it will determine if an image resource needs to be created or patched.
 
@@ -432,6 +432,12 @@ When you successfully delete an image resource, you will see this message:
 Build Services image resources can be created by applying the [kpack image resources](https://github.com/pivotal/kpack/blob/master/docs/image.md) to cluster via `kubectl`.
 
 Use the `default` service account for Build Service registry and git secrets.
+
+### <a id='registry-cache'></a> Using a registry for caching
+
+TBS Image resource can be configured to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
+
+For more details see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) docs for how to set the cache tag.
 
 #### <a id='kubectl-secrets'></a> Using Secrets
 
