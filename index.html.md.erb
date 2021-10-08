@@ -8,7 +8,7 @@ This topic provides an overview of Tanzu Build Service.
 ## <a id='overview'></a> Overview
 
 Tanzu Build Service uses the open-source [Cloud Native Buildpacks](https://buildpacks.io) project to turn application source code into [container images](https://github.com/opencontainers/image-spec/blob/master/spec.md).
-Build Service executes reproducible builds that align with modern container standards, and additionally keeps images up-to-date.
+Build Service executes reproducible builds that align with modern container standards, and additionally keeps image resources up-to-date.
 It does so by leveraging Kubernetes infrastructure with [kpack](https://github.com/pivotal/kpack), a Cloud Native Buildpacks Platform, to orchestrate the image lifecycle.
 The kpack CLI tool, kp can aid in managing kpack resources.
 
@@ -19,9 +19,9 @@ Build Service helps you develop and automate containerized software workflows se
 Build Service reduces operational overhead and improves security by automating the building of application images.
 It relies on `Image`, `Builder`, `ClusterStore` and `ClusterStack` to achieve these results.
 
-### <a id='image'></a> Image
+### <a id='image'></a> Image Resource
 
-An `Image` defines the source of the application, build time environment and registry destination. This source code could reside in git, a blobstore, or as code on a workstation.
+An `Image` resource defines the source of the application, build time environment and registry destination. This source code could reside in git, a blobstore, or as code on a workstation.
 
 For more information see the [Managing Images and Builds](managing-images.html) page.
 
