@@ -52,7 +52,6 @@ The `source` field describes the base images for the CustomStack. It can be conf
   ```yaml
   stack:
     name: <cluster-stack-name>
-    apiVersion: kpack.io/v1alpha1
     kind: ClusterStack
   ```
 
@@ -70,7 +69,6 @@ destination:
     tag: <output-run-image-tag>
   stack: # Optional
     name: <output-cluster-stack-name>
-    apiVersion: kpack.io/v1alpha1
     kind: ClusterStack
 ```
 
@@ -123,7 +121,6 @@ spec:
       tag: my.registry.io/final-run-image
     stack: # Optional
       name: stack-sample-cluster-stack
-      apiVersion: kpack.io/v1alpha1
       kind: ClusterStack
   caCerts: # Optional
     buildRef: # Optional
@@ -184,7 +181,6 @@ spec:
   source:
     stack:
       name: stack-sample-cluster-stack
-      apiVersion: kpack.io/v1alpha1
       kind: ClusterStack
   destination:
     build:
@@ -193,7 +189,6 @@ spec:
       tag: my.registry.io/final-run-image
     stack: # Optional
       name: final-stack-sample-cluster-stack
-      apiVersion: kpack.io/v1alpha1
       kind: ClusterStack
   caCerts: # Optional
     buildRef: # Optional

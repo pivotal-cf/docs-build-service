@@ -433,6 +433,10 @@ Build Services image resources can be created by applying the [kpack image resou
 
 Use the `default` service account for Build Service registry and git secrets.
 
+### <a id='additional-tags'></a> Image Resource Additional Tags
+
+With the addition of kpack apiVersion kpack.io/v1alpha2, additional tags can be specified on image resources. Additional tags are not currently configurable via the `kp` cli, applying yaml configuration with `kubectl` is required. See [kpack docs](https://github.com/pivotal/kpack/blob/main/docs/image.md#tags-config) for details.
+
 ### <a id='registry-cache'></a> Using a registry for caching
 
 TBS Image resource can be configured to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
@@ -918,7 +922,3 @@ data:
   cosign.password: ...
 ```
 This will be equivalent to setting `COSIGN_DOCKER_MEDIA_TYPES=1` as specified in the cosign [registry-support](https://github.com/sigstore/cosign#registry-support)
-
-## <a id='additional-tags'></a> Image Resource Additional Tags
-
-With the addition of kpack apiVersion kpack.io/v1alpha2, additional tags can be specified on image resources. Additional tags are not currently configurable via the `kp` cli, applying yaml configuration with `kubectl` is required. See [kpack docs](https://github.com/pivotal/kpack/blob/main/docs/image.md#-configuring-tags) for details.
