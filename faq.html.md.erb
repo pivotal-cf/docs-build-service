@@ -318,4 +318,5 @@ This is because TBS ships with windows images to support windows builds. Windows
 By default, `imgpkg` will not relocate the proprietary windows layers to your registry. TBS also will not pull any windows layers to the cluster unless windows builds are being run so if you do not need windows this message can be ignored.
 
 ## <a id='faq-21'></a> What is the relationship between a kpack *image resource* and an *OCI image*?
-"Image resource" describes a kubernetes custom resource that produces OCI images by way of build resources. This resource will continue producing new builds that, when successful, output container images to the registry as declared in the image's configuration image.yaml.
+
+"Image resource" describes a kubernetes custom resource that produces OCI images by way of build resources. This resource will continue producing new builds that, when successful, output container images to the registry as configured by the image resource.
