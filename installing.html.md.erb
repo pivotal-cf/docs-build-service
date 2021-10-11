@@ -417,9 +417,9 @@ kbld package -f descriptor-<version>.yaml \
 
 <p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry.</p>
 
-1. Move the output file `packaged-dependencies.tar` to a machine that has access to the air-gapped environment.
+2. Move the output file `packaged-dependencies.tar` to a machine that has access to the air-gapped environment.
 
-1. Upload the dependency images to the Tanzu Build Service registry:
+3. Upload the dependency images to the Tanzu Build Service registry:
 
 ```
 kbld unpackage -f descriptor-<version>.yaml \
