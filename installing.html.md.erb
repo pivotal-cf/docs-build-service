@@ -217,7 +217,7 @@ The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are us
 
 These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page:
 
-When importing with kp cli, you must `docker login` to both `registry.tanzu.vmware.com` and `registry.tanzu.vmware.com`.
+When importing with kp cli, you must `docker login` to both `registry.tanzu.vmware.com` and `registry.pivotal.io`.
 
 ```
 kp import -f /tmp/descriptor-<version>.yaml
@@ -242,7 +242,7 @@ Users must navigate to the following dependencies pages in Tanzu Network and acc
 
 <p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and the Tanzu Network registry `registry.tanzu.vmware.com`.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and both urls for the Tanzu Network registry (`registry.tanzu.vmware.com` and `registry.pivotal.io`).</p>
 
 #### <a id='additional-config'></a> Additional Configuration
 
