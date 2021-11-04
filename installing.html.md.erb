@@ -16,9 +16,9 @@ Before you install Build Service, you must:
 
 * Ensure your Kubernetes cluster is configured with `PersistentVolumes`. Configure the cache size per image to 2&nbsp;GB. Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds. For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation.
 
-* Download the Duffle executable for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network.
+* Download the Duffle executable for your operating system from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
 
-* Download the Build Service Bundle from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network.
+* Download the Build Service Bundle from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
 
 ## <a id='other-install'></a> Installing on TKG/GKE/AKS
 
@@ -313,7 +313,7 @@ Verify your Build Service installation by first targeting the cluster Build Serv
 
 To verify your Build Service installation:
 
-1. Download the `kp` binary from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network.
+1. Download the `kp` binary from the [Tanzu Build Service](https://network.pivotal.io/products/build-service/) page on Tanzu Network.
 
 1. List the custom cluster builders available in your installation:
 
@@ -330,7 +330,7 @@ You should see an output that looks as follows:
 
 ## <a id='update-deps'></a> Updating Build Service Dependencies
 
-Visit the [Build Service dependencies tile on PivNet](https://network.tanzu.vmware.com/products/tbs-dependencies). Build Service can be updated with those artifacts both directly against the PivNet registry or via the downloaded versions of those images.
+Visit the [Build Service dependencies tile on PivNet](https://network.pivotal.io/products/tbs-dependencies). Build Service can be updated with those artifacts both directly against the PivNet registry or via the downloaded versions of those images.
 
 
 ### <a id='update-online-deps'></a> Online Update of Dependencies
