@@ -41,7 +41,7 @@ Tanzu Build Service ships with the following buildpacks:
 | Paketo NGINX | `paketo-buildpacks/nginx` | https://github.com/paketo-buildpacks/nginx |
 | Paketo Procfile | `paketo-buildpacks/procfile` | https://github.com/paketo-buildpacks/procfile |
 
-Updated Buildpacks and new buildpacks will be available on [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) release page.
+Updated Buildpacks and new buildpacks will be available on [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) release page.
 
 ---
 
@@ -96,7 +96,7 @@ To see where the build service run image is located run: `kp stack status STACK-
 To update the the location of the run image:
 
 1. Use `kubectl` to update the `buildservice.pivotal.io/defaultRepository` annotation on the `build-service-stack` Stack resource.
-1. Re-run [`kp stack update`](managing-stacks.html) with the most recent build image and run image from the [build-service-dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
+1. Re-run [`kp stack update`](managing-stacks.html) with the most recent build image and run image from the [build-service-dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
 
 ---
 
