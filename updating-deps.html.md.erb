@@ -18,7 +18,7 @@ This workflow can be used to update all dependencies (stacks and stores) in Tanz
 
 You can update all of the dependencies that are installed by default with Tanzu Build Service with the `kp import` command.
 
-1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
+1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
 2. Use the `kp` CLI
 
@@ -45,7 +45,7 @@ default
 
 This section described how to update individual cluster stacks. This provides a more fine-grained way to patch operating system packages.
 
-New stack versions will be provided on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
+New stack versions will be provided on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
 To update specific cluster stacks with the `kp` CLI:
 
@@ -92,15 +92,15 @@ kp clusterstore add <store-name> -b <buildpackage-image1> -b <buildpackage-image
 
 #### <a id='online-store-update-tanzu-net'></a> Updating Buildpacks From Tanzu Network
 
-New Cloud Native Buildpacks (packaged as buildpackages) will be available on [Tanzu Network](https://network.pivotal.io)
+New Cloud Native Buildpacks (packaged as buildpackages) will be available on [Tanzu Network](https://network.tanzu.vmware.com)
 and should be uploaded to a Tanzu Build Service to keep application images patched.
 
 New versions of the Java, NodeJS, and Go buildpacks will be released on their respective Tanzu Network pages:
 
-* [Java](https://network.pivotal.io/products/tanzu-java-buildpack)
-* [NodeJS](https://network.pivotal.io/products/tanzu-nodejs-buildpack)
-* [Go](https://network.pivotal.io/products/tanzu-go-buildpack)
-* New versions of all other buildpacks will be released on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies) page.
+* [Java](https://network.tanzu.vmware.com/products/tanzu-java-buildpack)
+* [NodeJS](https://network.tanzu.vmware.com/products/tanzu-nodejs-buildpack)
+* [Go](https://network.tanzu.vmware.com/products/tanzu-go-buildpack)
+* New versions of all other buildpacks will be released on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page.
 
 Here is a list of how to update each buildpack that is included with Tanzu Build Service by default:
 
@@ -125,11 +125,11 @@ kp clusterstore add <store-name> registry.pivotal.io/buildpacakge-1 registry.piv
 
 The stack images and buildpacks used by build service can be updated by first downloading those images and saving them as a .tar file. This file can be provided to the `kp` CLI to import to Tanzu Build Service.
 
-1. Download the Dependency Descriptor file (`descriptor-<version>.yml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page on Tanzu Network.
+1. Download the Dependency Descriptor file (`descriptor-<version>.yml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.pivotal.io/products/tbs-dependencies/build-service) page.
+2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service) page.
 
-3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.pivotal.io/products/kbld) page.
+3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.tanzu.vmware.com/products/kbld) page.
 
 4. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
 
