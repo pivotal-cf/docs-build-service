@@ -1,8 +1,7 @@
 # Tanzu Build Service Documentation
 
 This repository contains content for Tanzu Build Service documentation. We publish the Tanzu Build Service documentation at
-[https://docs.pivotal.io/build-service/index.html](https://docs.pivotal.io/build-service/index.html).
-The repository for the book buil
+[https://docs.vmware.com/en/VMware-Tanzu-Build-Service/index.html](https://docs.vmware.com/en/VMware-Tanzu-Build-Service/index.html).
 
 ## How To Contribute
 
