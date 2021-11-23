@@ -3,6 +3,29 @@ title: TBS Release Notes
 owner: Build Service Team
 ---
 
+## <a id="1-3-4"></a> v1.3.4
+
+**Release Date: November 23, 2021**
+
+### Bug Fixes
+
+- Fix an issue where an empty secretRef in an image's service bindings would result in controller panic.
+
+### Product Snapshot
+
+Tanzu Build Service 1.3.4 ships with the following components:
+
+* [kpack 0.4.3](https://github.com/pivotal/kpack/releases/tag/v0.4.3)
+* [kpack cli v0.4.2](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.4.2)
+* [CNB lifecycle v0.11.4](https://github.com/buildpacks/lifecycle/releases/tag/v0.11.4)
+
+Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
+
+### Product Dependencies
+
+Build Service can be installed on any Kubernetes cluster (v1.19 or later).
+
+
 ## <a id="1-3-3"></a> v1.3.3
 
 **Release Date: November 8, 2021**
@@ -97,3 +120,4 @@ Build Service can be installed on any Kubernetes cluster (v1.19 or later).
 ### Upgrade Path
 
 v1.2.* can be upgraded to v1.3.*. Please follow the [install](installing.html) process to upgrade.
+
