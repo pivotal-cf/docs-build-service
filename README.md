@@ -26,7 +26,7 @@ the source for this page in GitHub" at the bottom of the topic.
 | **Branch Name** | **Content** | **Location** |
 |-----------------|-------------|--------------|
 | `master` | DO NOT USE | |
-| `v1.3`.  | Tanzu Build Service v1.3  | https://docs.vmware.com/en/Tanzu-Build-Service/1.3/vmware-tanzu-build-service-v12/GUID-docs-build-service-index.html |
+| `v1.3`  | Tanzu Build Service v1.3  | https://docs.vmware.com/en/Tanzu-Build-Service/1.3/vmware-tanzu-build-service-v12/GUID-docs-build-service-index.html |
 | `v1.2`   | Tanzu Build Service v1.2  | https://docs.vmware.com/en/Tanzu-Build-Service/1.2/vmware-tanzu-build-service-v12/GUID-docs-build-service-index.html and  redirected https://docs.pivotal.io/build-service/1-1/  |
 | `v1.1`   | Tanzu Build Service v1.1  | https://docs.vmware.com/en/Tanzu-Build-Service/1.1/vmware-tanzu-build-service-v11/GUID-docs-build-service-index.html and  redirected https://docs.pivotal.io/build-service/1-1/  |
 | `v1.0`   | Tanzu Build Service v1.0    | https://docs.pivotal.io/build-service/1-0/ |
