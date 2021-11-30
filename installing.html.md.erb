@@ -409,14 +409,19 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 
 To import these dependencies into an air-gapped environment, they must first be relocated to the internal registry. Use `kbld` to perform this relocation (not `imgpkg`):
 
+1. Log in to the Tanzu Network Registry:
+
+```
+docker login registry.tanzu.vmware.com
+docker login registry.pivotal.io
+```
+
 1. Download the dependency images locally:
 
 ```
 kbld package -f descriptor-<version>.yaml \
   --output /tmp/packaged-dependencies.tar
 ```
-
-<p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry.</p>
 
 1. Move the output file `packaged-dependencies.tar` to a machine that has access to the air-gapped environment.
 
