@@ -205,12 +205,15 @@ The stack images and buildpacks used by build service can be updated by first do
 
 1. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
 
+    Note: Currently, users need to sign into both `registry.tanzu.vmware.com` and `registry.pivotal.io`. The credentials for both should be the same.
+
     ```
     docker login registry.tanzu.vmware.com
+    docker login registry.pivotal.io
 
     kbld package -f descriptor-<version>.yaml \
         --output /tmp/packaged-dependencies.tar
-    ```
+    ``` 
 
 1. Move the output file `packaged-dependencies.tar` to a machine that has access to the "offline" environment
 
