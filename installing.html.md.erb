@@ -84,7 +84,7 @@ docker login registry.tanzu.vmware.com
 imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION>" --to-repo <IMAGE-REPOSITORY>
 ```
 
-Where `TBS-VERSION` is the version of Tanzu Build Service you want to install and `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+Where `TBS-VERSION` is the full version (1.3.x) of Tanzu Build Service you want to install and `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
 
 <p class="note">
 <strong>Note:</strong> When relocating, the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
