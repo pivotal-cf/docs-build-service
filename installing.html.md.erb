@@ -137,7 +137,7 @@ ytt -f /tmp/bundle/values.yaml \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	-v pull_from_kp_default_repo=true
+	-v pull_from_kp_default_repo=true \
 	-v tanzunet_username='<TANZUNET-USERNAME>' \
 	-v tanzunet_password='<TANZUNET-PASSWORD>' \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
