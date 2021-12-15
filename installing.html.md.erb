@@ -42,15 +42,15 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume kp cli v0.4.* from TBS release v1.3.*. If a feature is not working, you may need to upgrade your cli.
+	* These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.
 
 * Download the `docker` CLI to authenticate with registries.
 
 * Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
 
-<p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1 are not compatible with TBS. Notably, TKG 1.2.1 uses this version of Containerd, a different TKG version must be used.</p>
+<p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1, 1.5.6, and 1.5.7 are not compatible with TBS. Notably, TKG 1.2.1 uses one of these versions of Containerd, a different TKG version must be used.</p>
 
-<p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with TBS. You must use k8s 1.19, 1.20.7+, or 1.21 when using TKGs.</p>
+<p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with TBS.</p>
 
 ## <a id='install'></a> Installing
 
@@ -129,31 +129,31 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
 
 2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters:
 
-Tanzu Build Service 1.3 ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, pass in your TanzuNet credentials when running the install command below:
+Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, include your TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` when running the install command below:
 
 ```
-ytt -f /tmp/bundle/values.yaml \
-    -f /tmp/bundle/config/ \
+ytt -f /tmp/bundle/config/ \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	-v pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	-v tanzunet_username='<TANZUNET-USERNAME>' \
 	-v tanzunet_password='<TANZUNET-PASSWORD>' \
+	-v descriptor_name='<DESCRIPTOR-NAME>' \
+	--data-value-yaml enable_automatic_dependency_updates=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
 You can check the status of the DependencyUpdater by running `kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml`
 
-Alternatively, if you prefer to manage dependencies yourself (*not recommended*), simply leave the TanzuNet credentials out of the install.
+Alternatively, if you prefer to manage dependencies yourself (*not recommended*), leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
 
 ```
-ytt -f /tmp/bundle/values.yaml \
-    -f /tmp/bundle/config/ \
+ytt -f /tmp/bundle/config/ \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	-v pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -170,7 +170,11 @@ Where:
     <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 * `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
 * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
+* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
+  * `full` contains all dependencies - for production use.
+  * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
 
+<p class="note"><strong>Note:</strong> You may want to pin your TBS to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
 
 #### <a id='ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -184,9 +188,11 @@ ytt -f /tmp/bundle/values.yaml \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    -v pull_from_kp_default_repo=true \
+    --data-value-yaml pull_from_kp_default_repo=true \
 	-v tanzunet_username='<TANZUNET-USERNAME>' \
     -v tanzunet_password='<TANZUNET-PASSWORD>' \
+    -v descriptor_name='<DESCRIPTOR-NAME>' \
+	--data-value-yaml enable_automatic_dependency_updates=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -211,7 +217,7 @@ Where:
 
 ### <a id='import'></a> Import Tanzu Build Service Dependencies
 
-<p class="warning"><strong>Warning:</strong> Tanzu Build Service 1.3 ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
+<p class="warning"><strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
@@ -369,13 +375,12 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
 2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
-ytt -f /tmp/bundle/values.yaml \
-    -f /tmp/bundle/config/ \
+ytt -f /tmp/bundle/config/ \
     -f <PATH-TO-CA> \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    -v pull_from_kp_default_repo=true \
+    --data-value-yaml pull_from_kp_default_repo=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```

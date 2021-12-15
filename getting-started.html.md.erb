@@ -34,13 +34,13 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume kp cli v0.4.* from TBS release v1.3.*. If a feature is not working, you may need to upgrade your cli.
+	* These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.
 
 ## <a id='Assumptions'></a> Assumptions
 
 For this example setup, we will make the following assumptions:
 
-* You are installing TBS 1.3.0 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
+* You are installing TBS 1.4.1 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
 * You are using a registry named `my.registry.io` with credentials
   * Username: `my-user`
   * Password: `my-password`
@@ -69,13 +69,13 @@ docker login registry.tanzu.vmware.com
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.3.0" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
+imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.4.1" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
 ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
 ```
-imgpkg pull -b "my.registry.io/tbs:1.3.0" -o /tmp/bundle
+imgpkg pull -b "my.registry.io/tbs:1.4.1" -o /tmp/bundle
 ```
 
 ### <a id='install'></a> Install Tanzu Build Service
@@ -83,15 +83,16 @@ imgpkg pull -b "my.registry.io/tbs:1.3.0" -o /tmp/bundle
 Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
 ```
-ytt -f /tmp/bundle/values.yaml \
-    -f /tmp/bundle/config/ \
+ytt -f /tmp/bundle/config/ \
     -f /tmp/ca.crt \
 	-v kp_default_repository='my.registry.io/tbs' \
 	-v kp_default_repository_username='my-user' \
 	-v kp_default_repository_password='my-password' \
-	-v pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	-v tanzunet_username='tanzunet-username' \
 	-v tanzunet_password='tanzunet-password' \
+	-v descriptor_name='lite' \
+	--data-value-yaml enable_automatic_dependency_updates=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
