@@ -188,10 +188,10 @@ ytt -f /tmp/bundle/values.yaml \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    --data-value-yaml pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	-v tanzunet_username='<TANZUNET-USERNAME>' \
-    -v tanzunet_password='<TANZUNET-PASSWORD>' \
-    -v descriptor_name='<DESCRIPTOR-NAME>' \
+	-v tanzunet_password='<TANZUNET-PASSWORD>' \
+	-v descriptor_name='<DESCRIPTOR-NAME>' \
 	--data-value-yaml enable_automatic_dependency_updates=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
@@ -333,7 +333,7 @@ Where `TBS-VERSION` is the version of Tanzu Build Service you want to install.
 
 ```
 imgpkg copy --tar /tmp/tanzu-build-service.tar \
-  --to-repo=<IMAGE-REPOSITORY>
+  --to-repo=<IMAGE-REPOSITORY> \
   --registry-ca-cert-path <PATH-TO-CA>
 ```
 
@@ -376,11 +376,11 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
 
 ```
 ytt -f /tmp/bundle/config/ \
-    -f <PATH-TO-CA> \
+	-f <PATH-TO-CA> \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    --data-value-yaml pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -408,48 +408,52 @@ Other optional parameters can be added using the `-v` flag:
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
-These must be imported with the `kp` cli and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
+For air-gapped environments, dependencies must be imported with the `kp` cli and the Dependency Descriptor bundle image (`registry.tanzu.vmware.com/tbs-dependencies/full`) from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
 
 #### <a id='offline-import-relocate'></a> Relocate Tanzu Build Service Dependency Images (Air-Gapped)
 
-To import these dependencies into an air-gapped environment, they must first be relocated to the internal registry. Use `kbld` to perform this relocation (not `imgpkg`):
+1. First, find the latest version of the descriptor from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
 
-1. Download the dependency images locally:
+1. To import these dependencies into an air-gapped environment, they must first be pulled locally. Use `imgpkg` and the `<VERSION>` from the previous step:
 
 ```
-kbld package -f descriptor-<version>.yaml \
-  --output /tmp/packaged-dependencies.tar
+imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
+  --to-tar=tbs-dependencies.tar
 ```
 
 <p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry.</p>
 
-1. Move the output file `packaged-dependencies.tar` to a machine that has access to the air-gapped environment.
+1. Move the output file `tbs-dependencies.tar` to a machine that has access to the air-gapped environment.
 
-1. Upload the dependency images to the Tanzu Build Service registry:
+1. Then the dependencies must be uploaded to the Tanzu Build Service registry:
 
 ```
-kbld unpackage -f descriptor-<version>.yaml \
-  --input /tmp/packaged-dependencies.tar \
-  --repository <IMAGE-REPOSITORY> \
-  --lock-output /tmp/dependencies-relocated.lock \
+imgpkg copy --tar=tbs-dependencies.tar \
+  --to-repo <IMAGE-REPOSITORY> \
   --registry-ca-cert-path <PATH-TO-CA>
 ```
 
 Where:
 
-* `IMAGE-REPOSITORY` is the internal image repository where dependency images will be relocated.
+* `IMAGE-REPOSITORY` is the internal image repository where dependency images will be relocated. This should be the same as `kp_default_repository` from installation.
 * `PATH-TO-CA` is the path to the registry CA certificate file.
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY`.</p>
+<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REPOSITORY`.</p>
 
 #### <a id='offline-import-import'></a> Import Tanzu Build Service Dependency Resources (Air-Gapped)
 
 After the dependency images are uploaded to the internal registry, you can successfully import these images and create the corresponding Tanzu Build Service resources.
 
-Use the following command with `kbld` and the `kp` CLI:
+Use the following commands with `imgpkg`, `kbld`, and the `kp` CLI:
 
 ```
-kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f - --registry-ca-cert-path <path-to-ca-cert>
+imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
+  -o /tmp/descriptor-bundle \
+  --registry-ca-cert-path <PATH-TO-CA>
+
+kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
+  -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
+  | kp import -f - --registry-ca-cert-path <PATH-TO-CA>
 ```
 
 ## <a id='verify-installation'></a> Verify Installation
