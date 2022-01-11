@@ -124,40 +124,45 @@ kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/paketo-bu
 
 If your Tanzu Build Service installation is in an offline/air-gapped environment, you can update stores with the following offline workflow:
 
-1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
+1. Find the latest version of the Dependency Descriptor bundle image (`registry.tanzu.vmware.com/tbs-dependencies/full`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Download the `kp` CLI for your operating system from the latest release on the [Tanzu Build Service](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service) page.
+2. Download the following CLIs for your operating system:
+ - [kp](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service).
+ - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
+ - [kbld](https://network.tanzu.vmware.com/products/kbld)
 
-3. Download the `kbld` CLI for your operating system from the latest release on the [kbld](https://network.tanzu.vmware.com/products/kbld) page.
-
-4. Download the dependency images for Tanzu Build Service to your local machine with `kbld`:
+4. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg`:
 
 ```
 docker login registry.tanzu.vmware.com
 
-kbld package -f descriptor-<version>.yaml \
-  --output /tmp/packaged-dependencies.tar
+imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
+  --to-tar=tbs-dependencies.tar
 ```
 
-5. Move the output file `packaged-dependencies.tar` to a machine that has access to the "offline" environment
+5. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment
 
 6. Upload the dependency images to the registry used to deploy Tanzu Build Service:
 
 ```
 docker login <build-service-registry>
 
-kbld unpackage -f descriptor-<version>.yaml \
-  --input /tmp/packaged-dependencies.tar \
-  --repository <IMAGE-REPOSITORY> \
-  --lock-output /tmp/dependencies-relocated.lock
+imgpkg copy --tar=tbs-dependencies.tar \
+  --to-repo <IMAGE-REPOSITORY>
 ```
 
 Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
 
-7. Now that dependencies are relocated to the internal registry, you can use the following command to update the necessary resources:
+7. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
 
 ```
-kbld -f descriptor-<version>.yaml -f /tmp/dependencies-relocated.lock | kp import -f -
+imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
+  -o /tmp/descriptor-bundle \
+  --registry-ca-cert-path <PATH-TO-CA>
+
+kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
+  -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
+  | kp import -f -
 ```
 
 ## <a id='remove-buildpackages-from-store'></a> Removing Buildpackages from a ClusterStore
