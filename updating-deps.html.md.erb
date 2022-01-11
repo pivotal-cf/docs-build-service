@@ -10,16 +10,15 @@ Keeping applications up-to-date with the latest dependency patches is a core fea
 
 You can use the `kp` CLI to update any resource. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.3.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.</p>
 
 ## <a id='online-update'></a> Updating Dependencies
 
 ### <a id='dependency-updater'></a> Automatically Update Dependencies
 
-Tanzu Build Service 1.3 ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes.
+Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes.
 
-
-You can run `kubectl get TanzuNetDependencyUpdater -A` to check if you have a TanzuNetDependencyUpdater set up already. If you have one, there is nothing you need to do to manage your dependencies in TBS. 
+You can run `kubectl get TanzuNetDependencyUpdater -A` to check if you have a TanzuNetDependencyUpdater set up already. If you have one, there is nothing you need to do to manage your dependencies in TBS.
 
 If you would like to enable this feature after install, you can create the following resources:
 
@@ -38,10 +37,16 @@ spec:
   serviceAccountName: <SERVICE-ACCOUNT>
   productSlug: tbs-dependencies
   checkEvery: 1m
-``` 
+  descriptorName: <DESCRIPTOR-NAME>
+  descriptorVersion: <DESCRIPTOR-VERSION>
+```
 - The `productSlug` field corresponds to the product name in TanzuNet
 - The `checkEvery` field is the frequency that the updater will check for new descriptor file releases
-- The `serviceAccountName` field is the name of the service accoutn from step 2
+- The `serviceAccountName` field is the name of the service account from step 2
+- The `descriptorName` field is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
+	- `full` contains all dependencies - for production use.
+	- `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
+- The `descriptorVersion` (optional) field can be used to pin to a specific version of the descriptor. This is only recommended for use to protect from breaking changes. This can usually be left blank.
 
 ### <a id='online-bulk-update'></a> Bulk Update
 
@@ -56,7 +61,7 @@ The Bulk Update workflow can update all dependencies (ClusterStacks, ClusterStor
 
 2. Use the `kp` CLI
 
-<p class="warning"><strong>Warning:</strong> Tanzu Build Service 1.3 ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
+<p class="warning"><strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
 
 ```
 kp import -f descriptor-<version>.yaml
