@@ -188,10 +188,10 @@ ytt -f /tmp/bundle/values.yaml \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    --data-value-yaml pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	-v tanzunet_username='<TANZUNET-USERNAME>' \
-    -v tanzunet_password='<TANZUNET-PASSWORD>' \
-    -v descriptor_name='<DESCRIPTOR-NAME>' \
+	-v tanzunet_password='<TANZUNET-PASSWORD>' \
+	-v descriptor_name='<DESCRIPTOR-NAME>' \
 	--data-value-yaml enable_automatic_dependency_updates=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
@@ -376,11 +376,11 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
 
 ```
 ytt -f /tmp/bundle/config/ \
-    -f <PATH-TO-CA> \
+	-f <PATH-TO-CA> \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
 	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    --data-value-yaml pull_from_kp_default_repo=true \
+	--data-value-yaml pull_from_kp_default_repo=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
