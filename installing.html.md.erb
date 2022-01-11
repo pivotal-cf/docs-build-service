@@ -146,7 +146,7 @@ ytt -f /tmp/bundle/config/ \
 ```
 You can check the status of the DependencyUpdater by running `kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml`
 
-Alternatively, if you prefer to manage dependencies yourself (*not recommended*), leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
+Alternatively, if you prefer to manage dependencies manually, leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
 
 ```
 ytt -f /tmp/bundle/config/ \
