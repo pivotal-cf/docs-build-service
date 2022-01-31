@@ -3,6 +3,7 @@
 * [**Installation**](installing.html)
     * [Installing Windows Components](installing-windows-components.html)
     * [Getting Started with Tanzu Build Service](getting-started.html)
+    * [Installing Tanzu Build Service without kapp controller](installing-no-kapp.html)
 * [**Accessing Tanzu Build Service**](accessing-tbs.html)
 * [**Updating Tanzu Build Service Dependencies**](updating-deps.html)
 * [**Managing Secrets**](managing-secrets.html)
