@@ -22,7 +22,9 @@ Before you install Build Service, you must:
 
 * Have access to a container registry to install Tanzu Build Service and store the application images that will be created.
   * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported
-  * TBS uses ~10GB of registry space for installation, this does not include the space that will be used for application images.
+  * If installing using the `lite` descriptor, 1GB of registry storage is recommended 
+  * If installing using the `full` descriptor, which is intended for production use and offline environments, 10 GB of available storage is recommended
+  * This registry space suggestion does not include the space that will be used for application images built by TBS
 
 * Ensure your Kubernetes cluster is configured with default `StorageClass`.
 Tanzu Build Service will default to using 2G of cache if a default `StorageClass` is defined.
