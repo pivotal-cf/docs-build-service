@@ -188,8 +188,7 @@ To install Tanzu Build Service with an internal registry that requires providing
 installation command with the CA certificate file passed in with a `-f` flag:
 
 ```
-ytt -f /tmp/bundle/values.yaml \
-	-f /tmp/bundle/config/ \
+ytt -f /tmp/bundle/config/ \
 	-f <PATH-TO-CA> \
 	-v kp_default_repository='<IMAGE-REPOSITORY>' \
 	-v kp_default_repository_username='<REGISTRY-USERNAME>' \

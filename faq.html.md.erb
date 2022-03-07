@@ -119,8 +119,7 @@ If you have trouble configuring the registry credentials for gcr when following 
 
 	registry_name="_json_key"
 	registry_password="$(cat /path/to/gcp/service/account/key.json)"
-	ytt -f /tmp/bundle/values.yaml \
-		-f /tmp/bundle/config/ \
+	ytt -f /tmp/bundle/config/ \
 		-v docker_repository='<IMAGE-REPOSITORY>' \
 		-v docker_username="$registry_name" \
 		-v docker_password="$registry_password" \
@@ -142,8 +141,7 @@ TBS can be configured with a proxy at [installation](installing.html) time by sp
 This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.</p>
 
 ```
-ytt -f /tmp/bundle/values.yaml \
-	-f /tmp/bundle/config/ \
+ytt -f /tmp/bundle/config/ \
 	-v docker_repository='<IMAGE-REPOSITORY>' \
 	-v docker_username='<REGISTRY-USERNAME>' \
 	-v docker_password='<REGISTRY-PASSWORD>' \
