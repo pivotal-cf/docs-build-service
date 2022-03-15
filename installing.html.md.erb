@@ -105,15 +105,15 @@ docker login ${INSTALL_REGISTRY_HOSTNAME}
 1. Copy the Tanzu Build Service package repository to your registry with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
+imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
 ```
 
 For example:
 
-* Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
-* GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
-* Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
-* Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
+* Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
+* GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
+* Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
+* Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
 
 ### <a id='install'></a> Installation
 
@@ -196,7 +196,7 @@ To upgrade Tanzu Build Service to a newer version, run the following steps.
 1. Relocate the new package repository:
 
 ```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$NEW_TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
+imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$NEW_TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
 ```
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
@@ -259,7 +259,7 @@ docker login registry.tanzu.vmware.com
 1. Copy the Tanzu Build Service package repository to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
 ```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/package-rep:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
+imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
 ```
 
 1. Move the output file `tanzu-build-service.tar` to a machine that has access to the air-gapped environment. The machine must have write access to the internal registry.
