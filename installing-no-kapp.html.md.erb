@@ -18,11 +18,11 @@ Before you install Build Service, you must:
 * Have access to the Kubernetes cluster satisfying the [minimum required permissions](#install-rbac).
 
 * Ensure that all worker nodes have at least 50 GB of ephemeral storage allocated to them.
-	* To do this on TKGs, mount a 50GB volume at `/var/lib` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your TKGs cluster. [These instructions](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-4E68C7F2-C948-489A-A909-C7A1F3DC545F.html) show how to configure storage on worker nodes.
+	* To do this on TKGs, mount a 50GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your TKGs cluster. [These instructions](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1) show how to configure storage on worker nodes.
 
 * Have access to a container registry to install Tanzu Build Service and store the application images that will be created.
   * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported
-  * If installing using the `lite` descriptor, 1GB of registry storage is recommended 
+  * If installing using the `lite` descriptor, 1GB of registry storage is recommended
   * If installing using the `full` descriptor, which is intended for production use and offline environments, 10 GB of available storage is recommended
   * This registry space suggestion does not include the space that will be used for application images built by TBS
 
