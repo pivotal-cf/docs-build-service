@@ -40,6 +40,10 @@ This section provides context for the CVEs that may show up in security scans of
 - github.com/containerd/containerd | [CVE-2021-43816](https://avd.aquasec.com/nvd/2021/cve-2021-43816/) | CRITICAL
     - Containerd is not used as a container runtime in TBS code and therefore never interacts with volume mounts at all
 
+- org.apache.logging.log4j:log4j-core | [CVE-2021-44228](https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2021-44228) | CRITICAL
+- org.apache.logging.log4j:log4j-core | [CVE-2021-45105](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45105) | HIGH
+    - These CVEs have been patched, however show up in some scans of TBS dependencies such as builders or the Java & Node.js buildpacks. Scanners report these up because some log4j files provided by third-party vendors have been patched but have maintained the same file name which the scanners assume are vulnerable.
+
 ### Product Dependencies
 
 Build Service can be installed on any Kubernetes cluster (v1.19 or later).
