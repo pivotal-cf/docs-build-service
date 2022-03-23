@@ -59,7 +59,14 @@ The Bulk Update workflow can update all dependencies (ClusterStacks, ClusterStor
 
 <p class="note"><strong>Note:</strong> You can see all of the buildpackages versions that will be imported by looking at the `buildpackage-versions-<version>.yaml` file from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) release.</p>
 
-2. Use the `kp` CLI
+2. Docker login to the TanzuNet registry (both urls)
+
+```
+docker login registry.tanzu.vmware.com
+docker login registry.pivotal.io
+```
+
+3. Use the `kp` CLI
 
 <p class="warning"><strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
 
