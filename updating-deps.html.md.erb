@@ -216,7 +216,7 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
  - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
  - [kbld](https://network.tanzu.vmware.com/products/kbld)
 
-4. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg`:
+3. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg` using the `VERSION` found from Tanzu Network in step 1:
 
 	```
 	docker login registry.tanzu.vmware.com
@@ -225,9 +225,9 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 	  --to-tar=tbs-dependencies.tar
 	```
 
-5. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment
+4. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment
 
-6. Upload the dependency images to the registry used to deploy Tanzu Build Service:
+5. Upload the dependency images to the registry used to deploy Tanzu Build Service:
 
 	```
 	docker login <build-service-registry>
@@ -238,7 +238,7 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
 Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
 
-7. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
+6. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
 
 	```
 	imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
