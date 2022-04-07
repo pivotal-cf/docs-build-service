@@ -8,8 +8,9 @@ This topic describes how to install and configure Tanzu Build Service.
 We recommend installing TBS with the Tanzu CLI and kapp controller. If you want to view the previous method of installation, see [Installing without kapp controller](installing-no-kapp.html).
 
 Reasons to use the previous installation method include:
-* You do not want to install kapp controller on your cluster
-* You want to make custom changes to the TBS installation via `ytt` templating or overlays
+
+* You do not want to install kapp controller on your cluster.
+* You want to make custom changes to the TBS installation through `ytt` templating or overlays.
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -27,15 +28,15 @@ Before you install Build Service, you must:
   * This registry space suggestion does not include the space that will be used for application images built by TBS
 
 * Ensure your Kubernetes cluster is configured with a default `StorageClass`.
-Tanzu Build Service will default to using 2G of cache if a default `StorageClass` is defined.
+Tanzu Build Service defaults to using 2G of cache if a default `StorageClass` is defined.
 Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds.
 
-    For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
+    For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. For information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
 * Download Carvel [imgpkg](https://network.tanzu.vmware.com/products/imgpkg/). Version 0.12.0 or higher is required.
 
-* Download the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-general.html#cli-and-plugin)
-  - Only the `package` and `secret` plugins are required
+* Download the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install-general.html#cli-and-plugin).
+  - Only the `package` and `secret` plug-ins are required.
 
 * Install Carvel [kapp controller](https://carvel.dev/kapp-controller/docs/latest/install/) on your cluster.
 
@@ -56,7 +57,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 <p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with TBS.</p>
 
-## <a id='install-tbs'></a> Installing Tanzu Build Service
+## <a id='install-tbs'></a> Install Tanzu Build Service
 
 1. Set up environment variables for use during the installation.
 
@@ -72,14 +73,14 @@ export TBS_VERSION=<LATEST-TBS-VERSION>
 
 Where:
 
-* `IMAGE-REGISTRY` is the hostname of the registry that will be used.
+* `IMAGE-REGISTRY` is the host name of the registry.
 * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-  * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`
-  * gcr.io has the form `gcr.io/my-project/build-service`
-  * Harbor has the form `my-harbor.io/my-project/build-service`
-* `REGISTRY-USERNAME` is the username of the registry that will be used. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
-* `REGISTRY-PASSWORD` is the password of the registry that will be used. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-* `TANZUNET_REGISTRY_USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com).
+  * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
+  * gcr.io has the form `gcr.io/my-project/build-service`.
+  * Harbor has the form `my-harbor.io/my-project/build-service`.
+* `REGISTRY-USERNAME` is the user name of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
+* `REGISTRY-PASSWORD` is the password of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+* `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
 * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
   * For Google Cloud Registry, use the contents of the service account JSON key.
 * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
@@ -133,7 +134,7 @@ tanzu package repository add tbs-repository \
     --namespace tbs-install
 ```
 
-1. You should be able to get the status of the package repository, and ensure the status updates to `Reconcile succeeded` by running:
+1. You should be able to get the status of the package repository and ensure the status updates to `Reconcile succeeded` by running:
 
 ```
 tanzu package repository get tbs-repository --namespace tbs-install
@@ -170,11 +171,11 @@ Where:
 
 Additional fields can be added to `tbs-values.yml`:
 
-* `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
-* `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
+* `admin_users` is a comma-separated list of users granted admin privileges on Build Service.
+* `admin_groups`: a comma-separated list of groups granted admin privileges on Build Service.
 * `http_proxy`: The HTTP proxy to use for network traffic.
 * `https_proxy`: The HTTPS proxy to use for network traffic.
-* `no_proxy`: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
+* `no_proxy`: A comma-separated list of host names, IP addresses, or IP ranges in CIDR format that should not use a proxy.
 
 You can see the full values schema by running:
 
@@ -216,12 +217,12 @@ tanzu package install tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -
 
 ## <a id='offline-install-tbs'></a> Installing Tanzu Build Service (Air-Gapped)
 
-Tanzu Build Service can be installed to a Kubernetes Cluster and registry that are air-gapped from external traffic.
+Tanzu Build Service can be installed to a Kubernetes cluster and registry that are air-gapped from external traffic.
 
-An air-gapped environment will often use an internal registry with a self-signed CA certificate and you will need access to this
+An air-gapped environment often uses an internal registry with a self-signed CA certificate. You need access to this
 CA certificate file to install TBS.
 
-<p class="note"><strong>Note:</strong> If you are using a CA certificate that is trusted (eg. Lets Encrypt) you will not need the CA certificate file. </p>
+<p class="note"><strong>Note:</strong> If you are using a CA certificate that is trusted (for example, Lets Encrypt) you do not need the CA certificate file. </p>
 
 1. Set up environment variables for use during the installation.
 
@@ -235,11 +236,11 @@ export TBS_VERSION=<LATEST-TBS-VERSION>
 
 Where:
 
-* `IMAGE-REGISTRY` is the hostname of the private registry that will be used.
+* `IMAGE-REGISTRY` is the host name of the private registry.
 * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
   * Harbor has the form `my-harbor.io/my-project/build-service`
-* `REGISTRY-USERNAME` is the username of the private registry that will be used. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-* `REGISTRY-PASSWORD` is the password of the private registry that will be used. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+* `REGISTRY-USERNAME` is the user name of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+* `REGISTRY-PASSWORD` is the password of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
 * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
 <p class="note">
@@ -249,7 +250,7 @@ For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
 
 ### <a id='offline-relocate-images'></a> Relocate Images to a Registry (Air-Gapped)
 
-This procedure relocates images from the Tanzu Network registry to an internal image registry via local machine(s).
+This procedure relocates images from the Tanzu Network registry to an internal image registry through local machine(s).
 
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
@@ -384,9 +385,9 @@ tanzu package repository delete tbs-repository --namespace tbs-install
 
 ## <a id='access-to-cluster-builders'></a> Ensuring Access to Cluster Builders
 
-In order to use Cluster Builders, such as the ones installed with Tanzu Build Service, we suggest to install Tanzu Build Service to a repository that is accessible by the nodes in the kubernetes cluster without credentials.
+To use Cluster Builders, such as the ones installed with Tanzu Build Service, VMware suggests installing Tanzu Build Service to a repository accessible by the nodes in the Kubernetes cluster without credentials.
 
-If this is not desired, see [When to use Synchronized Secrets](synced-secrets.html#sync-secrets).
+If you do not want to do this, see [When to use Synchronized Secrets](synced-secrets.html#sync-secrets).
 
 ## <a id='ensure-readable-run-image'></a> Ensuring the Run Image is Readable
 
@@ -398,9 +399,9 @@ The location of the run image can be identified by running the following command
 kp clusterstack status <stack-name>
 ```
 
-If the cluster stack run image is not public, you may need to create a registry secret in any namespace where Images or Builds will be used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
+If the cluster stack run image is not public, you might need to create a registry secret in any namespace where Images or Builds are used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
 
-This can be done with the `kp` CLI:
+You can do this with the `kp` CLI:
 
 ```
 kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace

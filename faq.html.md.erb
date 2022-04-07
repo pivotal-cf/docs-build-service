@@ -16,15 +16,15 @@ owner: Build Service Team
 
 ## <a id='faq-2'></a> Why do I see two images in the image registry after a successful build?
 
-By default Build Service will tag each built image twice. The first tag will be the configured image tag. The second tag will be a unique tag with the build number and build timestamp. The second tag is added to ensure that previous images are not deleted on registries that garbage collect untagged images.
+By default Build Service will tag each built image twice. The first tag is the configured image tag. The second tag is a unique tag with the build number and build timestamp. The second tag is added to ensure that previous images are not deleted on registries that garbage collect untagged images.
 
 ---
 
 ## <a id='faq-3'></a> How does TBS work in air gapped environments?
 
-Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `imgpkg copy` command can create a `.tar` file  composed of the kubernetes config and images required to successfully install Build Service.
-The `imgpkg copy` command also ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
-executing the `kapp install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
+Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `imgpkg copy` command can create a `.tar` file  composed of the Kubernetes config and images required to successfully install Build Service.
+The `imgpkg copy` command also ensures that all the images can be relocated to air-gapped registries. By providing the credentials to the air-gapped registry when
+executing the `kapp install` command, Build Service can then use that secret to pull images from the registry and so work in air-gapped environments.
 
 Currently, `kbld package` and `kbld unpackage` must be used to import dependencies to an air-gapped environment.
 
@@ -42,8 +42,8 @@ Yes, documentation is available on [Tanzu Buildpacks Documenation](https://docs.
 
 ## <a id='faq-5'></a> Why do I get an X509 error from Build Service when trying to create an image in my registry?
 
-When interacting with a registry or a git repo that has been deployed using a self signed certificate, Build Service must be provided with the certificate during install time.
-Unfortunately, you will either need to target a registry that does not have self signed certificates or re-install Build Service to work with this registry.
+When interacting with a registry or a Git repo that has been deployed using a self-signed certificate, Build Service must be provided with the certificate during install time.
+You will either need to target a registry that does not have self-signed certificates or re-install Build Service to work with this registry.
 
 ---
 
@@ -55,8 +55,8 @@ Unfortunately, you will either need to target a registry that does not have self
     kp secret create my-dockerhub-creds --dockerhub DOCKERHUB-USERNAME
     ```
 
-    Where `DOCKERHUB-USERNAME` is your dockerhub username
-    You will be prompted for your dockerhub password
+    Where `DOCKERHUB-USERNAME` is your dockerhub username.
+    You will be prompted for your dockerhub password.
 
 ---
 
@@ -70,16 +70,16 @@ Unfortunately, you will either need to target a registry that does not have self
     kp secret create my-git-ssh-cred --git git@github.com --git-ssh-key PATH-TO-GITHUB-PRIVATE-KEY
     ```
 
-    Where `PATH-TO-GITHUB-PRIVATE-KEY` is the absolute local path to the github ssh private key
+    Where `PATH-TO-GITHUB-PRIVATE-KEY` is the absolute local path to the github ssh private key.
 
-    Or with a basic auth github username and password
+    Or with a basic auth github username and password.
 
 	```
 	kp secret create my-git-cred --git https://github.com --git-user GITHUB-USERNAME
 	```
 
-	Where `GITHUB-USERNAME` is your github username
-	You will be prompted for your github password
+	Where `GITHUB-USERNAME` is your github username.
+	You will be prompted for your github password.
 
 ---
 
@@ -87,10 +87,10 @@ Unfortunately, you will either need to target a registry that does not have self
 
 The run image must be publicly readable or readable with the registry credentials configured in a project/namespace.
 
-To see where the build service run image is located run: `kp stack status STACK-NAME`.
+To see where the build service run image is located, run: `kp stack status STACK-NAME`.
 
 If you cannot make the run image publicly readable, you must `kp` to create a registry secret within the namespace where your builds reside.
-This can be accomplished using `kp secret create`.
+This can be accomplished by using `kp secret create`.
 
 ---
 
@@ -107,7 +107,7 @@ it using the `docker` CLI to verify that it exists.
 Some builders are very large and can overwhelm Harbor's default database connection.
 You can remediate this issue by increasing the `database.maxOpenConns` setting in the
 helm `values.yaml` file. Increase this value from 100 to 300.
-The exact setting can be found [here](https://github.com/goharbor/harbor-helm/blob/ab57e34774ad57fe6506ad5161b2d7b207e1dfd1/values.yaml#L689).
+The exact setting can be found in the [harbor-helm values.yaml file](https://github.com/goharbor/harbor-helm/blob/ab57e34774ad57fe6506ad5161b2d7b207e1dfd1/values.yaml#L689) on GitHub.
 
 ---
 
