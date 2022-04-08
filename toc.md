@@ -15,5 +15,6 @@
 * [**Managing Custom Stacks**](managing-custom-stacks.html)
 * [**RBAC in Tanzu Build Service**](tbs-with-projects.html)
 * [**Using TBS in CI/CD**](tbs-in-ci.html)
+* [**Buildpacks Documentation**](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html)
 * [**Frequently Asked Questions**](faq.html)
 * [**Additional Resources**](additional-resources.html)
