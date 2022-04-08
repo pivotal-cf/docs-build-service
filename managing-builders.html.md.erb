@@ -5,7 +5,7 @@ owner: Build Service Team
 
 A Builder is a Tanzu Build Service resource used to manage [Cloud Native Buildpack builders](https://buildpacks.io/docs/concepts/components/builder/).
 
-Builders contain a set of buildpacks and a stack that will be used to create images.
+Builders contain a set of buildpacks and a stack used to create images.
 
 There are two types of Builders:
 
@@ -14,7 +14,7 @@ There are two types of Builders:
 
 <p class='note'><strong>Note:</strong> Only Build Service Admins can manage Cluster Builders.</p>
 
-The `kp` CLI can be used to manage builders and clusterbuilders. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+The `kp` CLI can be used to manage builders and clusterbuilders. The help text is published in the [kpack-cli documentation](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md) on GitHub.
 
 ```
 $ kp builder
@@ -61,7 +61,7 @@ Flags:
   -h, --help   help for clusterbuilder
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you might need to upgrade your cli.</p>
 
 ## <a id='create-builder'></a> Creating a Builder
 
@@ -88,15 +88,15 @@ Use the `kp` cli to create a Builder:
 Where:
 
 * `name`: The name of the builder.
-* `tag`: The registry location where the builder will be created.
-* `stack`: The name of the stack to be used by the builder.
-* `store`: The name of the store containing the buildpacks that will be used by the builder.
-* `namespace` The kubernetes namespace for the builder (for Builders only)
-* `order`: The local path to the buildpack order YAML that the builder will use.
-  Sample order YAML files will be available on the [VMware Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
+* `tag`: The registry location where the builder is created.
+* `stack`: The name of the stack used by the builder.
+* `store`: The name of the store containing the buildpacks used by the builder.
+* `namespace` The kubernetes namespace for the builder (for Builders only).
+* `order`: The local path to the buildpack order YAML that the builder uses.
+  Sample order YAML files are available on the [VMware Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
   For more information about listing buildpacks in groups in the order YAML, see [builder.toml](https://buildpacks.io/docs/reference/builder-config/#order-_list-required_) in the Buildpacks.io documentation.
 
-  Example order YAML file that would be used by a builder designed to build NodeJS and Java apps:
+  Example order YAML file that used by a builder designed to build NodeJS and Java apps:
 
   ```
   - group:
@@ -104,11 +104,12 @@ Where:
   - group:
 	- id: tanzu-buildpacks/java
   ```
-* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
 
-## <a id='patch-builder'></a> Patching a Builder
+* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks are in the same group.
 
-You can update a Builder resource using the `kp` cli. To update a builder given a `name`, run:
+## <a id='patch-builder'></a> Patching a builder
+
+You can update a builder resource using the `kp` cli. To update a builder given a `name`, run:
 
 * Cluster Builder:
 
@@ -133,14 +134,14 @@ You can update a Builder resource using the `kp` cli. To update a builder given 
 Where:
 
 * `name`: The name of the builder.
-* `stack`: The name of the stack to be used by the builder.
-* `store`: The name of the store containing the buildpacks that will be used by the builder.
-* `namespace` The kubernetes namespace for the builder (for Builders only)
-* `order`: The local path to the buildpack order YAML that the builder will use.
-  Sample order YAML files will be available on the [VMware Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
+* `stack`: The name of the stack used by the builder.
+* `store`: The name of the store containing the buildpacks used by the builder.
+* `namespace` The Kubernetes namespace for the builder (for Builders only).
+* `order`: The local path to the buildpack order YAML that the builder uses.
+  Sample order YAML files are available on the [VMware Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
   For more information about listing buildpacks in groups in the order YAML, see [builder.toml](https://buildpacks.io/docs/reference/builder-config/#order-_list-required_) in the Buildpacks.io documentation.
 
-  Example order YAML file that would be used by a builder designed to build NodeJS and Java apps:
+  Example order YAML file used by a builder designed to build NodeJS and Java apps:
 
   ```
   ---
@@ -150,13 +151,14 @@ Where:
   - group:
 	- id: paketo-buildpacks/nodejs
   ```
-* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
+
+* `buildpack`: Buildpack ID and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks are in the same group.
 
 <p class='note'><strong>Note:</strong> The `tag` (location in a registry) of a builder cannot be modified. To change this field, you must create a new builder.</p>
 
 ## <a id='save-builder'></a> Saving Builders
 
-Users can create or update a Builder/ClusterBuilder using the `save` command. The `kp builder/clusterbuilder save` command is used exactly the same as `kp builder/clusterbuilder create` and `kp builder/clusterbuilder update`, but it will determine if a builder/clusterbuilder needs to be created or updated.
+Users can create or update a Builder/ClusterBuilder by using the `save` command. The `kp builder/clusterbuilder save` command is used exactly the same as `kp builder/clusterbuilder create` and `kp builder/clusterbuilder update`, but it determines whether a builder/clusterbuilder needs to be created or updated.
 
 To save a Builder/ClusterBuilder:
 
@@ -181,15 +183,15 @@ To save a Builder/ClusterBuilder:
 Where:
 
 * `name`: The name of the builder.
-* `tag`: The registry location where the builder will be created.
-* `stack`: The name of the stack to be used by the builder.
-* `store`: The name of the store containing the buildpacks that will be used by the builder.
-* `namespace` The kubernetes namespace for the builder (for Builders only)
-* `order`: The local path to the buildpack order YAML that the builder will use.
-  Sample order YAML files will be available on the [VMware Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
+* `tag`: The registry location where the builder is created.
+* `stack`: The name of the stack used by the builder.
+* `store`: The name of the store containing the buildpacks used by the builder.
+* `namespace` The Kubernetes namespace for the builder (for Builders only).
+* `order`: The local path to the buildpack order YAML that the builder uses.
+  Sample order YAML files are available on the [VMware Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
   For more information about listing buildpacks in groups in the order YAML, see [builder.toml](https://buildpacks.io/docs/reference/builder-config/#order-_list-required_) in the Buildpacks.io documentation.
 
-  Example order YAML file that would be used by a builder designed to build NodeJS and Java apps:
+  Example order YAML file used by a builder designed to build NodeJS and Java apps:
 
   ```
   ---
@@ -199,11 +201,12 @@ Where:
   - group:
 	- id: paketo-buildpacks/nodejs
   ```
-* `buildpack`: Buildpack id and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks will be in the same group.
+
+* `buildpack`: Buildpack ID and optional version in the form of either '<buildpack>@<version>' or '<buildpack>'. Repeat for each buildpack in order, or supply once with comma-separated list. This cannot be combined with `--order`. All supplied buildpacks are in the same group.
 
 ## <a id='delete-builder'></a> Deleting Builders
 
-To delete a Builder:
+To delete a builder:
 
 * Cluster Builder:
 
@@ -217,7 +220,7 @@ To delete a Builder:
     kp builder delete <builder name> --namespace <namespace>
     ```
 
-<p class='note'><strong>Warning:</strong> Deleting a builder will prevent image configs that reference that builder from successfully building again.</p>
+<p class='note'><strong>Warning:</strong> Deleting a builder prevents image configs that reference that builder from successfully building again.</p>
 
 ## <a id='get-builder-details'></a> Retrieving Builder Details
 
@@ -309,7 +312,8 @@ kp cb create pinned \
   --tag my-registry.io/example/pinned \
   --order order.yaml
 ```
-where the contents of order.yaml file is
+
+Where the contents of order.yaml file is:
 
 ```
 - group:
@@ -320,13 +324,13 @@ where the contents of order.yaml file is
     version: 1.3.0
 ```
 
-<p class='note'><strong>Note:</strong> When a buildpack version is pinned, Images that use the Builder will not initiate new Builds due to new Buildpack versions. For best practice, only pin a buildpack version when necessary. </p>
+<p class='note'><strong>Note:</strong> When a buildpack version is pinned, Images that use the Builder do not initiate new Builds due to new Buildpack versions. As a best practice, only pin a buildpack version when necessary. </p>
 
 ## <a id='update-lifecycle'></a> Update Lifecycle
 
-All builders make use of a lifecycle. A lifecycle orchestrates buildpack execution, then assembles the resulting artifacts into a final app image. Within Build Service, it will be uploaded to the canonical registry, which is the docker-repository specified during TBS install. More information on lifecycles can be found [here](https://buildpacks.io/docs/concepts/components/lifecycle/).
+All builders make use of a lifecycle. A lifecycle orchestrates buildpack execution, then assembles the resulting artifacts into a final app image. Within Build Service, it is uploaded to the canonical registry, which is the docker-repository specified during Tanzu Build Service install. More information on lifecycles can be found in [Lifecycle](https://buildpacks.io/docs/concepts/components/lifecycle/) on the Buildpacks.io website.
 
-To update the lifecycle that will be used by builders:
+To update the lifecycle to be used by builders:
 
 	```
     kp lifecycle update --image <image-tag>

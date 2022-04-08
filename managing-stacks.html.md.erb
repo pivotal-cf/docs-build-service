@@ -5,9 +5,9 @@ owner: Build Service Team
 
 A ClusterStack is a cluster scoped resource that provides the build and run images for the [Cloud Native Buildpack stack](https://buildpacks.io/docs/concepts/components/stack/) that will be used in a [Builder](managing-builders.html).
 
-Most users automatically configure three ClusterStack resources via the TBS installation process.  These ClusterStacks are referenced in three corresponding ClusterBuilder resources.
+Most users automatically configure three ClusterStack resources through the Tanzu Build Service installation process.  These ClusterStacks are referenced in three corresponding ClusterBuilder resources.
 
-Additional information about security and patching cadence for these stacks and their ideal use cases can be found [here](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). More detailed release notes for the stacks can be accessed by following the links in the table below.
+For more information about security and patching cadence for these stacks and their ideal use cases, see [Stacks](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). More detailed release notes for the stacks can be accessed by following the links:
 
 
 | Name | ID |
@@ -16,7 +16,7 @@ Additional information about security and patching cadence for these stacks and 
 | [base](https://github.com/paketo-buildpacks/base-release/releases)| io.buildpacks.stacks.bionic |
 | [full](https://github.com/paketo-buildpacks/full-release/releases)| io.buildpacks.stacks.bionic |
 
-The `kp` CLI can be used to manage clusterstack. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+The `kp` CLI can be used to manage clusterstack. See the kpack-cli [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
 
 ```
 $ kp clusterstack
@@ -42,17 +42,17 @@ Flags:
 Use "kp clusterstack [command] --help" for more information about a command.
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from Tanzu Build Service release v1.4.*. If a feature is not working, you may need to upgrade your cli.</p>
 
-<p class='note'><strong>Note:</strong> Only Build Service Admins (i.e. users with the <code>pb-admin-role</code> kubernetes ClusterRole) can perform clusterstack commands.</p>
+<p class='note'><strong>Note:</strong> Only Build Service Admins (that is, users with the <code>pb-admin-role</code> kubernetes ClusterRole) can perform clusterstack commands.</p>
 
 ## <a id='create-stack'></a> Create a ClusterStack
 
-Users can create a clusterstack using build and run images from a Docker registry or the local machine.
-The run and build images provided during clusterstack creation will be uploaded to the `canonical repository`, which is the `docker-repository` specified during TBS install.
+Users can create a clusterstack by using build and run images from a Docker registry or the local machine.
+The run and build images provided during clusterstack creation are uploaded to the `canonical repository`, which is the `docker-repository` specified during Tanzu Build Service install.
 
 
-- If using a Docker registry for the stack images:
+- If you use a Docker registry for the stack images:
 
     ```
     kp clusterstack create <clusterstack-name> \
@@ -62,7 +62,7 @@ The run and build images provided during clusterstack creation will be uploaded 
 
     <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the canonical registry on the local machine.</p>
 
-    Example:
+    For example:
 
     ```
     kp csk create my-clusterstack \
@@ -70,15 +70,17 @@ The run and build images provided during clusterstack creation will be uploaded 
      -r gcr.io/test/stack/build:latest
     ```
 
-* If using local stack images created with `docker save`:
+* If you use local stack images created with `docker save`:
 
     ```
     kp clusterstack create <clusterstack-name> \
      --build-image <path to build-image>.tar \
      --run-image <path to run-image>.tar
     ```
+
     <p class='note'><strong>Note:</strong> The user must have write access to the canonical registry on the local machine.</p>
-    Example:
+    
+    For example:
 
     ```
     kp csk create my-clusterstack \
@@ -88,8 +90,8 @@ The run and build images provided during clusterstack creation will be uploaded 
 
 ## <a id='update-stack'></a> Update a ClusterStack
 
-Users can update a stack using build and run images from a Docker registry or the local machine.
-The run and build images provided during clusterstack update will be uploaded to the `canonical repository`, which is the `docker-repository` specified during TBS install.
+Users can update a stack by using build and run images from a Docker registry or the local machine.
+The run and build images provided during clusterstack update are uploaded to the `canonical repository`, which is the `docker-repository` specified during Tanzu Build Service install.
 
 - If using a Docker registry:
 
@@ -98,8 +100,10 @@ The run and build images provided during clusterstack update will be uploaded to
      --build-image <location of build-image> \
      --run-image <location of run-image>
     ```
+
     <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the canonical registry on the local machine.</p>
-    Example:
+
+    For example:
 
     ```
     kp csk update my-clusterstack \
@@ -114,8 +118,10 @@ The run and build images provided during clusterstack update will be uploaded to
      --build-image <path to build-image>.tar \
      --run-image <path to run-image>.tar
     ```
+
     <p class='note'><strong>Note:</strong> The user must have write access to the canonical registry on the local machine.</p>
-    Example:
+    
+    For example:
 
     ```
     kp csk update my-clusterstack \
@@ -125,11 +131,11 @@ The run and build images provided during clusterstack update will be uploaded to
 
 ## <a id='save-stacks'></a> Save a ClusterStack
 
-Users can create or update a ClusterStack using the `save` command. The `kp clusterstack save` command is used exactly the same as `kp clusterstack create` and `kp clusterstack update`, but it will determine if a clusterstack needs to be created or updated.
+Users can create or update a ClusterStack by using the `save` command. The `kp clusterstack save` command is used exactly the same as `kp clusterstack create` and `kp clusterstack update`, but it determines whether a clusterstack needs to be created or updated.
 
-## <a id='get-stack-status'></a> Get ClusterStack Status
+## <a id='get-stack-status'></a> Get ClusterStack status
 
-Users can get the current status of a clusterstack:
+Users can get the current status of a clusterstack by running:
 
 ```
 kp clusterstack status <stack-name>
@@ -146,13 +152,13 @@ Build Image:    paketo/build:full-cnb
 
 ## <a id='delete-stacks'></a> Delete a ClusterStack
 
-Users can delete an existing clusterstack:
+Users can delete an existing clusterstack by running:
 
 ```
 kp clusterstack delete <stack-name>
 ```
 
-<p class='note'><strong>Note:</strong> User will not be asked for a confirmation before deletion.</p>
+<p class='note'><strong>Note:</strong> The user is not asked for a confirmation before deletion.</p>
 
 ## <a id='list-stacks'></a> List all ClusterStacks
 
@@ -168,6 +174,6 @@ full       True     org.cloudfoundry.stacks.cflinuxfs3
 tiny       True     io.paketo.stacks.tiny
 ```
 
-## <a id='image-update-stack-updates-only'></a> How to update an Image for Stack updates only?
+## <a id='image-update-stack-updates-only'></a> How to update an image for Stack updates only?
 
-To achieve Stack only updates for an Image, you can [pin the Buildpack versions](managing-builders.html#pin-buildpack-version) in the Builder used for creating the Image.
+To achieve Stack only updates for an Image, you can [pin the Buildpack versions](managing-builders.html#pin-buildpack-version) in the Builder used for creating the image.

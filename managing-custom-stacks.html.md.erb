@@ -3,13 +3,13 @@ title: Managing Custom Stacks
 owner: Build Service Team
 ---
 
-A CustomStack is a resource that allows users to create a customized [ClusterStack](managing-stacks.html) from Ubuntu 18.04 (Bionic Beaver) and UBI7/UBI8 non-minimal based OCI images.
+A CustomStack is a resource that allows users to create a customized [ClusterStack](managing-stacks.html) from Ubuntu 18.04 (Bionic Beaver) and UBI7/UBI8 non-minimal-based OCI images.
 
-<p class='note'><strong>Note:</strong> Customstacks created with UBI7/UBI8 images do not currently support adding packages, mixins, or caCerts.  Currently, only the Java Tanzu Buildpacks support CustomStacks that use UBI images </p>
+<p class='note'><strong>Note:</strong> Customstacks created with UBI7/UBI8 images do not currently support adding packages, mixins, or caCerts.  Currently, only the Java Tanzu Buildpacks support CustomStacks that use UBI images. </p>
 
 CustomStacks can be used to:
 
-* Convert a pre-existing base image that you'd like to use with TBS into a ClusterStack resource.
+* Convert a pre-existing base image that you'd like to use with Tanzu Build Service into a ClusterStack resource.
 * Add required stack metadata to base images.
 * Add CA certificates to build and/or run image.
 * Add packages and [mixin labels](https://buildpacks.io/docs/concepts/components/stack/#mixins) to build and/or run image.
@@ -22,14 +22,14 @@ A CustomStack is created by running `kubectl apply` with a resource configuratio
 * `source`: The location of base images used for building the stack. See more info in [Source Configuration](#source-config).
 * `destination`: The location to publish built images and optional ClusterStack. See more info in [Destination Configuration](#destination-config).
 * `caCerts`: References to config maps of CA certificates to add to one or both of the stack images.
-* `packages`: List of packages to install on one or both of the stack images. A list of all available packages can be found [here](https://packages.ubuntu.com/bionic/allpackages).
-* `mixins`: List of mixin labels to add to one or both of the stack images. Information on the mixins concept can be found [here](https://buildpacks.io/docs/concepts/components/stack/#mixins).
+* `packages`: List of packages to install on one or both of the stack images. A list of all available packages can be found in [Software Packages in "bionic"](https://packages.ubuntu.com/bionic/allpackages) on the ubuntu packages web page.
+* `mixins`: List of mixin labels to add to one or both of the stack images. Information on the mixins concept can be found in [Stack](https://buildpacks.io/docs/concepts/components/stack/#mixins) on the Buildpacks.io website.
 * `service-account-name`: Name of service account with secret containing credentials to push to registry.
-* `user`: User and group ID of the CNB user
+* `user`: User and group ID of the CNB user.
   * Not required if the user is already present in metadata.
-  * If the user and/or group ID do not exist on the image, they will be created.
+  * If the user and/or group ID do not exist on the image, they are created.
 
-### <a id='source-config'></a> Source Configuration
+### <a id='source-config'></a> Source configuration
 
 The `source` field describes the base images for the CustomStack. It can be configured in exactly one of the following ways:
 
@@ -59,7 +59,7 @@ The `source` field describes the base images for the CustomStack. It can be conf
 
 ### <a id='destination-config'></a> Destination Configuration
 
-The `destination` field describes where the built images will be published and if a ClusterStack should be created.
+The `destination` field describes where the built images are published and whether a ClusterStack should be created.
 
 ```yaml
 destination:
@@ -72,11 +72,11 @@ destination:
     kind: ClusterStack
 ```
 
-* `output-build-image-tag`: The registry location where the build image will be created.
-* `output-run-image-tag`: The registry location where the run image will be created.
-* `output-cluster-stack-name`: Name of ClusterStack to create with CustomStack images
+* `output-build-image-tag`: The registry location where the build image is created.
+* `output-run-image-tag`: The registry location where the run image is created.
+* `output-cluster-stack-name`: Name of ClusterStack to create with CustomStack images.
 
-### <a id='example-registry-images'></a> Example CustomStack from Registry Images
+### <a id='example-registry-images'></a> Example CustomStack from registry images
 
 ```yaml
 apiVersion: v1
@@ -216,14 +216,18 @@ spec:
 
 ## <a id='debugging-customstacks'></a> Debugging CustomStacks
 
-When a CustomStack is created, a pod is created in the same namespace which will modify the base image and push the resulting stack image to the registry. The pod will be named `stack-pod-<customstack-name>-<number>`, where:
+When a CustomStack is created, a pod is created in the same namespace which modifies the base image and pushes the resulting stack image to the registry. The pod is named `stack-pod-<customstack-name>-<number>`
 
-* `customstack-name`: The name of your CustomStack
-* `number`: The revision of your CustomStack. This will be incremented by one each time a new spec is applied.
+Where:
 
-The ten latest pods are kept around for debugging purposes. To debug a failing CustomStack, check the logs of the corresponding pod: `kubectl logs <pod-name> -c <create-build-image/create-run-image>`, where:
+* `customstack-name` is the name of your CustomStack.
+* `number` is the revision of your CustomStack. This is incremented by one each time a new spec is applied.
 
-* `pod-name`: The name of the pod
-* `create-build-image/create-run-image`: The container whose logs you would like to see.
+The ten latest pods are kept around for debugging purposes. To debug a failing CustomStack, check the logs of the corresponding pod: `kubectl logs <pod-name> -c <create-build-image/create-run-image>`
+
+Where:
+
+* `pod-name` is the name of the pod.
+* `create-build-image/create-run-image` is the container whose logs you want to see.
 	* `create-build-image` for logs related to creating the build image.
 	* `create-run-image` for logs related to create the run image.

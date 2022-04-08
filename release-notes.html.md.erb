@@ -1,5 +1,5 @@
 ---
-title: TBS Release Notes
+title: Tanzu Build Service Release Notes
 owner: Build Service Team
 ---
 
@@ -9,7 +9,7 @@ owner: Build Service Team
 
 ### New Features
 
-- Bump kpack to use lifecycle 0.13.3 which adds support for bom entries in the `io.buildpacks.build.metadata` image label in Buildpack API 0.7 in addition to the existing sbom layer formats which establishes a migration path.
+- Bump kpack to use lifecycle 0.13.3, which adds support for bom entries in the `io.buildpacks.build.metadata` image label in Buildpack API 0.7 in addition to the existing sbom layer formats which establishes a migration path.
 - When dependency updates are paused, the pinned descriptor version is [100.0.267](https://network.pivotal.io/products/tbs-dependencies#/releases/1053790)
 
 ### Breaking Changes
@@ -35,7 +35,7 @@ Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.vmware
 
 ### Security Scanning
 
-This section provides context for the CVEs that may show up in security scans of TBS
+This section provides context for the CVEs that may show up in security scans of TBS.
 
 - github.com/containerd/containerd | [CVE-2021-43816](https://avd.aquasec.com/nvd/2021/cve-2021-43816/) | CRITICAL
     - Containerd is not used as a container runtime in TBS code and therefore never interacts with volume mounts at all

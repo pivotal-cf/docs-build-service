@@ -8,7 +8,7 @@ This topic contains the following sections:
 - [Image Resources](#images)
 - [Builds](#builds)
 
-The `kp` CLI can be used to manage image resources and builds. The help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+The `kp` CLI can be used to manage image resources and builds. The help text is published in the [kpack-cli documentation](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md) on GitHub.
 
 ```
 $ kp image
@@ -56,13 +56,13 @@ Flags:
 Use "kp build [command] --help" for more information about a command.
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you might need to upgrade your cli.</p>
 
 # <a id='images'></a> Image Resources
 
 Image resources provide a configuration for Tanzu Build Service to build and maintain a Docker image utilizing Tanzu, Paketo, and custom [Cloud Native Buildpacks](https://buildpacks.io).
 
-Build Service will monitor the inputs to the image resource to rebuild the image when the underlying source or buildpacks have changed.
+Build Service monitors the inputs to the image resource to rebuild the image when the underlying source or buildpacks have changed.
 
 The following procedures describe how to create and manage image resources in Build Service with the `kp` CLI.
 
@@ -85,15 +85,15 @@ You can specify only one location for app source code.
 
 #### Builders
 
-Users can select a Builder (namespaced-scoped) or a Cluster Builder (cluster-scoped) to be used to create image resource builds. You can use any of the available Builders or Cluster Builders with any of the source types (git, blob, or local).
+Users can select a Builder (namespaced-scoped) or a Cluster Builder (cluster-scoped) used to create image resource builds. You can use any of the available Builders or Cluster Builders with any of the source types (git, blob, or local).
 
-If you do not use the `--builder` or `--cluster-builder` flags, the `default` Cluster Builder will be used.
+If you do not use the `--builder` or `--cluster-builder` flags, the `default` Cluster Builder is used.
 
 For more information on Builders, see [Managing Builders](managing-builders.html).
 
-### <a id='create-image-with-git-repo'></a> Creating an Image Resource With Source Code in a Git Repository
+### <a id='create-image-with-git-repo'></a> Creating an image resource with source code in a Git repository
 
-To create an image resource using source code from a git repository run:
+To create an image resource using source code from a git repository, run:
 
     kp image create <name> \
       --tag <tag> \
@@ -107,21 +107,21 @@ To create an image resource using source code from a git repository run:
 
 Where:
 
-* `name`: The name of the image resource.
-* `tag`: The registry location where the image will be created.
-* `builder`: (optional) Builder name to be used in the image resource. Cannot be used with `cluster-builder`.
-* `cluster-builder`: (optional) Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
-* `namespace`: (optional) The Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `env` (optional): Image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
-* `sub-path` (optional): Build code at the sub path located within the source code directory.
-* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
-* `wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
-* `git-repo` Git repository URL of the source code.
-* `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
+* `name` is the name of the image resource.
+* `tag` is the registry location where the image is created.
+* `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
+* `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
+* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `sub-path` (optional) is the build code at the subpath located within the source code directory.
+* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
+* `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
+* `git-repo` is the Git repository URL of the source code.
+* `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
 
-<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
+<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the Git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
 
-### <a id='create-image-by-referencing-blob-store-source'></a> Create an Image Resource With Source Code In A Blob Store
+### <a id='create-image-by-referencing-blob-store-source'></a> Create an image resource with source code in a blob store
 
 Users can specify source code in a blob store saved as a compressed file (`zip`, `tar.gz`, `.tar`) or a `.jar` file.
 
@@ -138,24 +138,24 @@ To create an image resource using source code from blob store:
 
 Where:
 
-* `name`: The name of the image resource.
-* `tag`: The registry location where the image will be created.
-* `builder`: (optional) Builder name to be used in the image resource. Cannot be used with `cluster-builder`.
-* `cluster-builder`: (optional) Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
-* `namespace`: (optional) The Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `env` (optional): Image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
-* `sub-path` (optional): Build code at the sub path located within the source code directory.
-* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
-* `wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
-* `blob-url` URL of the source code blob file.
+* `name` is the name of the image resource.
+* `tag` is the registry location where the image is created.
+* `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
+* `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
+* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `sub-path` (optional) is the build code at the subpath located within the source code directory.
+* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
+* `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
+* `blob-url` is the URL of the source code blob file.
 
 <p class='note'><strong>Note:</strong> The source code file in the blob store must be publicly viewable or the <code>blob-url</code> must contain the basic authentication credentials.</p>
 
-### <a id='create-image-with-local-source-code'></a> Creating an Image Resource With Local Source Code
+### <a id='create-image-with-local-source-code'></a> Creating an image resource with local source code
 
 Users can apply local source code from a directory, compressed source code (`zip`, `tar.gz`, `.tar`), or a `.jar` file.
 
-To create an image resource using source code from a local machine run:
+To create an image resource using source code from a local machine, run:
 
 	kp image create <name> \
 	  --tag <tag> \
@@ -169,23 +169,23 @@ To create an image resource using source code from a local machine run:
 
 Where:
 
-* `name`: The name of the image resource.
-* `tag`: The registry location where the image will be created.
-* `source-path` Path to local source code.
-* `builder`: (optional) Builder name to be used in the image resource. Cannot be used with `cluster-builder`.
-* `cluster-builder`: (optional) Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
-* `namespace`: (optional) The Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `env` (optional): image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
-* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
-* `--wait` flag (optional) Waits for image create to be reconciled and tails resulting build logs.
-* `registry-ca-cert-path` (optional) Add CA certificate for registry API
-* `registry-verify-certs` (optional) Set whether to verify server's certificate chain and host name (default true)
+* `name` is the name of the image resource.
+* `tag` is the registry location where the image is created.
+* `source-path` is the path to local source code.
+* `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
+* `cluster-builder` (optional) is the Cluster Builder name used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
+* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
+* `--wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
+* `registry-ca-cert-path` (optional) adds CA certificate for registry API.
+* `registry-verify-certs` (optional) sets whether to verify server's certificate chain and host name (default true).
 
-### <a id='buildpack-config'></a> Buildpack Configuration
+### <a id='buildpack-config'></a> Buildpack configuration
 
-Image resources use buildpacks to build application images in a registry. The buildpacks contain the dependencies needed for these builds and you can add buildpack configuration to Tanzu Build Service Image Resources.
+Image resources use buildpacks to build application images in a registry. The buildpacks contain the dependencies needed for these builds and you can add buildpack configuration to Tanzu Build Service image resources.
 
-#### <a id='buildpack-config-use-cases'></a> Buildpack Configuration Use Cases
+#### <a id='buildpack-config-use-cases'></a> Buildpack configuration use cases
 
 Common use cases for setting buildpack configuration include:
 
@@ -193,15 +193,15 @@ Common use cases for setting buildpack configuration include:
 * Language-specific configuration (Go build target)
 * Buildpack-specific configuration
 
-#### <a id='buildpack-config-docs'></a> Buildpack Configuration Documentation
+#### <a id='buildpack-config-docs'></a> Buildpack configuration documentation
 
 Buildpack configuration details can be found in the documentation for that specific buildpack.
 
 Use `kp clusterstore status <store-name> --verbose` to find the homepage of the desired buildpack.
 
-#### <a id='buildpack-config-use-cases'></a> Buildpack Configuration in Image Resources
+#### <a id='buildpack-config-use-cases'></a> Buildpack configuration in image resources
 
-Buildpack configuration – including manually selecting buildpacks to use – can be set in two ways in Tanzu Build Service Image Resources. The configuration depends on the specific buildpack, find buildpack details in [Buildpack Configuration Documentation](#buildpack-config-docs).
+Buildpack configuration, including manually selecting buildpacks to use, can be set in two ways in Tanzu Build Service Image Resources. The configuration depends on the specific buildpack, find buildpack details in [Buildpack Configuration Documentation](#buildpack-config-docs).
 
 1. Creating a `buildpack.yml` file at the root of the application source code.
 
@@ -213,9 +213,9 @@ go:
   targets: ["./cmd/package"]
 ```
 
-2. Setting environment variables on an Image Resource.
+2. Setting environment variables on an image resource.
 
-Tanzu Build Service Image Resources can have environment variables configured which will be set in all Builds and in the final exported registry image. These can be used for buildpack configuration.
+Tanzu Build Service image resources can have environment variables configured that are set in all Builds and in the final exported registry image. These can be used for buildpack configuration.
 
 Example `kp` command to create an image resource for a Go app to build with the path `./cmd/package`:
 
@@ -226,13 +226,13 @@ kp image create my-image \
   --env BP_GO_TARGETS="./cmd/package"
 ```
 
-## <a id='patch-images'></a> Patching Image Resources
+## <a id='patch-images'></a> Patching image resources
 
-Users can patch their existing image resources with the `kp` CLI. Running a patch will trigger a new build of the image resource if any of the build inputs are changed.
+Users can patch their existing image resources with the `kp` CLI. Running a patch triggers a new build of the image resource if any of the build inputs are changed.
 
 Patch image resources with the following commands:
 
-* With Source Code in a Git Repository
+* With source code in a Git repository
 
 	```
     kp image patch <name> \
@@ -244,7 +244,7 @@ Patch image resources with the following commands:
 	  --git-revision <git-revision>
     ```
 
-* With Source Code In A Blob Store
+* With source code in a blob store
 
 	```
     kp image patch <name> \
@@ -255,7 +255,7 @@ Patch image resources with the following commands:
 	  --blob <blob-url>
     ```
 
-* With Local Source Code
+* With local source code
 
 	```
     kp image patch <name> \
@@ -268,24 +268,24 @@ Patch image resources with the following commands:
 
 Where:
 
-* `name`: The name of the image resource to patch.
-* `namespace`: (optional) The Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `env` (optional): Image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
-* `cache-size` (optional): The cache size used for subsequent builds. Must be a valid kubernetes quantity (default 2G).
-* `git-repo` Git repository URL of the source code. Must select one of `git-repo`, `blob-url`, or `source-path`
-* `git-revision` (optional) The Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
-* `blob-url` URL of the source code blob file. Must select one of `git-repo`, `blob-url`, or `source-path`
-* `source-path` Path to local source code. Must select one of `git-repo`, `blob-url`, or `source-path`
+* `name` is the name of the image resource to patch.
+* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
+* `git-repo` is the Git repository URL of the source code. Must select one of `git-repo`, `blob-url`, or `source-path`
+* `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `master`.
+* `blob-url` is the URL of the source code blob file. Must select one of `git-repo`, `blob-url`, or `source-path`
+* `source-path` is the path to local source code. Must select one of `git-repo`, `blob-url`, or `source-path`
 
-<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
+<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the Git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
 <p class='note'><strong>Note:</strong> The <code>tag</code> location in a registry and <code>name</code> of an image resource cannot be modified. To change these fields, you must create a new image resource.</p>
 
-## <a id='save-image'></a> Saving Image Resources
+## <a id='save-image'></a> Saving image resources
 
-Users can create or patch an Image Resource using the `save` command. The `kp image save` command is used exactly the same as `kp image create` or `kp image patch`, but it will determine if an image resource needs to be created or patched.
+Users can create or patch an image resource using the `save` command. The `kp image save` command is used exactly the same as `kp image create` or `kp image patch`, but it determines whether an image resource needs to be created or patched.
 
-<p class='note'><strong>Note:</strong>For handling source code changes in the Tanzu Build Service process, we recommend utilizing the `kp image save --wait` command within a CI/CD pipeline to update the source code referenced in the image resource.</p>
-This can be accomplished by updating the `--git-revision` field with a new commit ID.  For many TBS customers this commit ID references source code that has undergone unit testing, so that they can be confident that the resulting image can be deployed or promoted to higher level environments.
+<p class='note'><strong>Note:</strong>For handling source code changes in the Tanzu Build Service process, VMware recommends utilizing the `kp image save --wait` command within a CI/CD pipeline to update the source code referenced in the image resource.</p>
+You can do this by updating the `--git-revision` field with a new commit ID.  This commit ID references source code that has undergone unit testing, so the resulting image can be deployed or promoted to higher level environments.
 
 ```
 kp image save my-image \
@@ -294,13 +294,13 @@ kp image save my-image \
   --git-revision my-branch
 ```
 
-## <a id='list-images'></a> Listing Images
+## <a id='list-images'></a> Listing images
 
 To list all the image resources in a Kubernetes namespace:
 
     kp image list --namespace <namespace>
 
-Example
+For example:
 
 ```
 $ kp image list -n example1
@@ -314,7 +314,7 @@ To list all the image resources across all Kubernetes namespaces:
 
     kp image list --all-namespaces
 
-Example
+For example:
 
 ```
 $ kp image list -A
@@ -326,7 +326,7 @@ test-image3     True      BUILDPACK        third/image:sha      example2
 test-image4     False     CONFIG           fourth/image:sha     example2
 ```
 
-### <a id='filter-images'></a> Filter Image Resources
+### <a id='filter-images'></a> Filter image resources
 
 Users can further filter the list of image resources by applying the `--filter` flag and specifying a filter and value. This command is useful for traversing large number of image resources by narrowing the list to only display image resources that possess certain attributes.
 
@@ -338,7 +338,7 @@ test-image2     False     BUILDPACK        second/image:sha     example1
 test-image4     False     CONFIG           fourth/image:sha     example2
 ```
 
-See below for the current supported filters and values:
+See below for the currently supported filters and values:
 
 ```
 builder=string
@@ -347,7 +347,7 @@ latest-reason=commit,trigger,config,stack,buildpack
 ready=true,false,unknown
 ```
 
-## <a id='rebuild-image'></a> Image Resource Rebuilds
+## <a id='rebuild-image'></a> Image resource rebuilds
 
 Rebuilds happen in three ways:
 
@@ -355,27 +355,27 @@ Rebuilds happen in three ways:
 1. An automatic rebuild occurs when build inputs change (source code, stack, or buildpacks).
 1. A user can trigger a rebuild manually.
 
-An imperative rebuild will be initiated if any of the following changes are made to an image resource:
+An imperative rebuild is initiated if any of the following changes are made to an image resource:
 
 * An update to the commit, branch, Git repository, or other arguments to `kp image patch`.
 
 * You upload a new copy of the local source code by running `kp image patch --local-path <source-path>`, where `<source-path>` is the source code path.
 
-For more information, see [Patching Image Resources](#patch-images).
+For more information, see [Patching image resources](#patch-images).
 
 Build Service auto-rebuilds image resources when one or more of the following build inputs change:
 
-* New buildpack versions are made available via updates to a Cluster Store.
+* New buildpack versions are made available through updates to a Cluster Store.
     - New Buildpack versions are made available on [Tanzu Network](https://network.tanzu.vmware.com/).
     - To update buildpacks, you must add new buildpack versions from Tanzu Network to a Cluster Store. See [Updating Build Service Dependencies](updating-deps.html) for more details.
 
 * There is a new commit on a branch or tag Tanzu Build Service is tracking.
 
-* There is a new Cluster Stack (ie. base OS image) available, such as `full`, `tiny`, or `base`.
+* There is a new Cluster Stack (that is, base OS image) available, such as `full`, `tiny`, or `base`.
 	- New Stack versions are made available on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on Tanzu Network.
     - You can get updates to Stacks from the Tanzu Network Registry by using the `kp` CLI. See [Updating Build Service Dependencies](updating-deps.html) for more details.
 
-### <a id='trigger-rebuild-image'></a> Trigger an Image Resource Rebuild
+### <a id='trigger-rebuild-image'></a> Trigger an image resource rebuild
 
 You can initiate a manual rebuild using `kp`:
 
@@ -383,15 +383,15 @@ You can initiate a manual rebuild using `kp`:
 
 This is useful for debugging image resource builds.
 
-## <a id='view-image-status'></a> Viewing the Status of an Image Resource
+## <a id='view-image-status'></a> Viewing the status of an image resource
 
-When a user creates an image resource using the above workflow, they are configuring Tanzu Build Service to start creating builds of the image resource which create container images to be pushed to a registry.
+When a user creates an image resource using the above workflow, they are configuring Tanzu Build Service to start creating builds of the image resource that create container images to be pushed to a registry.
 
 If a particular build associated with an image resource fails, check the status of the image resource by running:
 
     kp image status <image-name> --namespace <namespace>
 
-Where `image-name` is the name of the image resource. See [Listing Image Resources](#list-images) to get image names.
+Where `image-name` is the name of the image resource. See [Listing image resources](#list-images) to get image names.
 
 The following is an example output of this command:
 
@@ -409,7 +409,7 @@ Id:        2
 Reason:    COMMIT
 ```
 
-## <a id='delete-images'></a> Deleting an Image Resource
+## <a id='delete-images'></a> Deleting an image resource
 
 This procedure describes how to delete a Build Service image resource with the `kp` CLI.
 
@@ -421,37 +421,37 @@ To delete an image resource:
 
 Where `image` is the name of the image resource.
 
-When you successfully delete an image resource, you will see this message:
+When you successfully delete an image resource, you see this message:
 
 ```
 "<image>" deleted
 ```
 
-## <a id='image-with-YAML'></a> Managing Image Resources with YAML
+## <a id='image-with-YAML'></a> Managing image resources with YAML
 
-Build Services image resources can be created by applying the [kpack image resources](https://github.com/pivotal/kpack/blob/master/docs/image.md) to cluster via `kubectl`.
+Build Services image resources can be created by applying the [kpack image resources](https://github.com/pivotal/kpack/blob/master/docs/image.md) to cluster through `kubectl`.
 
-Use the `default` service account for Build Service registry and git secrets.
+Use the `default` service account for Build Service registry and Git secrets.
 
-### <a id='additional-tags'></a> Image Resource Additional Tags
+### <a id='additional-tags'></a> Image resource additional tags
 
-With the addition of kpack apiVersion kpack.io/v1alpha2, additional tags can be specified on image resources. Additional tags are not currently configurable via the `kp` cli, applying yaml configuration with `kubectl` is required. See [kpack docs](https://github.com/pivotal/kpack/blob/main/docs/image.md#tags-config) for details.
+With the addition of kpack apiVersion kpack.io/v1alpha2, additional tags can be specified on image resources. Additional tags are not currently configurable through the `kp` cli, applying YAML configuration with `kubectl` is required. See [kpack docs](https://github.com/pivotal/kpack/blob/main/docs/image.md#tags-config) for details.
 
 ### <a id='registry-cache'></a> Using a registry for caching
 
-TBS Image resource can be configured to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
+Tanzu Build Service image resource can be configured to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
 
-For more details see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) docs for how to set the cache tag.
+For more details, see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) docs for how to set the cache tag.
 
-#### <a id='kubectl-secrets'></a> Using Secrets
+#### <a id='kubectl-secrets'></a> Using secrets
 
-Use the `default` service account for Build Service registry and git secrets. kpack will default to the `default` service account if no service account is specified.
+Use the `default` service account for Build Service registry and Git secrets. kpack will default to the `default` service account if no service account is specified.
 
-#### <a id='image-status'></a> Debugging with Image Resource Status
+#### <a id='image-status'></a> Debugging with image resource status
 
-Using `kubectl` is a good way to debug Image Resources.
+Using `kubectl` is a good way to debug image resources.
 
-When an image resource has successfully built with its current configuration, its status will report the up to date fully qualified built image reference.
+When an image resource has successfully built with its current configuration, its status reports the up-to-date fully qualified built image reference.
 
 This information is available with `kubectl get image <image-name> -o yaml`.
 
@@ -468,8 +468,8 @@ status:
   ...
 ```
 
-When a build fails the image resource status will report the condition Succeeded=False. The image resource status also includes the status of the
-builder being used by the image resource. If the builder is not ready, you may want to inspect that builder. More details in [Managing Builders](managing-builders.html).
+When a build fails, the image resource status reports the condition Succeeded=False. The image resource status also includes the status of the
+builder used by the image resource. If the builder is not ready, you may want to inspect that builder. More details in [Managing Builders](managing-builders.html).
 
 ```yaml
 status:
@@ -487,24 +487,24 @@ status:
 
 If further debugging is required, inspect the image resource's latest Build status discussed in [Viewing Build Details for an Image Resource](#build-status).
 
-## <a id='service-bindings'></a> Image Resource Service Bindings
+## <a id='service-bindings'></a> Image resource service bindings
 
 Tanzu Build Service supports application service bindings as described in the Kubernetes [Service Bindings specification](https://github.com/servicebinding/spec).
 
 The `kp` CLI does not currently support creating service bindings, you should use `kubectl`.
 
-### <a id='service-bindings'></a> Creating an Image Resource with Service Bindings
+### <a id='service-bindings'></a> Creating an image resource with service bindings
 
-kpack documentation can be found [here](https://github.com/pivotal/kpack/blob/main/docs/servicebindings.md).
+For more information, see [Service Bindings](https://github.com/pivotal/kpack/blob/main/docs/servicebindings.md) in the kpack documentation on GitHub.
 
 To create a service binding in your application image, you must create *either* of the following:
 
-* A [Provisioned Service](https://github.com/servicebinding/spec#provisioned-service)
-* A Kubernetes Secret that follows the guidelines provided in [Well-known Secret Entry](https://github.com/servicebinding/spec#provisioned-service)
+* A [Provisioned service](https://github.com/servicebinding/spec#provisioned-service)
+* A Kubernetes secret that follows the guidelines provided in [Well-known Secret Entry](https://github.com/servicebinding/spec#provisioned-service)
 
-<p class='note'><strong>Note:</strong> Check the desired buildpack documentation for details on the service bindings it supports. You can access these docs [here](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html).</p>
+<p class='note'><strong>Note:</strong> Check the desired buildpack documentation for details on the service bindings it supports. You can access these docs on [Language Family Buildpacks for VMware Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html).</p>
 
-The following is an example that can be used with `kubectl apply`. It creates a `production-db` service binding for a maven app.
+The following is an example you can use with `kubectl apply`. It creates a `production-db` service binding for a maven app.
 
 Example:
 
@@ -545,15 +545,15 @@ stringData:
 
 The procedures in this section describe how to view information and logs for image resource builds using the `kp` CLI.
 
-## <a id='list-builds'></a> Listing Builds
+## <a id='list-builds'></a> Listing builds
 
 Build Service stores the ten most recent successful builds and the ten most recent failed builds.
 
-To see a the list of builds for an image resource run:
+To see a the list of builds for an image resource, run:
 
 	kp build list <image-name> --namespace <namespace>
 
-If the `namespace` is not specified, it defaults to the kubernetes current-context namespace. And if the `image-name` is not specified, the builds for all the image resources in your namespace are listed.
+If the `namespace` is not specified, it defaults to the Kubernetes current-context namespace. If the `image-name` is not specified, the builds for all the image resources in your namespace are listed.
 
 The following is an example of the output for this command:
 
@@ -568,13 +568,13 @@ BUILD    STATUS    IMAGE                           REASON
 
 The following describes the fields in the example output:
 
-* `BUILD`: Describes the index of builds in the order that they were built.
+* `BUILD` describes the index of builds in the order they were built.
 
-* `STATUS`: Describes the status of a previous build image.
+* `STATUS` describes the status of a previous build image.
 
-* `IMAGE`: The full image reference for the app image produced by the build.
+* `IMAGE` is the full image reference for the app image produced by the build.
 
-* `REASON`: Describes why an image rebuild occurred. These reasons include:
+* `REASON` describes why an image rebuild occurred. These reasons include:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
     * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder.
@@ -583,9 +583,9 @@ The following describes the fields in the example output:
 
 <p class="note"><strong>Note:</strong> A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the <code>kp</code> CLI output shows the primary <code>Reason</code> and appends a <code>+</code> sign to the <code>Reason</code> field. The priority rank for the <code>Reason</code>, from highest to lowest, is <code>CONFIG</code>, <code>COMMIT</code>, <code>BUILDPACK</code>, <code>STACK</code>, and <code>TRIGGER</code>.</p>
 
-## <a id='build-status'></a> Viewing Build Details for an Image
+## <a id='build-status'></a> Viewing build details for an image
 
-To display retrieve a detailed Bill of Materials for a particular build:
+To display retrieve a detailed bill of materials for a particular build:
 
     kp build status <image> -b <build-number>
 
@@ -627,37 +627,37 @@ io.kotlin.etc       321
 
 The following describes the fields in the example output:
 
-* `Image`: The full image reference for the app image produced by the build.
+* `Image` is the full image reference for the app image produced by the build.
 
-* `Status`: Describes the status of a previous build image.
+* `Status` describes the status of a previous build image.
 
-* `Reason`: Describes why an image resource build occurred and the change diff. The reason could be one or more  of these:
+* `Reason` describes why an image resource build occurred and the change diff. The reason could be one or more  of these:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
     * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder.
     * `STACK`: Occurs when a new base OS image (called a `run image`) is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
-* `Started`: When a build started.
+* `Started` is when a build started.
 
-* `Finished`: When a build finished.
+* `Finished` is when a build finished.
 
-* `Pod Name`: The name of the Pod being used for the Build.
+* `Pod Name` is the name of the Pod being used for the Build.
 
-* `Builder`: The full image tag for the builder image used by the build.
+* `Builder` is the full image tag for the builder image used by the build.
 
-* `Run Image`: The full image tag for the run image used by the app.
+* `Run Image` is the full image tag for the run image used by the app.
 
-* `Source`: Describes where the source code used to build the image is coming from. Can be `Git`, `Blob`, or `Local Source`.
-* `Url`: The Git repository URL for `Git` source, the Blob file URL for `Blob` source. Unset for `Local Source`.
-* `Revision`: The Git commit sha of the source code used to create the build for `Git` source.
+* `Source` describes where the source code used to build the image is coming from. Can be `Git`, `Blob`, or `Local Source`.
+* `Url` is the Git repository URL for `Git` source, the Blob file URL for `Blob` source. Unset for `Local Source`.
+* `Revision` is the Git commit sha of the source code used to create the build for `Git` source.
 
-* `BUILDPACK ID`: A list of buildpack ids the build used.
-* `BUILDPACK VERSION`: A list of buildpack versions the build used.
+* `BUILDPACK ID` is a list of buildpack ids the build used.
+* `BUILDPACK VERSION` is a list of buildpack versions the build used.
 
-#### <a id='build-status-cb-pull'></a> Image Resource Status shows ImagePullBackOff
+#### <a id='build-status-cb-pull'></a> Image resource status shows ImagePullBackOff
 
-If the Build is currently waiting for a container, the Build status will show details in the output of `kp build status`.
+If the Build is currently waiting for a container, the Build status shows details in the output of `kp build status`.
 
 Here is an example output:
 
@@ -680,15 +680,15 @@ Revision:    ad123ad
 BUILDPACK ID        BUILDPACK VERSION
 ```
 
-If you are seeing this error and you are using a Cluster Builder, you may need to configure a Synced Secret. See [When to use Synchronized Secrets](synced-secrets.html#sync-secrets).
+If you see this error and you are using a Cluster Builder, you might need to configure a Synced Secret. See [When to use Synchronized Secrets](synced-secrets.html#sync-secrets).
 
-## <a id='build-logs'></a> Getting Build Logs
+## <a id='build-logs'></a> Getting build logs
 
-An image resource that a user creates will cause builds to be initiated for that image. Builds are where Cloud Native Buildpacks are run and apps get built into images.
+An image resource that a user creates causes builds to be initiated for that image. Builds are where Cloud Native Buildpacks are run and apps get built into images.
 
 Build logs are a good way to debug issues and to get information about how your app is being built.
 
-If you get logs of a build in progress, the logs will be tailed and will terminate when the build completes.
+If you get logs of a build in progress, the logs are tailed and terminate when the build completes.
 
 To get logs from a build run:
 
@@ -696,7 +696,7 @@ To get logs from a build run:
 
 Where:
 
-* `image-name` is the name of the image resource the build is associated with
+* `image-name` is the name of the image resource the build is associated with.
 * `build-name` (optional) is the index of the build from [listing builds](#list-builds). Defaults to latest build.
 
 The following is an example of the output of the command:
@@ -783,18 +783,19 @@ Adding cache layer 'tanzu-buildpacks/npm-install:npm-cache'
 ===> COMPLETION
 Build successful
 ```
-## <a id='build-status'></a> Viewing Bill of Materials
+## <a id='build-status'></a> Viewing bill of materials
 
 The kp cli allows you to view the bill of materials in an image built by a Build.
 
 ```
 kp build status <image-name> --bom
 ```
-For generating the bill of materials, the kp CLI will read metadata from the image (generated by the build) in the registry.
+
+To generate the bill of materials, the kp CLI reads metadata from the image (generated by the build) in the registry.
 
 <p class="note"><strong>Note:</strong> You must have credentials to access the image registry on your machine.</p>
 
-As an example:
+For example:
 
 ```
 $ kp build status --bom my-app-image | jq
@@ -831,39 +832,45 @@ $ kp build status --bom my-app-image | jq
 ]
 ```
 
-## <a id='offline-builds'></a> Offline Builds
+## <a id='offline-builds'></a> Offline builds
 
 Tanzu Build Service supports offline/air-gapped builds with Tanzu Buildpacks. Offline builds use pre-packaged dependencies and do not need to download from anywhere off-cluster to create application images.
 
-When using Tanzu Buildpacks the build will execute as an offline build. For details on how to configure buildpacks, see [Buildpack Configuration in Images](#buildpack-config-use-cases).
+When using Tanzu Buildpacks the build will execute as an offline build. For details on how to configure buildpacks, see [Buildpack configuration in images](#buildpack-config-use-cases).
 
 <p class='note'><strong>Note:</strong> Offline builds only ensure buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.</p>
 
-## <a id='cosign'></a> Image Signing with cosign
+## <a id='cosign'></a> Image signing with cosign
 
 Tanzu Build Service supports [cosign](https://github.com/sigstore/cosign) image signing.
 
 Images signed with cosign require using `kubectl` instead of `kp`.
 
-#### Cosign Signing Secret
+#### Cosign signing secret
+
 Images can be signed with cosign when a cosign formatted secret is added to the service account used to build the image.
 The secret can be added using the cosign CLI or manually.
 
 To create a cosign signing secret through the cosign CLI, when targetted to the Kubernetes cluster, use:
+
 `cosign generate-key-pair k8s://[NAMESPACE]/[NAME]`
 
 Alternatively, create the cosign secret and provide your own cosign key files manually to Kubernetes by running the following command:
+
 ```shell script
 % kubectl create secret generic <secret-name> --from-literal=cosign.password=<password> --from-file=</path/to/cosign.key>
 ```
-- `<secret-name>`: The name of the secret. Ensure that the secret is created in the same namespace as the eventual image resource.
-- `<password>`: The password provided to encrypt the private key. If not present, an empty password will be used.
-- `</path/to/cosign.key>`: The cosign private key file generated with `cosign generate-key-pair`.
+
+- `<secret-name>` is the name of the secret. Ensure that the secret is created in the same namespace as the eventual image resource.
+- `<password>` is the password provided to encrypt the private key. If not present, an empty password will be used.
+- `</path/to/cosign.key>` is the cosign private key file generated with `cosign generate-key-pair`.
 
 After adding the cosign secret, the secret must be added to the list of `secrets` attached to the service account resource that is building the image.
 
-#### Adding Cosign Annotations
-By default, the build number and build timestamp information will be added to the cosign signing annotations. Users can specify additional cosign annotations under the spec key.
+#### Adding cosign annotations
+
+By default, the build number and build timestamp information ise added to the cosign signing annotations. Users can specify additional cosign annotations under the spec key.
+
 ```yaml
 cosign:
   annotations:
@@ -871,12 +878,14 @@ cosign:
     value: "annotationValue"
 ```
 
-One way these annotations can be viewed is through verifying cosign signatures. The annotations will be under the `optional` key in the verified JSON response. For example, this can be done with:
+One way these annotations can be viewed is through verifying cosign signatures. The annotations are under the `optional` key in the verified JSON response. For example, you can do this by running:
+
 ```bash
 % cosign verify -key /path/to/cosign.pub registry.example.com/project/image@sha256:<DIGEST>
 ```
 
 Which provides a JSON response similar to:
+
 ```json
 {
   "critical": {
@@ -893,8 +902,10 @@ Which provides a JSON response similar to:
 }
 ```
 
-#### Push Cosign Signature to a Different Location
-Cosign signatures can be pushed to a different registry from where the image is located. To enable this, add the corresponding annotation to the cosign secret resource.
+#### Push cosign signature to a different location
+
+Cosign signatures can be pushed to a different registry from where the image is located. To enable this, add the corresponding annotation to the cosign secret resource:
+
 ```
 metadata:
   name: ...
@@ -905,12 +916,15 @@ data:
   cosign.key: ...
   cosign.password: ...
 ```
-This will be equivalent to setting `COSIGN_REPOSITORY` as specified in cosign [Specifying Registry](https://github.com/sigstore/cosign#specifying-registry)
 
-The same service account that has that cosign secret attached, and would be used for signing and building the image, would require that the registry credentials for this other repository be placed under the listed `secrets` and is not required to be listed in `imagePullSecrets`. It should be noted that if you wish to push the signatures to the same registry but a different path from the image, the credential used must have access to both paths. You cannot use two separate credentials for the same registry with different paths.
+This is equivalent to setting `COSIGN_REPOSITORY` as specified in cosign [Specifying Registry](https://github.com/sigstore/cosign#specifying-registry) on GitHub.
 
-#### Cosign Legacy Docker Media Types
-To sign images in a registry that does not fully support OCI media types, legacy equivalents can be used by adding the corresponding annotation to the cosign secret resource:
+The same service account that has that cosign secret attached, and is used for signing and building the image, requires that the registry credentials for this other repository be placed under the listed `secrets`. It is not required to be listed in `imagePullSecrets`. To push the signatures to the same registry but to a different path from the image, the credential used must have access to both paths. You cannot use two separate credentials for the same registry with different paths.
+
+#### Cosign legacy Docker media types
+
+To sign images in a registry that does not fully support OCI media types, you can use legacy equivalents by adding the corresponding annotation to the cosign secret resource:
+
 ```
 metadata:
   name: ...
@@ -921,4 +935,5 @@ data:
   cosign.key: ...
   cosign.password: ...
 ```
-This will be equivalent to setting `COSIGN_DOCKER_MEDIA_TYPES=1` as specified in the cosign [registry-support](https://github.com/sigstore/cosign#registry-support)
+
+This is equivalent to setting `COSIGN_DOCKER_MEDIA_TYPES=1` as specified in the cosign [registry-support](https://github.com/sigstore/cosign#registry-support).
