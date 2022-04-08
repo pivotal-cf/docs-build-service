@@ -3,39 +3,39 @@ title: RBAC in Tanzu Build Service
 owner: Build Service Team
 ---
 
-Given that Tanzu Build Service supports functionality most customers would likely want to restrict to only certain users, we encourage utilization of RBAC as a best practice if Tanzu Build Service is to be broadly deployed for usage by many users.
+Given that Tanzu Build Service supports functionality most customers would likely want to restrict to only certain users, we encourage utilization of role-based access control (RBAC) as a best practice if Tanzu Build Service is to be broadly deployed to many users.
 
 
 ## <a id='projects-operator'></a> RBAC using Projects Operator
 
 [Projects Operator](https://github.com/vmware-tanzu/projects-operator) can be installed on the cluster to simplify RBAC management.
 
-Projects Operator extends kubernetes with a `Project` CRD and corresponding controller. Projects are intended to provide isolation of kubernetes resources on a single kubernetes cluster. A `Project` is essentially a kubernetes namespace along with a corresponding set of RBAC rules.
+Projects Operator extends Kubernetes with a `Project` CRD and corresponding controller. Projects are intended to provide isolation of Kubernetes resources on a single Kubernetes cluster. A `Project` is essentially a Kubernetes namespace along with a corresponding set of RBAC rules.
 
 As part of the Projects Operator [installation](https://github.com/vmware-tanzu/projects-operator#install), you can specify the ClusterRole to apply for each `Project` using the `CLUSTER_ROLE_REF` environment variable.
-The TBS installation comes with a ClusterRole called [build-service-user-role](#user-role) which can be used for this purpose.
+The Tanzu Build Service installation comes with a ClusterRole called [build-service-user-role](#user-role), which can be used for this purpose.
 
 
-## <a id='rbac'></a> RBAC Support in Tanzu Build Service
+## <a id='rbac'></a> RBAC support in Tanzu Build Service
 
 Tanzu Build Service is installed with 2 Kubernetes [ClusterRoles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) that can be used for RBAC for Build Service users and admins:
 
 * `build-service-user-role`
 * `build-service-admin-role`
 
-### <a id='user-role'></a> Build Service User Role
+### <a id='user-role'></a> Build Service user role
 
-This should be used for users that will create Images and Builds.
+This should be used for users who create images and builds.
 
-To view the configuration for this role:
+To view the configuration for this role, run:
 
 ```
 kubectl get clusterrole build-service-user-role -o yaml
 ```
 
-To use this ClusterRole you should create a [RoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding) with an existing user.
+To use this ClusterRole, create a [RoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding) with an existing user.
 
-Example:
+For example:
 
 ```yaml
 ---
@@ -53,19 +53,19 @@ subjects:
   name: my-user
 ```
 
-### <a id='admin-role'></a> Build Service Admin Role
+### <a id='admin-role'></a> Build Service admin role
 
-This should be used for admin users that will operate Tanzu Build Service.
+Use this role for admin users who operate Tanzu Build Service.
 
-To view the configuration for this role:
+To view the configuration for this role, run:
 
 ```
 kubectl get clusterrole build-service-admin-role -o yaml
 ```
 
-To use this ClusterRole you should create a [RoleBinding or ClusterRoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding) with an existing user.
+To use this ClusterRole, create a [RoleBinding or ClusterRoleBinding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding) with an existing user.
 
-Example:
+For example:
 
 ```yaml
 ---
@@ -80,3 +80,4 @@ roleRef:
 subjects:
 - kind: User
   name: my-cluster-wide-admin-user
+```
