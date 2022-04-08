@@ -1,174 +1,100 @@
 ---
-title: Release Notes
+title: TBS Release Notes
 owner: Build Service Team
 ---
 
-## <a id="1-0-0"></a> v1.0.0
+## <a id="1-4-3"></a> v1.4.3
 
-**Release Date: Month XX, 2020**
+**Release Date: March, 04, 2022**
 
-### Features
+### New Features
 
-New features and changes in this release:
-
-* 
-
-### Product Snapshot
-
-Tanzu Build Service 1.0.0 ships with the following components:
-
-* [kpack 0.X.X](https://github.com/pivotal/kpack/releases/tag/v0.X.X)
-* [CNB lifecycle v0.X.X](https://github.com/buildpacks/lifecycle/releases/tag/v0.X.X)
-* [kp cli v0.X.X](https://network.pivotal.io/products/build-service/#/releases/XXXXXX)
-
-Tanzu Build Service 1.0.0 ships with the following buildpacks:
-
-[//]: # (Copied from 0.2.0, still true?)
-* Tanzu Java `tanzu-buildpacks/java`
-* Paketo NodeJS `paketo-buildpacks/nodejs`
-* Paketo .NET Core `paketo-buildpacks/dotnet-core`
-* Paketo Golang `paketo-buildpacks/go`
-* Paketo PHP `paketo-buildpacks/php`
-* Paketo HTTPD `paketo-buildpacks/httpd`
-* Paketo NGINX `paketo-buildpacks/nginx`
-* Paketo Procfile `paketo-buildpacks/procfile`
-
-Tanzu Build Service 1.0.0 ships with the following stacks:
-
-[//]: # (Copied from 0.2.0, still true?)
-* base `io.buildpacks.stacks.bionic`
-* full/default `org.cloudfoundry.stacks.cflinuxfs3`
-* tiny `io.paketo.stacks.tiny`
-
-Updates to the buildpacks and stacks are provided in the
-[VMware Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies).
-
-### Product Dependencies
-
-[//]: # (Copied from 0.2.0, still true?)
-Build Service can be installed on any Kubernetes cluster (v1.15 or later). 
+- Bump kpack to use lifecycle 0.13.3 which adds support for bom entries in the `io.buildpacks.build.metadata` image label in Buildpack API 0.7 in addition to the existing sbom layer formats which establishes a migration path.
+- When dependency updates are paused, the pinned descriptor version is [100.0.267](https://network.pivotal.io/products/tbs-dependencies#/releases/1053790)
 
 ### Breaking Changes
 
-* 
-* 
+None
 
-### Security Fixes
+### Bug Fixes
 
-This release includes the following security fixes:
-
-* 
-
-### Resolved Issues
-
-This release has the following fix:
-
-* 
-[//]: # (fixes Known Issue in v1.2.0)
-
-### Known Issues
-
-This release has the following issues:
-
-* Issue 1
-
-* Issue 2
-
-
-##<a id="0-2-0"></a> v0.2.0
-
-**Release Date: June 26, 2020**
-
-**0.2.0** represents a Beta release of the Tanzu Build Service.
-
-The `pb` cli has been deprecated in favor of the `kp` cli for interacting with Tanzu Build Service. The `kp` cli will be shipped with Tanzu Build Service in place of `pb`. For more details see [Using Tanzu Build Service](using.html).
-
-Notable improvements in the `kp` cli:
-
-* The `kp` cli is more interoperable with `kubectl`.
-	* `kp` output is formatted to look consistent with `kubectl` output.
-	* Unlike `pb`, `kp` does not utilize a alternative YAML format used to apply kpack resources. Instead, `kp` provides imperative commands to interact with Tanzu Build Service.
-	* `pb` required users to provide image tags when managing images, `kp` uses image resource names for easier control.
-	* All `kp` commands are configurable to work on a kubernetes namespace with a `--namespace` flag.
-* The ability to update images with `kp patch`. This can be naturally used in a CI/CD context.
-* The `--wait` flag for `kp image create` and `kp image patch` which will tail build logs and wait for corresponding builds to complete.
-* The ability to manage multiple stores and stacks.
-* Improved output for `kp store status` to view available buildpacks.
-
-Tanzu Build Service 0.2.0 now ships with four stacks. Output from `kp stack list`:
-
-	NAME                READY    ID
-    base                True     io.buildpacks.stacks.bionic
-    default             True     org.cloudfoundry.stacks.cflinuxfs3
-    full                True     org.cloudfoundry.stacks.cflinuxfs3
-    tiny                True     io.paketo.stacks.tiny
-
-The stacks are used in Custom Cluster Builders. The `default` stack is installed and will be used when a stack is not selected for a builder, but the stack image is the same as the `full` stack.
-
-For more details on stacks, see [Managing Stacks](managing-stacks.html).
-
-Same with the new stacks, Tanzu Build Service 0.2.0 now ships with four Custom Cluster Builders. Output from `kp custom-cluster-builder list`:
-
-	NAME                  READY    STACK                                   IMAGE
-    base                  true     io.buildpacks.stacks.bionic             my-registry.io/ccb:base@sha256:abc123
-    default               true     org.cloudfoundry.stacks.cflinuxfs3      my-registry.io/ccb:default@sha256:abc123
-    full                  true     org.cloudfoundry.stacks.cflinuxfs3      my-registry.io/ccb:full@sha256:abc123
-    tiny                  true     io.paketo.stacks.tiny                   my-registry.io/ccb:tiny@sha256:abc123
-
-Builders are used when creating images and can apply to different app use cases. The `default` Custom Cluster Builder is used when a builder is not selected for an image but is installed with the same buildpacks and stack as the `full` builder.
-
-For more details on builders, see [Managing Builders](managing-builders.html).
-
-Buildpack IDs have changed:
-All of the previous `org.cloudfoundry.*` ids are now `paketo-buildpacks/*` ids.
-All of the previous `io.pivotal.*` ids are now `tanzu-buildpacks/*` ids.
-
-Other improvements:
-
-* Projects are now completely optional. Build Service Cluster Builder secrets will be provided to any namespace that creates a Build Service image.
-* Images can configure Cloud Native Buildpack Service Bindings.
+- Full windows functionality has been restored
+- The [restricted pod security standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/) is now applied to all build pods which could previously violate security policies
+- When deploying with kapp controller, the deployment will no longer reconcile diffs indefinitely
+- Certs are now correctly verified by the TanzuNetDependencyUpdater when using a private registry
 
 ### Product Snapshot
 
-Tanzu Build Service 0.2.0 ships with the following components:
+Tanzu Build Service 1.4.3 ships with the following components:
 
-* [kpack 0.0.9](https://github.com/pivotal/kpack/releases/tag/v0.0.9)
-* [CNB lifecycle v0.8.0](https://github.com/buildpacks/lifecycle/releases/tag/v0.8.0)
-* [kp cli v0.2.0](https://network.pivotal.io/products/build-service/#/releases/667179)
+* [kpack 0.5.1](https://github.com/pivotal/kpack/releases/tag/v0.5.1)
+* [kpack cli v0.4.2](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.4.2)
+* [CNB lifecycle v0.13.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.13.3)
 
-Tanzu Build Service 0.2.0 ships with the following buildpacks:
+Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
-* Tanzu Java `tanzu-buildpacks/java`
-* Paketo NodeJS `paketo-buildpacks/nodejs`
-* Paketo .NET Core `paketo-buildpacks/dotnet-core`
-* Paketo Golang `paketo-buildpacks/go`
-* Paketo PHP `paketo-buildpacks/php`
-* Paketo HTTPD `paketo-buildpacks/httpd`
-* Paketo NGINX `paketo-buildpacks/nginx`
-* Paketo Procfile `paketo-buildpacks/procfile`
+### Security Scanning
 
-Tanzu Build Service 0.2.0 ships with the following stacks:
+This section provides context for the CVEs that may show up in security scans of TBS
 
-* base `io.buildpacks.stacks.bionic`
-* full/default `org.cloudfoundry.stacks.cflinuxfs3`
-* tiny `io.paketo.stacks.tiny`
+- github.com/containerd/containerd | [CVE-2021-43816](https://avd.aquasec.com/nvd/2021/cve-2021-43816/) | CRITICAL
+    - Containerd is not used as a container runtime in TBS code and therefore never interacts with volume mounts at all
 
-Updates to the buildpacks and stacks are provided in the [VMware Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies).
+- org.apache.logging.log4j:log4j-core | [CVE-2021-44228](https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2021-44228) | CRITICAL
+- org.apache.logging.log4j:log4j-core | [CVE-2021-45105](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45105) | HIGH
+    - These CVEs have been patched, however show up in some scans of TBS dependencies such as builders or the Java & Node.js buildpacks. Scanners report these up because some log4j files provided by third-party vendors have been patched but have maintained the same file name which the scanners assume are vulnerable.
 
 ### Product Dependencies
 
-Build Service can be installed on any Kubernetes cluster (v1.15 or later).
-
-### Breaking Changes
-
-* Tanzu Build Service now requires Kubernetes api v1.15 or later
-* `pb` cli is deprecated, `kp` cli should be used
-* All buildpack ids were updated to Paketo or Tanzu Buildpack ids
-* Projects resource api group changed from projects.pivotal.io to projects.vmware.com
-
-### Known Issues
-
+Build Service can be installed on any Kubernetes cluster (v1.19 or later).
 
 ### Upgrade Path
 
-No supported upgrade paths.
+v1.3.* can be upgraded to v1.4.*. Please follow the [install](installing.html) process to upgrade.
+
+
+## <a id="1-4-2"></a> v1.4.2
+
+**Release Date: January, 11, 2022**
+
+This release includes a few notable new features:
+
+- TBS can now import a "full" or "lite" descriptor which will use different sets of buildpacks for different use cases. See [intallation](installing.html) for more details.
+- The mechanism to sync secrets to build namespaces has changed. Users should now leverage the Carvel secretgen-controller for copying secrets to build namespaces. See the [Secret Synchronization page](synced-secrets.html) for more defails.
+
+### Breaking Changes
+
+- Installation steps have changed slightly. Some flags have changed and you must specify a descriptor name as part of installation. See [intallation](installing.html) for more details.
+- Secrets copied to Build namespaces using the old secret-syncing mechanism will be cleaned up. Only copies of secrets will be deleted, original secrets with the `com.vmware.tanzu.buildservice.sync: "true"` label will not be deleted.
+
+
+### Bug Fixes
+
+- Fix http(s) proxy support with git using HTTP_PROXY, HTTPS_PROXY, and NO_PROXY env vars
+
+### Product Snapshot
+
+Tanzu Build Service 1.4.2 ships with the following components:
+
+* [kpack 0.5.0](https://github.com/pivotal/kpack/releases/tag/v0.5.0)
+* [kpack cli v0.4.2](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.4.2)
+* [CNB lifecycle v0.13.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.13.2)
+
+Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.pivotal.io/tanzu-buildpacks).
+
+### Product Dependencies
+
+Build Service can be installed on any Kubernetes cluster (v1.19 or later).
+
+### Upgrade Path
+
+v1.3.* can be upgraded to v1.4.*. Please follow the [install](installing.html) process to upgrade.
+
+
+## <a id="1-4-1"></a> v1.4.1
+
+TBS version 1.4.1 has been skipped, please use 1.4.2 or later.
+
+## <a id="1-4-0"></a> v1.4.0
+
+TBS version 1.4.0 has been skipped, please use 1.4.2 or later.

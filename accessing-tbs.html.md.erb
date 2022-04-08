@@ -3,16 +3,47 @@ title: Accessing Tanzu Build Service
 owner: Build Service Team
 ---
 
-After you configure and install Build Service, you can use the `kp` CLI to interact with your Build Service installation.
-
-For more information, see [Installing Tanzu Build Service](installing.html).
-
-The `kp` cli uses the local `KUBECONFIG` utilized by `kubectl`. All operations will be performed on the current context's namepace.
-
 To use your Build Service installation, gain kubeconfig access to the Kubernetes Cluster that has the Build Service installed.
+For example, if you are using TKGI (formerly PKS):
 
-For example, if you are using PKS:
+```
+tkgi login -a <tkg-api-url> -u <username> -p <password>
+tkgi get-credentials <clustername> -a <tkg-api-url> -u <username> -p <password>
+```
 
-    pks login -a <PKS URL> -u <username> -p <password>
+You can use the `kp` CLI, downloaded as part of the [installation](installing.html) to interact with Build Service.
+The `kp` CLI uses the local `KUBECONFIG` utilized by `kubectl`. All operations will be performed on kubernetes current-context namespace.
 
-    pks get-credentials <cluster> -a <PKS URL> -u <username> -p <password>
+The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+
+```
+$ kp
+kp controls the kpack installation on Kubernetes.
+
+kpack extends Kubernetes and utilizes unprivileged kubernetes primitives to provide
+builds of OCI images as a platform implementation of Cloud Native Buildpacks (CNB).
+Learn more about kpack @ https://github.com/pivotal/kpack
+
+Usage:
+  kp [command]
+
+Available Commands:
+  build          Build Commands
+  builder        Builder Commands
+  clusterbuilder Cluster Builder Commands
+  clusterstack   Cluster Stack Commands
+  clusterstore   Cluster Store Commands
+  completion     Generate completion script
+  help           Help about any command
+  image          Image commands
+  import         Import dependencies for stores, stacks, and cluster builders
+  secret         Secret Commands
+  version        Display kp version
+
+Flags:
+  -h, --help   help for kp
+
+Use "kp [command] --help" for more information about a command.
+```
+
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.</p>

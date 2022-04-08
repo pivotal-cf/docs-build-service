@@ -3,7 +3,7 @@ title: Frequently Asked Questions
 owner: Build Service Team
 ---
 
-## How do Cloud Native Buildpacks (CNBs), kpack, and Tanzu Build Service overlap and differ?
+## <a id='faq-1'></a> How do Cloud Native Buildpacks (CNBs), kpack, and Tanzu Build Service overlap and differ?
 
 **CNBs** are build tools that adhere to the <a href="https://github.com/buildpacks/spec">CNB v3 Specification</a> and transform source code into an OCI compliant runnable image. The v3 specification, lifecycle, and local CLI (`pack`) are governed by the open source <a href="https://buildpacks.io">Cloud Native Buildpacks project.</a>
 
@@ -14,44 +14,40 @@ owner: Build Service Team
 
 ---
 
-## Why do I see two images in the image registry after a successful build?
+## <a id='faq-2'></a> Why do I see two images in the image registry after a successful build?
 
 By default Build Service will tag each built image twice. The first tag will be the configured image tag. The second tag will be a unique tag with the build number and build timestamp. The second tag is added to ensure that previous images are not deleted on registries that garbage collect untagged images.
 
 ---
 
-## How does TBS work in air gapped environments?
+## <a id='faq-3'></a> How does TBS work in air gapped environments?
 
-Build Service is shipped using a duffle bundle, which is composed of the kubernetes manifests and images required to successfully install Build Service. The `relocate` command ensure all the images can be relocated to airgapped registries, and by providing the credentials to the air-gapped registry when executing the `install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
+Build Service is installed and deployed using [Carvel](https://carvel.dev/) tools. Therefore, the `imgpkg copy` command can create a `.tar` file  composed of the kubernetes config and images required to successfully install Build Service.
+The `imgpkg copy` command also ensures that all the images can be relocated to air-gapped registries, and by providing the credentials to the air-gapped registry when
+executing the `kapp install` command, Build Service can then use that secret to pull images from said registry, hence working in air-gapped environments.
 
----
+Currently, `kbld package` and `kbld unpackage` must be used to import dependencies to an air-gapped environment.
 
-## Which buildpacks does TBS support?
+For more details on air-gapped installation, see [Installation to Air-Gapped Environment](installing.html#offline-installation).
 
-Tanzu Build Service ships with the following buildpacks:
-
-| Name | ID | Link |
-|---|---|---|
-| Tanzu Java | `tanzu-buildpacks/java` | N/A |
-| Paketo NodeJS | `paketo-buildpacks/nodejs` | https://github.com/paketo-buildpacks/nodejs |
-| Paketo .NET Core | `paketo-buildpacks/dotnet-core` | https://github.com/paketo-buildpacks/dotnet-core |
-| Paketo Golang | `paketo-buildpacks/go` | https://github.com/paketo-buildpacks/go |
-| Paketo PHP | `paketo-buildpacks/php` | https://github.com/paketo-buildpacks/php |
-| Paketo HTTPD | `paketo-buildpacks/httpd` | https://github.com/paketo-buildpacks/httpd |
-| Paketo NGINX | `paketo-buildpacks/nginx` | https://github.com/paketo-buildpacks/nginx |
-| Paketo Procfile | `paketo-buildpacks/procfile` | https://github.com/paketo-buildpacks/procfile |
-
-Updated Buildpacks and new buildpacks will be available on [Tanzu Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) release page.
+For more details on air-gapped builds, see [Offline Builds](managing-images.html#offline-builds).
 
 ---
 
-## Why do I get an X509 error from Build Service when trying to create an image in my registry?
+## <a id='faq-4'></a> Is there documentation on supported Tanzu Buildpacks?
 
-When interacting with a registry or a git repo that has been deployed using a self signed certificate, Build Service needs to be provided the certificate during install-time in the `credentials.yaml` file. Unfortunately, you will either need to target a registry that does not have self signed certificates and re-install Build Service to work with this registry.
+Yes, documentation is available on [Tanzu Buildpacks Documenation](https://docs.pivotal.io/tanzu-buildpacks/).
 
 ---
 
-## How do I configure a secret to publish images to Dockerhub?
+## <a id='faq-5'></a> Why do I get an X509 error from Build Service when trying to create an image in my registry?
+
+When interacting with a registry or a git repo that has been deployed using a self signed certificate, Build Service must be provided with the certificate during install time.
+Unfortunately, you will either need to target a registry that does not have self signed certificates or re-install Build Service to work with this registry.
+
+---
+
+## <a id='faq-6'></a> How do I configure a secret to publish images to Dockerhub?
 
 1. Create a dockerhub secret with the `kp` cli:
 
@@ -64,7 +60,7 @@ When interacting with a registry or a git repo that has been deployed using a se
 
 ---
 
-## How can I configure an image to pull from a private GitHub repository?
+## <a id='faq-7'></a> How can I configure an image resource to pull from a private GitHub repository?
 
 1. Create a github secret with the `kp` cli:
 
@@ -87,20 +83,18 @@ When interacting with a registry or a git repo that has been deployed using a se
 
 ---
 
-## Why do some builds fail with `Error: could not read run image: *`?
+## <a id='faq-8'></a> Why do some builds fail with "Error: could not read run image: *"?
 
 The run image must be publicly readable or readable with the registry credentials configured in a project/namespace.
 
 To see where the build service run image is located run: `kp stack status STACK-NAME`.
 
-To update the the location of the run image:
-
-1. Use `kubectl` to update the `buildservice.pivotal.io/defaultRepository` annotation on the `build-service-stack` Stack resource.
-1. Re-run [`kp stack update`](managing-stacks.html) with the most recent build image and run image from the [build-service-dependencies](https://network.pivotal.io/products/tbs-dependencies/) page.
+If you cannot make the run image publicly readable, you must `kp` to create a registry secret within the namespace where your builds reside.
+This can be accomplished using `kp secret create`.
 
 ---
 
-## Why don't my image builds appear in my Harbor v1.X.X registry?
+## <a id='faq-9'></a> Why don't my image builds appear in my Harbor v1.X.X registry?
 
 There is a known bug in Harbor that, at times, prevents the UI from showing images.
 If you are unable to see a recently built image in the Harbor UI, try pulling
@@ -108,15 +102,16 @@ it using the `docker` CLI to verify that it exists.
 
 ---
 
-## How do I fix "unsupported status code 500" when creating a builder on my Harbor v2.X.X registry?
+## <a id='faq-10'></a> How do I fix "unsupported status code 500" when creating a builder on my Harbor v2.X.X registry?
 
 Some builders are very large and can overwhelm Harbor's default database connection.
-You can remediate this issue by increasing the `database.maxOpenConns` setting in the 
+You can remediate this issue by increasing the `database.maxOpenConns` setting in the
 helm `values.yaml` file. Increase this value from 100 to 300.
 The exact setting can be found [here](https://github.com/goharbor/harbor-helm/blob/ab57e34774ad57fe6506ad5161b2d7b207e1dfd1/values.yaml#L689).
 
 ---
-## How do I configure credentials for using gcr as my installation registry?
+
+## <a id='faq-11'></a> How do I configure credentials for using gcr as my installation registry?
 
 You can use Google Container Registry for your Tanzu Build Service installation registry.
 
@@ -124,12 +119,228 @@ If you have trouble configuring the registry credentials for gcr when following 
 
 	registry_name="_json_key"
 	registry_password="$(cat /path/to/gcp/service/account/key.json)"
-	duffle install BUILD-SERVICE-INSTALLATION-NAME -c /tmp/credentials.yml  \
-        --set kubernetes_env=CLUSTER-NAME \
-        --set docker_registry=DOCKER-REGISTRY \
-        --set docker_repository=DOCKER-REPOSITORY \
-        --set registry_username="$registry_name" \
-        --set registry_password="$registry_password" \
-        --set custom_builder_image="BUILDER-IMAGE-TAG" \
-        -f /tmp/build-service-${version}.tgz \
-        -m /tmp/relocated.json
+	ytt -f /tmp/bundle/config/ \
+		-v docker_repository='<IMAGE-REPOSITORY>' \
+		-v docker_username="$registry_name" \
+		-v docker_password="$registry_password" \
+		| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+		| kapp deploy -a tanzu-build-service -f- -y
+
+
+---
+
+## <a id='faq-12'></a> Can I configure a proxy for my Tanzu Build Service?
+
+TBS can be configured with a proxy at [installation](installing.html) time by specifying additional parameters:
+
+* `http_proxy`: The HTTP proxy to use for network traffic.
+* `https_proxy`: The HTTPS proxy to use for network traffic.
+* `no_proxy`: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
+
+<p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the kubernetes API server will also flow through the proxy server.
+This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.</p>
+
+```
+ytt -f /tmp/bundle/config/ \
+	-v docker_repository='<IMAGE-REPOSITORY>' \
+	-v docker_username='<REGISTRY-USERNAME>' \
+	-v docker_password='<REGISTRY-PASSWORD>' \
+	-v http_proxy='<HTTP-PROXY-URL>' \
+	-v https_proxy='<HTTPS-PROXY-URL>' \
+	-v no_proxy='<KUBERNETES-API-SERVER-URL>' \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
+---
+
+## <a id='faq-13'></a> How do I build my app locally using kpack builders?
+
+You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code. By using your kpack builder locally, you can guarantee that the buildpacks, stacks, and lifecycle used to build the image config will also be used by the pack CLI, resulting in a container image that is the exact same, whether it is built by `kpack` or `pack`.
+
+<p class="note"><strong>Note:</strong> Make sure that you `docker login` to the image repository containing your kpack builder.</p>
+
+```
+pack build my-app --path ~/workspace/my-app --builder gcr.io/my-project/my-image:latest --trust-builder
+```
+
+---
+
+## <a id='faq-14'></a> What can I do with the kp --dry-run and --output flags?
+
+From kp CLI v1.0.3+ the `--dry-run` and `--output` flags are made available to kp commands that create or update any kpack Kubernetes resources.
+
+The `--dry-run` flag lets you perform a quick validation with no side-effects as no objects are sent to the server.
+And the `--output` flag lets you view the resource in yaml or json format.
+
+The `--dry-run-with-image-upload` flag is similar to the `--dry-run` flag in that no kpack Kubernetes resources are updated.
+This flag is provided as a convenience for kp commands that can output Kubernetes resource with generated container image references.
+
+For example, consider the command below
+
+```
+$ kp clusterstack create test-stack \
+ --dry-run \
+ --output yaml \
+ --build-image gcr.io/paketo-buildpacks/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d \
+ --run-image gcr.io/paketo-buildpacks/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f
+
+Creating ClusterStack... (dry run)
+Uploading to 'gcr.io/my-project/my-repo'... (dry run)
+	Skipping 'gcr.io/my-project/my-repo/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d'
+	Skipping 'gcr.io/my-project/my-repo/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f'
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  creationTimestamp: null
+  name: test-stack
+spec:
+  buildImage:
+    image: gcr.io/my-project/my-repo/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d
+  id: io.buildpacks.stacks.bionic
+  runImage:
+    image: gcr.io/my-project/my-repo/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f
+status:
+  buildImage: {}
+  runImage: {}
+```
+
+The resource yaml output above has the relocated build and run image urls. However, the images were never uploaded.
+
+If you now apply the resource output using `kubectl apply -f` as shown below, then the resource will be created but will be faulty since the referenced images do not exist.
+
+```
+$ kp clusterstack create test-stack \
+ --dry-run \
+ --output yaml \
+ --build-image gcr.io/paketo-buildpacks/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d \
+ --run-image gcr.io/paketo-buildpacks/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f \
+ | kubectl apply -f -
+Creating ClusterStack... (dry run)
+Uploading to 'gcr.io/my-project/my-repo'... (dry run)
+	Skipping 'gcr.io/my-project/my-repo/build@sha256:f550ab24b72586cb26215817b874b9e9ec2ca615ede03206833286934779ab5d'
+	Skipping 'gcr.io/my-project/my-repo/run@sha256:21c1fb65033ae5a765a1fb44bfefdea37024ceac86ac6098202b891d27b8671f'
+clusterstack.kpack.io/test-stack created
+```
+
+Running the same command above with the `--dry-run-with-image-upload` flag (instead of `--dry-run`) ensures the created resource refers to images exist.
+
+## <a id='faq-14'></a> Does TBS support Azure Devops for git repositories
+
+Yes! Azure DevOps Git is fully supported as of TBS 1.2
+
+## <a id='faq-15'></a> Why do I get a "repository does not exist" error when I use ECR Registry?
+
+ECR is supported but requires manually creating each repository that TBS will use. With other registries, the repositories will be created automatically.
+
+## <a id='faq-16'></a> How do I troubleshoot a failed build?
+
+Like many Kubernetes native products, operating TBS involves orchestrating resources that depend on each other to function.  If a resource is in a "not ready" state it is likely that there is a problem with one of the resources it depends on.
+
+If you are encountering a not ready `Image`, check and see which builder it uses and then check the status of that builder for additional information that could help you troubleshoot the problem.
+```
+$ kp image status <image-name>
+
+$ kp clusterbuilder status <clusterbuilder-name>
+```
+
+Similarly, if a builder resource is in a "not ready" state, it is possible that there is a problem with the `clusterstack` or `clusterstore` resources it is referencing.
+
+```
+$ kp clusterstack status <clusterstack-name> --verbose
+
+$ kp clusterstore status <clusterstore-name> --verbose
+```
+
+All Build Service concepts are also Kubernetes resources.  Therefore, customers can interact with them using the `kubectl` CLI to see all the information that can be provided by the Kubernetes API.
+
+```
+$ kubectl describe image <image-name>
+
+$ kubectl describe clusterbuilder <clusterbuilder-name>
+```
+
+## <a id='faq-17'></a> How do I troubleshoot an UNAUTHENTICATED error?
+
+**During `imgpkg copy`**
+
+1. Ensure you are logged in locally to both registries with:
+
+```
+docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
+docker logout <tbs-registry> && docker login <tbs-registry>
+```
+
+2. On linux, if you have installed `docker` with `snap` you will need to copy `/root/snap/docker/471/.docker/config.json` to `~/.docker/config.json` which is where `imgpkg` is looking for the docker credentials
+3. Ensure your credentials have write access to your registry with `docker push <registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
+
+**During `kp import`**
+
+1. Ensure you are logged in locally to both registries with:
+
+```
+docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
+docker logout <tbs-registry> && docker login <tbs-registry>
+```
+
+2. Ensure the credentials used to install TBS have write access to your registry as they sometimes differ from local credentials
+  - Use `docker login <tbs-registry>` using the credentials used to install TBS with `ytt/kapp`
+  - Try to `docker push <tbs-registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
+
+## <a id='faq-18'></a> Why does TBS leave behind pods after builds on my Cluster?
+
+All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This is not currently supported in the `kp` CLI, but users can apply yaml configuration using `kubectl` to update these fields.  Follow [this link](https://github.com/pivotal/kpack/blob/main/docs/image.md) for documentation.
+
+## <a id='faq-19'></a> How do I check what version of TBS I am using?
+**After successfully installing tanzu-build-service**
+In terminal run the command `kubectl describe configMap build-service-version -n build-service`
+
+Under the `data` field you will see the version of TBS you are currently using.
+EX:
+```
+    data:
+      version: 1.3.0
+```
+<p class="note"><strong>Note:</strong> This will only work for TBS versions 1.2 and above</p>
+
+## <a id='faq-20'></a> How does TBS use windows-based images?
+
+When running `imgpkg copy`, the command will output the following message:
+
+```
+Skipped layer due to it being non-distributable. If you would like to include non-distributable layers, use the --include-non-distributable flag
+```
+
+This is because TBS ships with windows images to support windows builds. Windows images contain "foreign layers" that are references to proprietary windows layers that cannot be distributed without proper Microsoft licensing.
+
+By default, `imgpkg` will not relocate the proprietary windows layers to your registry. TBS also will not pull any windows layers to the cluster unless windows builds are being run so if you do not need windows this message can be ignored.
+
+## <a id='faq-21'></a> What is the relationship between a kpack *image resource* and an *OCI image*?
+
+"Image resource" describes a kubernetes custom resource that produces OCI images by way of build resources. This resource will continue producing new builds that, when successful, output container images to the registry as configured by the image resource.
+
+## <a id='faq-22'></a> Pinning the Tanzu Net Updater
+
+When you configure the Tanzu Network Auto Updater during installation, dependencies are pulled in from network.tanzu.vmware.com as they are released to keep the all app OCI images up-to-date and patched.
+
+Using the steps from the installation docs will result in all dependencies to stay up-to-date with the latest buildpacks.
+
+To pin to a TBS "descriptor" version, find the desired version of the descriptor from the [TBS Dependencies Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) page. Run the following command to re-install TBS:
+
+```
+ytt -f /tmp/bundle/config/ \
+	-v kp_default_repository='<IMAGE-REPOSITORY>' \
+	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
+	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+	--data-value-yaml pull_from_kp_default_repo=true \
+	-v tanzunet_username='<TANZUNET-USERNAME>' \
+	-v tanzunet_password='<TANZUNET-PASSWORD>' \
+	-v descriptor_name='<DESCRIPTOR-NAME>' \
+	-v descriptor_version='<DESCRIPTOR-VERSION>' \
+	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+	| kapp deploy -a tanzu-build-service -f- -y
+```
+
+Where:
+
+* `DESCRIPTOR-VERSION` is the desired descriptor version from the [TBS Dependencies Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) page.

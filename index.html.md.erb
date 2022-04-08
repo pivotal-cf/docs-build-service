@@ -1,87 +1,80 @@
 ---
-title: Tanzu Build Service
+title: Tanzu Build Service 1.4 Documentation
 owner: Build Service Team
 ---
 
-This topic provides an overview of Tanzu Build Service (Beta).
-
-<p class="note"><strong>Note:</strong> To request early access to this Tanzu Build Service beta release, contact <a href="https://pivotal.io/contact">Pivotal</a>.</p>
-
-<p class="note warning"><strong>Warning:</strong> This release of Tanzu Build Service is not intended for use in a production environment. Features are subject to change without notice in future releases.</p>
-
+This topic provides an overview of Tanzu Build Service.
 
 ## <a id='overview'></a> Overview
 
-Tanzu Build Service uses the open-source [Cloud Native Buildpacks](https://buildpacks.io) project to turn app source code into [container images](https://github.com/opencontainers/image-spec/blob/master/spec.md). Build Service executes reproducible builds that align with modern container standards, and additionally keep the images up-to date. It does so by leveraging kubernetes infrastructure with [kpack](https://github.com/pivotal/kpack), a Cloud Native Bulidpacks Platform, to orchestrate the image lifecycle.
+Tanzu Build Service uses the open-source [Cloud Native Buildpacks](https://buildpacks.io) project to turn application source code into [container images](https://github.com/opencontainers/image-spec/blob/master/spec.md).
+Build Service executes reproducible builds that align with modern container standards, and additionally keeps image resources up-to-date.
+It does so by leveraging Kubernetes infrastructure with [kpack](https://github.com/pivotal/kpack), a Cloud Native Buildpacks Platform, to orchestrate the image lifecycle.
+The kpack CLI tool, kp can aid in managing kpack resources.
 
-You can use Build Service to develop and automate containerized software workflows securely and at scale.
-
+Build Service helps you develop and automate containerized software workflows securely and at scale.
 
 ## <a id='concepts'></a> Build Service Concepts
 
 Build Service reduces operational overhead and improves security by automating the building of application images.
-It relies on `images`, `builders`, `stacks` and `stores` to achieve these results. It additionally provides optional `projects` to simplify kubernetes multitenancy and manage access to the aforementioned resources.
+It relies on `Image`, `Builder`, `ClusterStore` and `ClusterStack` to achieve these results.
 
-### <a id='image'></a> Images
+### <a id='image'></a> Image Resource
 
-An `image` defines the source of the application, build time environment and registry destination. This source code could reside in git, a blobstore or as code on a workstation.
+An `Image` resource defines the source of the application, build time environment and registry destination. This source code could reside in git, a blobstore, or as code on a workstation.
 
-For more information about managing images in Build Service, see the [Manage Images](using.html#manage-images) section of the _Using Tanzu Build Service_ topic.
+For more information see the [Managing Images and Builds](managing-images.html) page.
 
-### <a id='builders'></a> Builders
+### <a id='builders'></a> Builder
 
-A `builder` references the stack and buildpacks that are used in the process of building source code. They "provide" the buildpacks that run against the application and the OS images upon which the application is built and run.
+A `Builder` references the Stack and Buildpacks that are used in the process of building source code. They "provide" the Buildpacks that run against the application and the OS images upon which the application is built and run.
 
-For more information about creating and managing builders in Build Service, see the [Manage Builders](using.html#manage-builders) section of the _Using Tanzu Build Service_ topic.
+For more information see the [Managing Builders](managing-builders.html) page.
 
+### <a id='store'></a> ClusterStore
 
-### <a id='store'></a> Stores
+A `ClusterStore` serves as a repository for Cloud Native Buildpacks available for use in Builders. One can populate a store with Buildpacks they [create](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/) and [package](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack).
 
-A `store` serves as a repository for Cloud Native Buildpacks available for use in builders. One can populate a store with buildpacks they [create](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/) and [package](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack).
+For more information see the [Managing ClusterStores](managing-stores.html) page.
 
+### <a id='stacks'></a> ClusterStack
+
+A `ClusterStack` defines a pair of build and run OS images. Critical security vulnerabilities are addressed by building apps on the most up-to date stack. The stacks used by Build Service to build applications are referenced in the Builders.
+
+For more information see the [Managing ClusterStacks](managing-stacks.html) page.
+
+## <a id='components'></a> Build Service Components
+
+Tanzu Build Service ships with the following components:
+
+* [kpack](https://github.com/pivotal/kpack)
+* [kpack CLI (kp)](https://github.com/vmware-tanzu/kpack-cli)
+* [CNB lifecycle](https://github.com/buildpacks/lifecycle)
+
+## <a id='dependencies'></a> Build Service Dependencies
+
+### <a id='buildpacks'></a> Buildpacks
+
+Tanzu Build Service utilize [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
 ### <a id='stacks'></a> Stacks
 
-A `stack` defines a pair of build and run OS images. Critical security vulnerabilities are addressed by building apps on the most up-to date stack. The stacks used by Build Service to build applications are referenced in the builders.
+Stack Documentation is available on the [Tanzu Buildpacks documentation](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html).
 
+The following Stacks and their updates can be found on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
 
-### <a id='project'></a> Projects
+| Name | ID |
+|---|---|
+| tiny | io.paketo.stacks.tiny |
+| base | io.buildpacks.stacks.bionic |
+| full | io.buildpacks.stacks.bionic |
 
-A `project` is optional resource that helps simplify multi-tenancy on the build service kubernetes cluster. It allows creation of project specific `images`, `builders` and `secrets` while still allowing access to cluster wide resources. Project authentication is managed by the cluster's auth provider and authorization is handled by kubernetes RBAC.
+### <a id='upgrading-dependencies'></a> Updating Build Service Dependencies
 
-For more information about creating and managing projects in Build Service, see the [Manage Projects](using.html#manage-projects) section of the _Using the Tanzu Build Service_ topic.
-
-
-## <a id='upgrading-dependencies'></a> Upgrading Build Service Dependencies
-
-Build Service allows the user to update buildpacks and store images via the `kp` CLI. You can learn more about it [here](updating-deps.html).
-
-## <a id='upgrading-dependencies'></a> Build Service Components
-
-Tanzu Build Service 0.2.0 ships with the following components:
-
-* [kpack 0.0.9](https://github.com/pivotal/kpack/releases/tag/v0.0.9)
-* [CNB lifecycle v0.8.0](https://github.com/buildpacks/lifecycle/releases/tag/v0.8.0)
-* [kp cli v0.2.0](https://network.pivotal.io/products/build-service/#/releases/667179)
-
-Tanzu Build Service 0.2.0 ships with the following buildpacks:
-
-* Tanzu Java `tanzu-buildpacks/java`
-* Paketo NodeJS `paketo-buildpacks/nodejs`
-* Paketo .NET Core `paketo-buildpacks/dotnet-core`
-* Paketo Golang `paketo-buildpacks/go`
-* Paketo PHP `paketo-buildpacks/php`
-* Paketo HTTPD `paketo-buildpacks/httpd`
-* Paketo NGINX `paketo-buildpacks/nginx`
-* Paketo Procfile `paketo-buildpacks/procfile`
-
-Tanzu Build Service 0.2.0 ships with the following stacks:
-
-* base `io.buildpacks.stacks.bionic`
-* full/default `org.cloudfoundry.stacks.cflinuxfs3`
-* tiny `io.paketo.stacks.tiny`
-
+Build Service allows the user to update Buildpacks and Stacks via the `kp` CLI. You can learn more about updating Build Service dependencies [here](updating-deps.html).
 
 ## <a id='troubleshooting'></a> Troubleshooting
 
-For troubleshooting Build Service, contact [Pivotal Support](https://pivotal.io/support).
+For troubleshooting failed builds, check the [FAQ section](faq.html) of our docs.
+
+If you are unable to resolve your problem, please contact [Tanzu VMware Support](https://tanzu.vmware.com/support).
