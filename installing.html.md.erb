@@ -61,29 +61,29 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 1. Set up environment variables for use during the installation.
 
-```
-export INSTALL_REGISTRY_HOSTNAME=<IMAGE-REGISTRY>
-export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
-export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
-export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
-export TANZUNET_REGISTRY_USERNAME=<TANZUNET_REGISTRY_USERNAME>
-export TANZUNET_REGISTRY_PASSWORD=<TANZUNET_REGISTRY_PASSWORD>
-export TBS_VERSION=<LATEST-TBS-VERSION>
-```
+  ```
+  export INSTALL_REGISTRY_HOSTNAME=<IMAGE-REGISTRY>
+  export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
+  export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
+  export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
+  export TANZUNET_REGISTRY_USERNAME=<TANZUNET_REGISTRY_USERNAME>
+  export TANZUNET_REGISTRY_PASSWORD=<TANZUNET_REGISTRY_PASSWORD>
+  export TBS_VERSION=<LATEST-TBS-VERSION>
+  ```
 
-Where:
+  Where:
 
-* `IMAGE-REGISTRY` is the host name of the registry.
-* `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-  * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
-  * gcr.io has the form `gcr.io/my-project/build-service`.
-  * Harbor has the form `my-harbor.io/my-project/build-service`.
-* `REGISTRY-USERNAME` is the user name of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
-* `REGISTRY-PASSWORD` is the password of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-* `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
-* `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
-  * For Google Cloud Registry, use the contents of the service account JSON key.
-* `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
+  * `IMAGE-REGISTRY` is the host name of the registry.
+  * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+    * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
+    * gcr.io has the form `gcr.io/my-project/build-service`.
+    * Harbor has the form `my-harbor.io/my-project/build-service`.
+  * `REGISTRY-USERNAME` is the user name of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
+  * `REGISTRY-PASSWORD` is the password of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+  * `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
+  * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
+    * For Google Cloud Registry, use the contents of the service account JSON key.
+  * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
 ### <a id='relocate-images'></a> Relocate Images to a registry
 
@@ -93,79 +93,79 @@ The local machine must have write access to the install registry.
 
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials (`TANZUNET_REGISTRY_USERNAME` & `TANZUNET_REGISTRY_PASSWORD`):
 
-```
-docker login registry.tanzu.vmware.com
-```
+  ```
+  docker login registry.tanzu.vmware.com
+  ```
 
 1. Log in to the image registry where you want to store the images by running:
 
-```
-docker login ${INSTALL_REGISTRY_HOSTNAME}
-```
+  ```
+  docker login ${INSTALL_REGISTRY_HOSTNAME}
+  ```
 
 1. Copy the Tanzu Build Service package repository to your registry with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
-```
+  ```
+  imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
+  ```
 
-For example:
+  For example:
 
-* Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
-* GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
-* Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
-* Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
+  * Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
+  * GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
+  * Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
+  * Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
 
 ### <a id='install'></a> Installation
 
 1. Create a namespace called tbs-install for deploying the package by running:
 
-```
-kubectl create ns tbs-install
-```
+  ```
+  kubectl create ns tbs-install
+  ```
 
-This namespace keeps the installation objects grouped together logically.
+  This namespace keeps the installation objects grouped together logically.
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
-```
-tanzu package repository add tbs-repository \
-    --url "${INSTALL_REPOSITORY}:${TBS_VERSION}" \
-    --namespace tbs-install
-```
+  ```
+  tanzu package repository add tbs-repository \
+      --url "${INSTALL_REPOSITORY}:${TBS_VERSION}" \
+      --namespace tbs-install
+  ```
 
 1. You should be able to get the status of the package repository and ensure the status updates to `Reconcile succeeded` by running:
 
-```
-tanzu package repository get tbs-repository --namespace tbs-install
-```
+  ```
+  tanzu package repository get tbs-repository --namespace tbs-install
+  ```
 
 1. Create a `tbs-values.yml` file by using the following sample as a guide. This file should be kept for future use.
 
-```yaml
----
-kp_default_repository: <INSTALL_REPOSITORY>
-kp_default_repository_username: <INSTALL_REGISTRY_USERNAME>
-kp_default_repository_password: <INSTALL_REGISTRY_PASSWORD>
-pull_from_kp_default_repo: true
-tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
-tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
-descriptor_name: <DESCRIPTOR-NAME>
-enable_automatic_dependency_updates: true
-ca_cert_data: <CA_CERT_CONTENTS> (optional)
-```
+  ```yaml
+  ---
+  kp_default_repository: <INSTALL_REPOSITORY>
+  kp_default_repository_username: <INSTALL_REGISTRY_USERNAME>
+  kp_default_repository_password: <INSTALL_REGISTRY_PASSWORD>
+  pull_from_kp_default_repo: true
+  tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
+  tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
+  descriptor_name: <DESCRIPTOR-NAME>
+  enable_automatic_dependency_updates: true
+  ca_cert_data: <CA_CERT_CONTENTS> (optional)
+  ```
 
-Where:
+  Where:
 
-* `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
-* `INSTALL_REGISTRY_USERNAME` is the registry username. Same value as used during relocation.
-* `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
-* `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
-* `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
-* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
-  * `full` contains all dependencies - for production use.
-  * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
-* `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
+  * `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
+  * `INSTALL_REGISTRY_USERNAME` is the registry username. Same value as used during relocation.
+  * `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
+  * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
+  * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
+  * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
+    * `full` contains all dependencies - for production use.
+    * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
+  * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
 
 #### <a id='additional-config'></a> Additional configuration
 
@@ -179,41 +179,41 @@ Additional fields can be added to `tbs-values.yml`:
 
 You can see the full values schema by running:
 
-```
-tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
-```
+  ```
+  tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
+  ```
 
 1. Install the package by running:
 
-```
-tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
-```
+  ```
+  tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
+  ```
 
 <p class="note"><strong>Note:</strong> >**Note:** Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
-To upgrade Tanzu Build Service to a newer version, run the following steps.
+To upgrade Tanzu Build Service to a newer version, take the following steps.
 
 1. Relocate the new package repository:
 
-```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$NEW_TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
-```
+  ```
+  imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$NEW_TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
+  ```
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
-```
-tanzu package repository add tbs-repository \
-    --url "${INSTALL_REPOSITORY}:${NEW_TBS_VERSION}" \
-    --namespace tbs-install
-```
+  ```
+  tanzu package repository add tbs-repository \
+      --url "${INSTALL_REPOSITORY}:${NEW_TBS_VERSION}" \
+      --namespace tbs-install
+  ```
 
 1. Install the package with the same `tbs-values.yml` file used during initial installation by running:
 
-```
-tanzu package install tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
-```
+  ```
+  tanzu package install tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
+  ```
 
 ## <a id='offline-install-tbs'></a> Installing Tanzu Build Service (Air-Gapped)
 
@@ -226,22 +226,22 @@ CA certificate file to install Tanzu Build Service.
 
 1. Set up environment variables for use during the installation.
 
-```
-export INSTALL_REGISTRY_HOSTNAME=<IMAGE-REGISTRY>
-export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
-export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
-export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
-export TBS_VERSION=<LATEST-TBS-VERSION>
-```
+  ```
+  export INSTALL_REGISTRY_HOSTNAME=<IMAGE-REGISTRY>
+  export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
+  export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
+  export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
+  export TBS_VERSION=<LATEST-TBS-VERSION>
+  ```
 
-Where:
+  Where:
 
-* `IMAGE-REGISTRY` is the host name of the private registry.
-* `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-  * Harbor has the form `my-harbor.io/my-project/build-service`
-* `REGISTRY-USERNAME` is the user name of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-* `REGISTRY-PASSWORD` is the password of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-* `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
+  * `IMAGE-REGISTRY` is the host name of the private registry.
+  * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+    * Harbor has the form `my-harbor.io/my-project/build-service`
+  * `REGISTRY-USERNAME` is the user name of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+  * `REGISTRY-PASSWORD` is the password of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+  * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
 <p class="note">
 <strong>Note:</strong>The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
@@ -254,82 +254,82 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-```
-docker login registry.tanzu.vmware.com
-```
+  ```
+  docker login registry.tanzu.vmware.com
+  ```
 
 1. Copy the Tanzu Build Service package repository to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
-```
+  ```
+  imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
+  ```
 
 1. Move the output file `tanzu-build-service.tar` to a machine that has access to the air-gapped environment. The machine must have write access to the internal registry.
 
 1. Log in to the image registry where you want to store the images by running:
 
-```
-docker login ${INSTALL_REGISTRY_HOSTNAME}
-```
+  ```
+  docker login ${INSTALL_REGISTRY_HOSTNAME}
+  ```
 
 1. Copy the images from your local machine to the internal registry:
 
-```
-imgpkg copy --tar /tmp/tanzu-build-service.tar \
-  --to-repo=${INSTALL_REPOSITORY} \
-  --registry-ca-cert-path <PATH-TO-CA>
-```
+  ```
+  imgpkg copy --tar /tmp/tanzu-build-service.tar \
+    --to-repo=${INSTALL_REPOSITORY} \
+    --registry-ca-cert-path <PATH-TO-CA>
+  ```
 
-Where:
+  Where:
 
-* `PATH-TO-CA` is the path to the registry CA certificate file.
+  * `PATH-TO-CA` is the path to the registry CA certificate file.
 
-For example:
+  For example:
 
-* Artifactory `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
-* Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
+  * Artifactory `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
+  * Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
 ### <a id='offline-install'></a> Installation (air-gapped)
 
 1. Create a namespace called `tbs-install` for deploying the package by running:
 
-```
-kubectl create ns tbs-install
-```
+  ```
+  kubectl create ns tbs-install
+  ```
 
-This namespace keeps the installation objects grouped together logically.
+  This namespace keeps the installation objects grouped together logically.
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
-```
-tanzu package repository add tbs-repository \
-    --url "${IMAGE-REPOSITORY}:${TBS_VERSION}" \
-    --namespace tbs-install
-```
+  ```
+  tanzu package repository add tbs-repository \
+      --url "${IMAGE-REPOSITORY}:${TBS_VERSION}" \
+      --namespace tbs-install
+  ```
 
 1. You should be able to get the status of the package repository, and ensure the status updates to `Reconcile succeeded` by running:
 
-```
-tanzu package repository get tbs-repository --namespace tbs-install
-```
+  ```
+  tanzu package repository get tbs-repository --namespace tbs-install
+  ```
 
 1. Create a `tbs-values.yml` file by using the following sample as a guide. This file should be kept for future use.
 
-```yaml
----
-kp_default_repository: $INSTALL_REPOSITORY
-kp_default_repository_username: $INSTALL_REGISTRY_USERNAME
-kp_default_repository_password: $INSTALL_REGISTRY_PASSWORD
-pull_from_kp_default_repo: true
-ca_cert_data: <CA_CERT_CONTENTS>
-```
+  ```yaml
+  ---
+  kp_default_repository: $INSTALL_REPOSITORY
+  kp_default_repository_username: $INSTALL_REGISTRY_USERNAME
+  kp_default_repository_password: $INSTALL_REGISTRY_PASSWORD
+  pull_from_kp_default_repo: true
+  ca_cert_data: <CA_CERT_CONTENTS>
+  ```
 
-Where:
+  Where:
 
-* `INSTALL_REPOSITORY` is a writable repository in your internal registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
-* `INSTALL_REGISTRY_USERNAME` is the internal registry username. Same value as used during relocation.
-* `INSTALL_REGISTRY_PASSWORD` is the internal registry password. Same value as used during relocation.
-* `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
+  * `INSTALL_REPOSITORY` is a writable repository in your internal registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
+  * `INSTALL_REGISTRY_USERNAME` is the internal registry username. Same value as used during relocation.
+  * `INSTALL_REGISTRY_PASSWORD` is the internal registry password. Same value as used during relocation.
+  * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
 
 #### <a id='offline-additional-config'></a> Additional configuration
 
@@ -343,15 +343,15 @@ Additional fields can be added to `tbs-values.yml`.
 
 You can see the full values schema by running:
 
-```
-tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
-```
+  ```
+  tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
+  ```
 
 1. Install the package by running:
 
-```
-tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml
-```
+  ```
+  tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml
+  ```
 
 ### <a id='offline-update-deps'></a> Updating Build Service Dependencies (air-gapped)
 
@@ -371,17 +371,17 @@ Re-importing dependencies is not required for upgrading Tanzu Build Service.
 
 To uninstall Tanzu Build Service, uninstall the package using the `tanzu` cli:
 
-```
-tanzu package installed delete tbs -n tbs-install -y
-```
+  ```
+  tanzu package installed delete tbs -n tbs-install -y
+  ```
 
 <p class="note"><strong>Note:</strong> All Tanzu Build Service resources are deleted. Registry images created by Tanzu Build Service are not deleted. </p>
 
 To delete the Tanzu Build Service package repository:
 
-```
-tanzu package repository delete tbs-repository --namespace tbs-install
-```
+  ```
+  tanzu package repository delete tbs-repository --namespace tbs-install
+  ```
 
 ## <a id='access-to-cluster-builders'></a> Ensuring access to cluster builders
 
@@ -395,17 +395,17 @@ Build Service relies on the run image being publicly readable or readable with t
 
 The location of the run image can be identified by running:
 
-```
-kp clusterstack status <stack-name>
-```
+  ```
+  kp clusterstack status <stack-name>
+  ```
 
 If the cluster stack run image is not public, you might need to create a registry secret in any namespace where images or builds are used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
 
 You can do this with the `kp` CLI:
 
-```
-kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
-```
+  ```
+  kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
+  ```
 
 ## <a id='next-steps'></a> Next steps
 
