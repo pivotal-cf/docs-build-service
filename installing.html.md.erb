@@ -189,7 +189,7 @@ The local machine must have write access to the install registry.
     tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
     ```
 
-<p class="note"><strong>Note:</strong> Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
+    <p class="note"><strong>Note:</strong> Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
@@ -243,10 +243,10 @@ CA certificate file to install Tanzu Build Service.
     * `REGISTRY-PASSWORD` is the password of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
     * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
-<p class="note">
-<strong>Note:</strong> The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
-For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
-<br>
+    <p class="note">
+    <strong>Note:</strong> The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
+    For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
+    <br>
 
 ### <a id='offline-relocate-images'></a> Relocate images to a registry (air-gapped)
 
@@ -297,7 +297,7 @@ This procedure relocates images from the Tanzu Network registry to an internal i
     kubectl create ns tbs-install
     ```
 
-  This namespace keeps the installation objects grouped together logically.
+    This namespace keeps the installation objects grouped together logically.
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
@@ -365,7 +365,7 @@ Tanzu Build Service dependencies must be kept up to date manually or in a CI/CD 
 
 1. Then the same installation steps can be followed by using the same `tbs-values.yml` file used for initial installation.
 
-Re-importing dependencies is not required for upgrading Tanzu Build Service.
+    Re-importing dependencies is not required for upgrading Tanzu Build Service.
 
 ## <a id='uninstall-tbs'></a> Uninstalling Tanzu Build Service
 
