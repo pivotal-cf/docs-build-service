@@ -124,7 +124,7 @@ The local machine must have write access to the install registry.
     kubectl create ns tbs-install
     ```
 
-  This namespace keeps the installation objects grouped together logically.
+    This namespace keeps the installation objects grouped together logically.
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
@@ -169,7 +169,7 @@ The local machine must have write access to the install registry.
 
 #### <a id='additional-config'></a> Additional configuration
 
-Additional fields can be added to `tbs-values.yml`:
+1. Additional fields can be added to `tbs-values.yml`:
 
 * `admin_users` is a comma-separated list of users granted admin privileges on Build Service.
 * `admin_groups` is a comma-separated list of groups granted admin privileges on Build Service.
@@ -177,7 +177,7 @@ Additional fields can be added to `tbs-values.yml`:
 * `https_proxy` is the HTTPS proxy to use for network traffic.
 * `no_proxy` is a comma-separated list of host names, IP addresses, or IP ranges in CIDR format that should not use a proxy.
 
-You can see the full values schema by running:
+1. You can see the full values schema by running:
 
     ```
     tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
@@ -333,7 +333,7 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
 #### <a id='offline-additional-config'></a> Additional configuration
 
-Additional fields can be added to `tbs-values.yml`.
+1. Additional fields can be added to `tbs-values.yml`.
 
 * `admin_users` is a comma-separated list of users who are granted admin privileges on Build Service.
 * `admin_groups` is a comma-separated list of groups that are granted admin privileges on Build Service.
@@ -341,7 +341,7 @@ Additional fields can be added to `tbs-values.yml`.
 * `https_proxy` is the HTTPS proxy to use for network traffic.
 * `no_proxy` is a comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
 
-You can see the full values schema by running:
+1. You can see the full values schema by running:
 
     ```
     tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
@@ -369,15 +369,15 @@ Re-importing dependencies is not required for upgrading Tanzu Build Service.
 
 ## <a id='uninstall-tbs'></a> Uninstalling Tanzu Build Service
 
-To uninstall Tanzu Build Service, uninstall the package using the `tanzu` cli:
+1. To uninstall Tanzu Build Service, uninstall the package using the `tanzu` cli:
 
     ```
     tanzu package installed delete tbs -n tbs-install -y
     ```
 
-<p class="note"><strong>Note:</strong> All Tanzu Build Service resources are deleted. Registry images created by Tanzu Build Service are not deleted. </p>
+    <p class="note"><strong>Note:</strong> All Tanzu Build Service resources are deleted. Registry images created by Tanzu Build Service are not deleted. </p>
 
-To delete the Tanzu Build Service package repository:
+1. To delete the Tanzu Build Service package repository:
 
     ```
     tanzu package repository delete tbs-repository --namespace tbs-install
