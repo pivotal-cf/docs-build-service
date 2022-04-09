@@ -61,29 +61,29 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 1. Set up environment variables for use during the installation.
 
-  ```
-  export INSTALL_REGISTRY_HOSTNAME=<IMAGE-REGISTRY>
-  export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
-  export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
-  export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
-  export TANZUNET_REGISTRY_USERNAME=<TANZUNET_REGISTRY_USERNAME>
-  export TANZUNET_REGISTRY_PASSWORD=<TANZUNET_REGISTRY_PASSWORD>
-  export TBS_VERSION=<LATEST-TBS-VERSION>
-  ```
+    ```
+    export INSTALL_REGISTRY_HOSTNAME=<IMAGE-REGISTRY>
+    export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
+    export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
+    export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
+    export TANZUNET_REGISTRY_USERNAME=<TANZUNET_REGISTRY_USERNAME>
+    export TANZUNET_REGISTRY_PASSWORD=<TANZUNET_REGISTRY_PASSWORD>
+    export TBS_VERSION=<LATEST-TBS-VERSION>
+    ```
 
-  Where:
+    Where:
 
-  * `IMAGE-REGISTRY` is the host name of the registry.
-  * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-    * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
-    * gcr.io has the form `gcr.io/my-project/build-service`.
-    * Harbor has the form `my-harbor.io/my-project/build-service`.
-  * `REGISTRY-USERNAME` is the user name of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
-  * `REGISTRY-PASSWORD` is the password of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-  * `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
-  * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
-    * For Google Cloud Registry, use the contents of the service account JSON key.
-  * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
+    * `IMAGE-REGISTRY` is the host name of the registry.
+    * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+      * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
+      * gcr.io has the form `gcr.io/my-project/build-service`.
+      * Harbor has the form `my-harbor.io/my-project/build-service`.
+    * `REGISTRY-USERNAME` is the user name of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
+    * `REGISTRY-PASSWORD` is the password of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+    * `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
+    * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
+      * For Google Cloud Registry, use the contents of the service account JSON key.
+    * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
 ### <a id='relocate-images'></a> Relocate Images to a registry
 
