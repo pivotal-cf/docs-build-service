@@ -189,7 +189,7 @@ The local machine must have write access to the install registry.
     tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
     ```
 
-<p class="note"><strong>Note:</strong> >**Note:** Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
+<p class="note"><strong>Note:</strong> Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
@@ -244,7 +244,7 @@ CA certificate file to install Tanzu Build Service.
     * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
 <p class="note">
-<strong>Note:</strong>The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
+<strong>Note:</strong> The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
 For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
 <br>
 
@@ -395,17 +395,17 @@ Build Service relies on the run image being publicly readable or readable with t
 
 The location of the run image can be identified by running:
 
-    ```
-    kp clusterstack status <stack-name>
-    ```
+  ```
+  kp clusterstack status <stack-name>
+  ```
 
 If the cluster stack run image is not public, you might need to create a registry secret in any namespace where images or builds are used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
 
 You can do this with the `kp` CLI:
 
-    ```
-    kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
-    ```
+  ```
+  kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
+  ```
 
 ## <a id='next-steps'></a> Next steps
 
