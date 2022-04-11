@@ -7,7 +7,7 @@ This topic describes the method of installing Tanzu Build Service without kapp c
 
 Reasons to use the previous installation method include:
 * You do not want to install kapp controller on your cluster
-* You want to make custom changes to the TBS installation via `ytt` templating or overlays
+* You want to make custom changes to the Tanzu Build Service installation via `ytt` templating or overlays
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -20,19 +20,19 @@ Before you install Build Service, you must:
 * Ensure that all worker nodes have at least 50 GB of ephemeral storage allocated to them.
 	* To do this on TKGs, mount a 50GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your TKGs cluster. [These instructions](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1) show how to configure storage on worker nodes.
 
-* Have access to a container registry to install Tanzu Build Service and store the application images that will be created.
-  * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported
-  * If installing using the `lite` descriptor, 1GB of registry storage is recommended
-  * If installing using the `full` descriptor, which is intended for production use and offline environments, 10 GB of available storage is recommended
-  * This registry space suggestion does not include the space that will be used for application images built by TBS
+* Have access to a container registry to install Tanzu Build Service and store the application images created.
+  * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
+  * If installing using the `lite` descriptor, VMware recommends 1 GB of registry storage.
+  * If installing using the `full` descriptor, which is intended for production use and offline environments, VMware recommends 10 GB of available storage.
+  * This registry space suggestion does not include the space used for application images Tanzu Build Service builds.
 
 * Ensure your Kubernetes cluster is configured with default `StorageClass`.
-Tanzu Build Service will default to using 2G of cache if a default `StorageClass` is defined.
+Tanzu Build Service defaults to using 2G of cache if a default `StorageClass` is defined.
 Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds.
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
-* Download four [Carvel](https://carvel.dev/) CLIs for your operating system. These tools will facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
+* Download four [Carvel](https://carvel.dev/) CLIs for your operating system. These tools facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
   - [kapp](https://network.tanzu.vmware.com/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
   - [ytt](https://network.tanzu.vmware.com/products/ytt/) is a templating tool that understands YAML structure.
   - [kbld](https://network.tanzu.vmware.com/products/kbld/) is needed to map relocated images to k8s config.
@@ -48,15 +48,15 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume kp cli v0.4.* from TBS release v1.4.*. If a feature is not working, you may need to upgrade your cli.
+	* These docs assume kp cli v0.4.* from Tanzu Build Service release v1.4.*. If a feature is not working, you may need to upgrade your cli.
 
 * Download the `docker` CLI to authenticate with registries.
 
-* Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
+* Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/Tanzu Build Service-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
 
-<p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1, 1.5.6, and 1.5.7 are not compatible with TBS. Notably, TKG 1.2.1 and TKGi 1.13.0 & 1.13.1 use these versions of Containerd, a different version must be used.</p>
+<p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1, 1.5.6, and 1.5.7 are not compatible with Tanzu Build Service. Notably, TKG 1.2.1 and TKGi 1.13.0 & 1.13.1 use these versions of Containerd, a different version must be used.</p>
 
-<p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with TBS.</p>
+<p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with Tanzu Build Service.</p>
 
 ## <a id='install'></a> Installing
 
@@ -98,7 +98,7 @@ For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
 <br>
 <br>
 <strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub username and a
-repository name that imgpkg will use for relocation. For example, <code>my-dockerhub-account/build-service</code>.
+repository name that imgpkg uses for relocation. For example, <code>my-dockerhub-account/build-service</code>.
 </p>
 
 For example:
@@ -109,11 +109,11 @@ For example:
 * Harbor `imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION>" --to-repo harbor.io/my-project/build-service`
 
 <p class="note">
-<strong>Note:</strong> During relocation, imgpkg will report the following:
+<strong>Note:</strong> During relocation, imgpkg reports the following:
 <br>
 <code>Skipped layer due to it being non-distributable. If you would like to include non-distributable layers, use the --include-non-distributable flag</code>.
 <br>
-This is due to windows-based images shipped with TBS and can be ignored. For more details see the faq.
+This is due to windows-based images shipped with Tanzu Build Service and can be ignored. For more details see the faq.
 </p>
 
 ### <a id='install'></a> Install Tanzu Build Service
@@ -135,90 +135,94 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
 
 2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters:
 
-Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, include your TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` when running the install command below:
+  Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature keeps Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, include your TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` when running the install command below:
 
-```
-ytt -f /tmp/bundle/config/ \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	-v tanzunet_username='<TANZUNET-USERNAME>' \
-	-v tanzunet_password='<TANZUNET-PASSWORD>' \
-	-v descriptor_name='<DESCRIPTOR-NAME>' \
-	--data-value-yaml enable_automatic_dependency_updates=true \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-You can check the status of the DependencyUpdater by running `kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml`
+    ```
+    ytt -f /tmp/bundle/config/ \
+      -v kp_default_repository='<IMAGE-REPOSITORY>' \
+      -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+      -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+      --data-value-yaml pull_from_kp_default_repo=true \
+      -v tanzunet_username='<TANZUNET-USERNAME>' \
+      -v tanzunet_password='<TANZUNET-PASSWORD>' \
+      -v descriptor_name='<DESCRIPTOR-NAME>' \
+      --data-value-yaml enable_automatic_dependency_updates=true \
+      | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+      | kapp deploy -a tanzu-build-service -f- -y
+    ```
+  You can check the status of the DependencyUpdater by running:
+  
+    ```
+    kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml
+    ```
 
 Alternatively, if you prefer to manage dependencies manually, leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
 
-```
-ytt -f /tmp/bundle/config/ \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
+  ```
+  ytt -f /tmp/bundle/config/ \
+    -v kp_default_repository='<IMAGE-REPOSITORY>' \
+    -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+    -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+    --data-value-yaml pull_from_kp_default_repo=true \
+    | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+    | kapp deploy -a tanzu-build-service -f- -y
+  ```
 
-Where:
+  Where:
 
-* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
-* `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
-* `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
-* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
-  * `full` contains all dependencies - for production use.
-  * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
+  * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+      <p class="note">
+      <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
+      </p>
+  * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+    as the username when using JSON key file authentication.
+  * `REGISTRY-PASSWORD` is the password you use to access the registry.
+      <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+  * `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
+  * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
+  * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
+    * `full` contains all dependencies - for production use.
+    * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
 
-<p class="note"><strong>Note:</strong> You may want to pin your TBS to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
+  <p class="note"><strong>Note:</strong> You may want to pin your Tanzu Build Service to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
 
 #### <a id='ca-cert'></a> Installing with a CA certificate for internal registry
 
 To install Tanzu Build Service with an internal registry that requires providing a CA certificate such as Harbor, use the normal
 installation command with the CA certificate file passed in with a `-f` flag:
 
-```
-ytt -f /tmp/bundle/config/ \
-	-f <PATH-TO-CA> \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	-v tanzunet_username='<TANZUNET-USERNAME>' \
-	-v tanzunet_password='<TANZUNET-PASSWORD>' \
-	-v descriptor_name='<DESCRIPTOR-NAME>' \
-	--data-value-yaml enable_automatic_dependency_updates=true \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
+  ```
+  ytt -f /tmp/bundle/config/ \
+    -f <PATH-TO-CA> \
+    -v kp_default_repository='<IMAGE-REPOSITORY>' \
+    -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+    -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+    --data-value-yaml pull_from_kp_default_repo=true \
+    -v tanzunet_username='<TANZUNET-USERNAME>' \
+    -v tanzunet_password='<TANZUNET-PASSWORD>' \
+    -v descriptor_name='<DESCRIPTOR-NAME>' \
+    --data-value-yaml enable_automatic_dependency_updates=true \
+    | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+    | kapp deploy -a tanzu-build-service -f- -y
+  ```
 
-Where:
+  Where:
 
-* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
-* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
-    <br>
-    <br>
-    <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
-    Otherwise, you will encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
-* `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
-* `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
+  * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
+  * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+      <p class="note">
+      <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
+      <br>
+      <br>
+      <strong>Exception:</strong> When using Dockerhub as your registry target, only use your DockerHub account for this value. For example, my-dockerhub-account (without /build-service).
+      Otherwise, you encounter an error similar to: <code>Error: invalid credentials, ensure registry credentials for 'index.docker.io/my-dockerhub-account/build-service/tanzu-buildpacks_go' are available locally</code>
+      </p>
+  * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+    as the username when using JSON key file authentication.
+  * `REGISTRY-PASSWORD` is the password you use to access the registry.
+      <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+  * `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
+  * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
 
 ### <a id='import'></a> Import Tanzu Build Service Dependencies
 
@@ -230,17 +234,17 @@ These must be imported with the `kp` cli and the Dependency Descriptor (`descrip
 
 When importing with kp cli, you must `docker login` to both `registry.tanzu.vmware.com` and `registry.pivotal.io`.
 
-```
-kp import -f /tmp/descriptor-<version>.yaml
-```
+  ```
+  kp import -f /tmp/descriptor-<version>.yaml
+  ```
 
 When importing to a registry that uses a self-signed CA certificate:
 
-```
-kp import -f /tmp/descriptor-<version>.yaml --registry-ca-cert-path <path-to-ca-cert>
-```
+  ```
+  kp import -f /tmp/descriptor-<version>.yaml --registry-ca-cert-path <path-to-ca-cert>
+  ```
 
-Using the `--show-changes` flag will give a summary of the resource changes for the import. You will also be asked to confirm the import. Confirmation can be skipped with `--force`.
+Using the `--show-changes` flag gives a summary of the resource changes for the import. You are also be asked to confirm the import. Confirmation can be skipped with `--force`.
 
 Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
 Users can only access these images if they agree to the dependency EULAs.
@@ -251,7 +255,7 @@ Users must navigate to the following dependencies pages in Tanzu Network and acc
 1. [Buildpacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-buildpacks-suite)
 1. [Stacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-stacks-suite)
 
-<p class="note"><strong>Note:</strong> `kp import` will fail if it cannot access the images in all of the above Tanzu Network pages.</p>
+<p class="note"><strong>Note:</strong> `kp import` fails if it cannot access the images in all of the above Tanzu Network pages.</p>
 
 <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and both urls for the Tanzu Network registry (`registry.tanzu.vmware.com` and `registry.pivotal.io`).</p>
 
@@ -259,13 +263,13 @@ Users must navigate to the following dependencies pages in Tanzu Network and acc
 
 Other optional parameters can be added using the `-v` flag:
 
-* `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
-* `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
+* `admin_users` is a comma-separated list of users who are granted admin privileges on Build Service.
+* `admin_groups`: a comma-separated list of groups that are granted admin privileges on Build Service.
 * `http_proxy`: The HTTP proxy to use for network traffic.
 * `https_proxy`: The HTTPS proxy to use for network traffic.
 * `no_proxy`: A comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
 
-<p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the kubernetes API server will also flow through the proxy server.
+<p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the Kubernetes API server also flows through the proxy server.
 This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.
 </p>
 
@@ -286,7 +290,7 @@ To configure UAA as an OIDC provider for your TKGI deployment:
 1. Under **Configure created clusters to use UAA as the OIDC provider**, select **Enable**.
 
 1. Ensure the values in the **UAA OIDC Groups Prefix** and **UAA OIDC Username Prefix** fields are the same and record them.
-   For example, `"oidc:"`. You will need these values during the installation of Build Service.
+   For example, `"oidc:"`. You need these values during the installation of Build Service.
       <p class="note"><strong>Note:</strong> Ensure you add a <code>:</code> at the end of the desired prefix.</p>
 
 1. Click **Save**.
@@ -299,10 +303,10 @@ To configure UAA as an OIDC provider for your TKGI deployment:
 
 Tanzu Build Service can be installed to a Kubernetes Cluster and registry that are air-gapped from external traffic.
 
-An air-gapped environment will often use an internal registry with a self-signed CA certificate and you will need access to this
-CA certificate file to install TBS.
+An air-gapped environment often uses an internal registry with a self-signed CA certificate and you need access to this
+CA certificate file to install Tanzu Build Service.
 
-<p class="note"><strong>Note:</strong> If you are using a CA certificate that is trusted (eg. Lets Encrypt) you will not need the CA certificate file. </p>
+<p class="note"><strong>Note:</strong> If you are using a CA certificate that is trusted (eg. Lets Encrypt) you do not need the CA certificate file. </p>
 
 ### <a id='offline-relocate-images'></a> Relocate Images to a Registry (Air-Gapped)
 
@@ -312,56 +316,56 @@ The local machine must have write access to the internal registry.
 
 1. Log in to the image registry where you want to store the images by running:
 
-```
-docker login <IMAGE-REGISTRY>
-```
+    ```
+    docker login <IMAGE-REGISTRY>
+    ```
 
-Where `IMAGE-REGISTRY` is the name of the image registry where you want to store the images.
+    Where `IMAGE-REGISTRY` is the name of the image registry where you want to store the images.
 
 2. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-```
-docker login registry.tanzu.vmware.com
-```
+    ```
+    docker login registry.tanzu.vmware.com
+    ```
 
 3. Copy the Tanzu Build Service bundle to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-```
-imgpkg copy -b registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION> --to-tar=/tmp/tanzu-build-service.tar
-```
+    ```
+    imgpkg copy -b registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION> --to-tar=/tmp/tanzu-build-service.tar
+    ```
 
-Where `TBS-VERSION` is the version of Tanzu Build Service you want to install.
+    Where `TBS-VERSION` is the version of Tanzu Build Service you want to install.
 
 4. Move the output file `tanzu-build-service.tar` to a machine that has access to the air-gapped environment.
 
 5. Unpackage the images from your local machine to the internal registry:
 
-```
-imgpkg copy --tar /tmp/tanzu-build-service.tar \
-  --to-repo=<IMAGE-REPOSITORY> \
-  --registry-ca-cert-path <PATH-TO-CA>
-```
+    ```
+    imgpkg copy --tar /tmp/tanzu-build-service.tar \
+      --to-repo=<IMAGE-REPOSITORY> \
+      --registry-ca-cert-path <PATH-TO-CA>
+    ```
 
-Where:
+    Where:
 
-* `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-* `PATH-TO-CA` is the path to the registry CA certificate file.
+    * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+    * `PATH-TO-CA` is the path to the registry CA certificate file.
 
-<p class="note">
-<strong>Note:</strong>The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
-For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
-<br>
-<br>
-<strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub username and an
-image name that imgpkg will use for relocation. For example, <code>my-dockerhub-account/build-service</code>.
-</p>
+    <p class="note">
+    <strong>Note:</strong>The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
+    For example, <code>IMAGE-REGISTRY/some-repo/build-service</code>.
+    <br>
+    <br>
+    <strong>Exception:</strong> When relocating to Dockerhub, you must provide the Dockerhub username and an
+    image name that imgpkg uses for relocation. For example, <code>my-dockerhub-account/build-service</code>.
+    </p>
 
-For example:
+    For example:
 
-* Dockerhub `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=my-dockerhub-account/build-service --registry-ca-cert-path ca.crt`
-* GCR `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=gcr.io/my-project/build-service --registry-ca-cert-path ca.crt`
-* Artifactory `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
-* Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
+    * Dockerhub `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=my-dockerhub-account/build-service --registry-ca-cert-path ca.crt`
+    * GCR `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=gcr.io/my-project/build-service --registry-ca-cert-path ca.crt`
+    * Artifactory `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
+    * Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
 ### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
 
@@ -371,43 +375,43 @@ Once the images have been relocated, installation is the same as a regular insta
 
 1. Pull the Tanzu Build Service bundle image locally using `imgpkg`:
 
-```
-imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
-```
+    ```
+    imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
+    ```
 
-Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
+    Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
 
 2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
-```
-ytt -f /tmp/bundle/config/ \
-	-f <PATH-TO-CA> \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
+    ```
+    ytt -f /tmp/bundle/config/ \
+      -f <PATH-TO-CA> \
+      -v kp_default_repository='<IMAGE-REPOSITORY>' \
+      -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+      -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+      --data-value-yaml pull_from_kp_default_repo=true \
+      | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+      | kapp deploy -a tanzu-build-service -f- -y
+    ```
 
-Where:
+    Where:
 
-* `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
-* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    * `PATH-TO-CA` is the path to the registry root CA. This CA is required to enable Build Service to interact with internally deployed registries. This is the CA that was used while deploying the registry.
+    * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+        <p class="note">
+        <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
+        </p>
+    * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+      as the username when using JSON key file authentication.
+    * `REGISTRY-PASSWORD` is the password you use to access the registry.
+        <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
 
 #### <a id='offline-additional-config'></a> Additional Configuration
 
 Other optional parameters can be added using the `-v` flag:
 
-* `admin_users` is a comma separated list of users who will be granted admin privileges on Build Service.
-* `admin_groups`: a comma separated list of groups that will be granted admin privileges on Build Service.
+* `admin_users` is a comma-separated list of users who are granted admin privileges on Build Service.
+* `admin_groups`: a comma separated list of groups that are granted admin privileges on Build Service.
 
 ### <a id='offline-import'></a> Import Tanzu Build Service Dependencies (Air-Gapped)
 
@@ -421,29 +425,29 @@ For air-gapped environments, dependencies must be imported with the `kp` cli and
 
 1. To import these dependencies into an air-gapped environment, they must first be pulled locally. Use `imgpkg` and the `<VERSION>` from the previous step:
 
-```
-imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
-  --to-tar=tbs-dependencies.tar
-```
+    ```
+    imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
+      --to-tar=tbs-dependencies.tar
+    ```
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry.</p>
+    <p class="note"><strong>Note:</strong> You must be logged in locally to the Tanzu Network registry.</p>
 
 1. Move the output file `tbs-dependencies.tar` to a machine that has access to the air-gapped environment.
 
 1. Then the dependencies must be uploaded to the Tanzu Build Service registry:
 
-```
-imgpkg copy --tar=tbs-dependencies.tar \
-  --to-repo <IMAGE-REPOSITORY> \
-  --registry-ca-cert-path <PATH-TO-CA>
-```
+    ```
+    imgpkg copy --tar=tbs-dependencies.tar \
+      --to-repo <IMAGE-REPOSITORY> \
+      --registry-ca-cert-path <PATH-TO-CA>
+    ```
 
-Where:
+    Where:
 
-* `IMAGE-REPOSITORY` is the internal image repository where dependency images will be relocated. This should be the same as `kp_default_repository` from installation.
-* `PATH-TO-CA` is the path to the registry CA certificate file.
+    * `IMAGE-REPOSITORY` is the internal image repository where dependency images are relocated. This should be the same as `kp_default_repository` from installation.
+    * `PATH-TO-CA` is the path to the registry CA certificate file.
 
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REPOSITORY`.</p>
+    <p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REPOSITORY`.</p>
 
 #### <a id='offline-import-import'></a> Import Tanzu Build Service Dependency Resources (Air-Gapped)
 
@@ -451,15 +455,15 @@ After the dependency images are uploaded to the internal registry, you can succe
 
 Use the following commands with `imgpkg`, `kbld`, and the `kp` CLI:
 
-```
-imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
-  -o /tmp/descriptor-bundle \
-  --registry-ca-cert-path <PATH-TO-CA>
+  ```
+  imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
+    -o /tmp/descriptor-bundle \
+    --registry-ca-cert-path <PATH-TO-CA>
 
-kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
-  -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
-  | kp import -f - --registry-ca-cert-path <PATH-TO-CA>
-```
+  kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
+    -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
+    | kp import -f - --registry-ca-cert-path <PATH-TO-CA>
+  ```
 
 ## <a id='verify-installation'></a> Verify Installation
 
@@ -471,35 +475,37 @@ To verify your Build Service installation:
 
 1. List the cluster builders available in your installation:
 
-```
-kp clusterbuilder list
-```
+    ```
+    kp clusterbuilder list
+    ```
 
-You should see an output that looks as follows:
+    You should see an output that looks as follows:
 
-```
-NAME       READY    STACK                          IMAGE
-base       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-default    true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-full       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
-```
+    ```
+    NAME       READY    STACK                          IMAGE
+    base       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+    default    true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+    full       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+    tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
+    ```
 
 ## <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
-To upgrade Tanzu Build Service to a newer version, run the same commands as [installation](installing.html#install), kapp will update resources if they already exist. Re-importing dependencies is not required for upgrading TBS.
+To upgrade Tanzu Build Service to a newer version, run the same commands as [installation](installing.html#install), kapp updates resources if they already exist. Re-importing dependencies is not required for upgrading Tanzu Build Service.
 
 ## <a id='uninstall-tbs'></a> Uninstalling Tanzu Build Service
 
 To uninstall Tanzu Build Service simply run the following `kapp` command:
 
-`kapp delete -a tanzu-build-service`
+  ```
+  kapp delete -a tanzu-build-service
+  ```
 
-<p class="note"><strong>Note:</strong> All Tanzu Build Service resources will be deleted. Registry images created by TBS will not be deleted. </p>
+<p class="note"><strong>Note:</strong> All Tanzu Build Service resources are deleted. Registry images created by Tanzu Build Service is not be deleted. </p>
 
 ## <a id='update-deps'></a> Updating Build Service Dependencies
 
-<p class="note"><strong>Note:</strong> If you enabled the TanzuNetDependencyUpdater during install (This can be verified by running `kubectl get TanzuNetDependencyUpdater -A` you do not need to do anything to manage your TBS dependencies </p>
+<p class="note"><strong>Note:</strong> If you enabled the TanzuNetDependencyUpdater during install (This can be verified by running `kubectl get TanzuNetDependencyUpdater -A` you do not need to do anything to manage your Tanzu Build Service dependencies </p>
 
 Use the following documentation to keep applications patched and up-to-date with Tanzu Build Service:
 
@@ -521,17 +527,17 @@ Build Service relies on the run-image being publicly readable or readable with t
 
 The location of the run image can be identified by running the following command:
 
-```
-kp clusterstack status <stack-name>
-```
+  ```
+  kp clusterstack status <stack-name>
+  ```
 
-If the cluster stack run image is not public, you may need to create a registry secret in any namespace where Images or Builds will be used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
+If the cluster stack run image is not public, you may need to create a registry secret in any namespace where Images or Builds are used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
 
 This can be done with the `kp` CLI:
 
-```
-kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
-```
+  ```
+  kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
+  ```
 
 ## <a id='next-steps'></a> Next Steps
 
@@ -541,157 +547,157 @@ Visit the <a href="managing-images.html">Managing Images and Builds</a> page to 
 
 The minimum Kubernetes RBAC permissions required to install Tanzu Build Service are as follows. This includes the namespaces required for the Kubernetes Roles:
 
-```yaml
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: build-service
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kpack
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: build-service-install-cluster-role
-rules:
-  - apiGroups:
-      - "admissionregistration.k8s.io"
-    resources:
-      - mutatingwebhookconfigurations
-      - validatingwebhookconfigurations
-    verbs:
-      - '*'
-  - apiGroups:
-      - "rbac.authorization.k8s.io"
-    resources:
-      - clusterroles
-      - clusterrolebindings
-    verbs:
-      - '*'
-  - apiGroups:
-      - "apiextensions.k8s.io"
-    resources:
-      - customresourcedefinitions
-    verbs:
-      - '*'
-  - apiGroups:
-      - "storage.k8s.io"
-    resources:
-      - storageclasses
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - kpack.io
-    resources:
-      - builds
-      - builds/status
-      - builds/finalizers
-      - images
-      - images/status
-      - images/finalizers
-      - builders
-      - builders/status
-      - clusterbuilders
-      - clusterbuilders/status
-      - clusterstores
-      - clusterstores/status
-      - clusterstacks
-      - clusterstacks/status
-      - sourceresolvers
-      - sourceresolvers/status
-    verbs:
-      - '*'
-  - apiGroups:
-      - "projects.vmware.com"
-    resources:
-      - projects
-    verbs:
-      - '*'
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: build-service-install-role
-  namespace: build-service
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-      - secrets
-      - serviceaccounts
-      - services
-      - namespaces
-    verbs:
-      - '*'
-  - apiGroups:
-      - "rbac.authorization.k8s.io"
-    resources:
-      - roles
-      - rolebindings
-    verbs:
-      - '*'
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-      - daemonsets
-    verbs:
-      - '*'
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kpack-install-role
-  namespace: kpack
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - services
-      - serviceaccounts
-      - namespaces
-      - secrets
-      - configmaps
-    verbs:
-      - '*'
-  - apiGroups:
-      - "rbac.authorization.k8s.io"
-    resources:
-      - roles
-      - rolebindings
-    verbs:
-      - '*'
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-      - daemonsets
-    verbs:
-      - '*'
-```
+  ```yaml
+  ---
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: build-service
+  ---
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: kpack
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRole
+  metadata:
+    name: build-service-install-cluster-role
+  rules:
+    - apiGroups:
+        - "admissionregistration.k8s.io"
+      resources:
+        - mutatingwebhookconfigurations
+        - validatingwebhookconfigurations
+      verbs:
+        - '*'
+    - apiGroups:
+        - "rbac.authorization.k8s.io"
+      resources:
+        - clusterroles
+        - clusterrolebindings
+      verbs:
+        - '*'
+    - apiGroups:
+        - "apiextensions.k8s.io"
+      resources:
+        - customresourcedefinitions
+      verbs:
+        - '*'
+    - apiGroups:
+        - "storage.k8s.io"
+      resources:
+        - storageclasses
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - kpack.io
+      resources:
+        - builds
+        - builds/status
+        - builds/finalizers
+        - images
+        - images/status
+        - images/finalizers
+        - builders
+        - builders/status
+        - clusterbuilders
+        - clusterbuilders/status
+        - clusterstores
+        - clusterstores/status
+        - clusterstacks
+        - clusterstacks/status
+        - sourceresolvers
+        - sourceresolvers/status
+      verbs:
+        - '*'
+    - apiGroups:
+        - "projects.vmware.com"
+      resources:
+        - projects
+      verbs:
+        - '*'
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: build-service-install-role
+    namespace: build-service
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+        - secrets
+        - serviceaccounts
+        - services
+        - namespaces
+      verbs:
+        - '*'
+    - apiGroups:
+        - "rbac.authorization.k8s.io"
+      resources:
+        - roles
+        - rolebindings
+      verbs:
+        - '*'
+    - apiGroups:
+        - apps
+      resources:
+        - deployments
+        - daemonsets
+      verbs:
+        - '*'
+  ---
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: kpack-install-role
+    namespace: kpack
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - services
+        - serviceaccounts
+        - namespaces
+        - secrets
+        - configmaps
+      verbs:
+        - '*'
+    - apiGroups:
+        - "rbac.authorization.k8s.io"
+      resources:
+        - roles
+        - rolebindings
+      verbs:
+        - '*'
+    - apiGroups:
+        - apps
+      resources:
+        - deployments
+        - daemonsets
+      verbs:
+        - '*'
+  ```
 
-The `kapp` command used to install Tanzu Build Service requires access to ConfigMaps in the namespace that will be used to run `kapp`:
+The `kapp` command used to install Tanzu Build Service requires access to ConfigMaps in the namespace used to run `kapp`:
 
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kapp-role
-  namespace: <my-kapp-namespace>
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-    verbs:
-      - '*'
-```
+  ```yaml
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: kapp-role
+    namespace: <my-kapp-namespace>
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - configmaps
+      verbs:
+        - '*'
+  ```
 
-Where the namespace `<my-kapp-namespace>` must be the namespace of the Kubernetes context that `kapp` will be run in.
+Where the namespace `<my-kapp-namespace>` must be the namespace of the Kubernetes context that `kapp` is run in.
