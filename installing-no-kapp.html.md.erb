@@ -62,9 +62,9 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 Create a kubernetes cluster where you would like to install build service and target the cluster as follows:
 
-```
-kubectl config use-context <CONTEXT-NAME>
-```
+  ```
+  kubectl config use-context <CONTEXT-NAME>
+  ```
 
 ### <a id='relocate-images'></a> Relocate Images to a Registry
 
@@ -72,25 +72,25 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
 1. Log in to the image registry where you want to store the images by running:
 
-```
-docker login <IMAGE-REGISTRY>
-```
+    ```
+    docker login <IMAGE-REGISTRY>
+    ```
 
 Where `IMAGE-REGISTRY` is the name of the image registry where you want to store the images.
 
 2. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-```
-docker login registry.tanzu.vmware.com
-```
+    ```
+    docker login registry.tanzu.vmware.com
+    ```
 
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-```
-imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION>" --to-repo <IMAGE-REPOSITORY>
-```
+    ```
+    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION>" --to-repo <IMAGE-REPOSITORY>
+    ```
 
-Where `TBS-VERSION` is the version full version (1.4.x) of Tanzu Build Service you want to install and `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
+    Where `TBS-VERSION` is the version full version (1.4.x) of Tanzu Build Service you want to install and `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
 
 <p class="note">
 <strong>Note:</strong> When relocating, the IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
