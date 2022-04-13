@@ -125,6 +125,15 @@ kubectl create ns tbs-install
 
 This namespace keeps the installation objects grouped together logically.
 
+1. Create a secret to pull in the package repository:
+
+```
+tanzu secret registry add tbs-install-registry \
+  --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
+  --server ${INSTALL_REGISTRY_HOSTNAME} \
+  --export-to-all-namespaces --yes --namespace tbs-install
+```
+
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
 ```
