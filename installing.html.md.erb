@@ -176,6 +176,47 @@ tanzu secret registry add tbs-install-registry \
       * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
     * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
 
+#### <a id='secret-references'></a> Using Secrets for credentials
+
+You may not want to install TBS with passwords saved in plaintext in the `tbs-values.yml`.
+
+You can store these credentials in `Secrets` and reference them in the `tbs-values.yml` using the following process:
+
+1. Create the secret for the `kp-default-repository` credentials using the `kp` cli:
+
+	```
+	kp secret create kp-default-repository-creds \
+	  --registry "${INSTALL_REGISTRY_HOSTNAME}" \
+	  --registry-user "${INSTALL_REGISTRY_USERNAME}" \
+	  --namespace tbs-install
+	```
+
+1. When leveraging automatic updates, create the secret for the Tanzu Network credentials using the `kp` cli:
+
+	```
+	kp secret create tanzunet-creds \
+	  --registry "registry.tanzu.vmware.com" \
+	  --registry-user "${TANZUNET_REGISTRY_USERNAME}" \
+	  --namespace tbs-install
+	```
+
+1. Create a `tbs-values.yml` with secret references instead of plaintext credentials:
+
+    ```yaml
+    ---
+    kp_default_repository: <INSTALL_REPOSITORY>
+    kp_default_repository_secret:
+      name: kp-default-repository-creds
+      namespace: tbs-install
+    pull_from_kp_default_repo: true
+    tanzunet_secret:
+      name: tanzunet-creds
+      namespace: tbs-install
+    descriptor_name: <DESCRIPTOR-NAME>
+    enable_automatic_dependency_updates: true
+    ca_cert_data: <CA_CERT_CONTENTS> (optional)
+    ```
+
 #### <a id='additional-config'></a> Additional configuration
 
 1. Additional fields can be added to `tbs-values.yml`:
