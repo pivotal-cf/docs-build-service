@@ -159,7 +159,7 @@ tanzu secret registry add tbs-install-registry \
     pull_from_kp_default_repo: true
     tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
     tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
-    descriptor_name: <DESCRIPTOR-NAME>
+    descriptor_name: <DESCRIPTOR_NAME>
     enable_automatic_dependency_updates: true
     ca_cert_data: <CA_CERT_CONTENTS> (optional)
     ```
@@ -171,7 +171,7 @@ tanzu secret registry add tbs-install-registry \
     * `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
     * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
     * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
-    * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
+    * `DESCRIPTOR_NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
       * `full` contains all dependencies - for production use.
       * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
     * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
@@ -212,7 +212,7 @@ You can store these credentials in `Secrets` and reference them in the `tbs-valu
     tanzunet_secret:
       name: tanzunet-creds
       namespace: tbs-install
-    descriptor_name: <DESCRIPTOR-NAME>
+    descriptor_name: <DESCRIPTOR_NAME>
     enable_automatic_dependency_updates: true
     ca_cert_data: <CA_CERT_CONTENTS> (optional)
     ```
