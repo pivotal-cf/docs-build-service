@@ -150,30 +150,30 @@ tanzu package repository get tbs-repository --namespace tbs-install
 
 1. Create a `tbs-values.yml` file by using the following sample as a guide. This file should be kept for future use.
 
-```yaml
----
-kp_default_repository: <INSTALL_REPOSITORY>
-kp_default_repository_username: <INSTALL_REGISTRY_USERNAME>
-kp_default_repository_password: <INSTALL_REGISTRY_PASSWORD>
-pull_from_kp_default_repo: true
-tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
-tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
-descriptor_name: <DESCRIPTOR-NAME>
-enable_automatic_dependency_updates: true
-ca_cert_data: <CA_CERT_CONTENTS> (optional)
-```
+    ```yaml
+    ---
+    kp_default_repository: <INSTALL_REPOSITORY>
+    kp_default_repository_username: <INSTALL_REGISTRY_USERNAME>
+    kp_default_repository_password: <INSTALL_REGISTRY_PASSWORD>
+    pull_from_kp_default_repo: true
+    tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
+    tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
+    descriptor_name: <DESCRIPTOR-NAME>
+    enable_automatic_dependency_updates: true
+    ca_cert_data: <CA_CERT_CONTENTS> (optional)
+    ```
 
-Where:
+    Where:
 
-* `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service dependencies are written to this location. Same value as used during relocation.
-* `INSTALL_REGISTRY_USERNAME` is the registry username. Same value as used during relocation.
-* `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
-* `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
-* `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
-* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
-  * `full` contains all dependencies - for production use.
-  * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
-* `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
+    * `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service dependencies are written to this location. Same value as used during relocation.
+    * `INSTALL_REGISTRY_USERNAME` is the registry username. Same value as used during relocation.
+    * `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
+    * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
+    * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
+    * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
+      * `full` contains all dependencies - for production use.
+      * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
+    * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
 
 #### <a id='additional-config'></a> Additional Configuration
 

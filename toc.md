@@ -11,6 +11,7 @@
 * [**Managing Images and Builds**](managing-images.html)
 * [**Managing ClusterStacks**](managing-stacks.html)
 * [Managing ClusterStores](managing-stores.html)
+* [Descriptors](descriptors.html)
 * [**Managing Builders**](managing-builders.html)
 * [**Managing Custom Stacks**](managing-custom-stacks.html)
 * [**RBAC in Tanzu Build Service**](tbs-with-projects.html)

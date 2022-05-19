@@ -69,6 +69,19 @@ The following Stacks and their updates can be found on the [Tanzu Build Service 
 | base | io.buildpacks.stacks.bionic |
 | full | io.buildpacks.stacks.bionic |
 
+### <a id='descriptors'></a> Descriptors
+
+Tanzu Build Service descriptors are curated sets of dependencies, including stacks and buildpacks, that are
+continuously released on [VMware Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) to resolve all workload
+Critical and High CVEs.
+Descriptors are imported into Tanzu Build Service to update the entire cluster.
+
+There are two types of descriptor, `lite` and `full`.
+The different descriptors can apply to different use cases and workload types.
+You can configure which descriptor is imported when installing Tanzu Build Service.
+
+For more information, see [Descriptors](./descriptors.html).
+
 ### <a id='upgrading-dependencies'></a> Updating Build Service Dependencies
 
 Build Service allows the user to update Buildpacks and Stacks via the `kp` CLI. You can learn more about updating Build Service dependencies [here](updating-deps.html).
