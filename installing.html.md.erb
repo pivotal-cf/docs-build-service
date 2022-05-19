@@ -172,8 +172,8 @@ The local machine must have write access to the install registry.
     * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
     * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
     * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
-      * `full` contains all dependencies - for production use.
-      * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
+      * `full` contains all dependencies.
+      * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
     * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
 
 #### <a id='secret-references'></a> Using Secrets for credentials
