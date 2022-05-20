@@ -127,15 +127,15 @@ There are two ways to install Tanzu Build Service:
 
 1. Pull the Tanzu Build Service bundle image locally using `imgpkg`:
 
-```
-imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
-```
+    ```
+    imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
+    ```
 
-Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
+    Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
 
 2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters:
 
-  Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature keeps Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, include your TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` when running the install command below:
+    Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature keeps Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, include your TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` when running the install command below:
 
     ```
     ytt -f /tmp/bundle/config/ \
@@ -150,41 +150,41 @@ Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during reloc
       | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
       | kapp deploy -a tanzu-build-service -f- -y
     ```
-  You can check the status of the DependencyUpdater by running:
+    You can check the status of the DependencyUpdater by running:
 
     ```
     kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml
     ```
 
-Alternatively, if you prefer to manage dependencies manually, leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
+    Alternatively, if you prefer to manage dependencies manually, leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
 
-  ```
-  ytt -f /tmp/bundle/config/ \
-    -v kp_default_repository='<IMAGE-REPOSITORY>' \
-    -v kp_default_repository_username='<REGISTRY-USERNAME>' \
-    -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-    --data-value-yaml pull_from_kp_default_repo=true \
-    | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-    | kapp deploy -a tanzu-build-service -f- -y
-  ```
+    ```
+    ytt -f /tmp/bundle/config/ \
+      -v kp_default_repository='<IMAGE-REPOSITORY>' \
+      -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+      -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+      --data-value-yaml pull_from_kp_default_repo=true \
+      | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+      | kapp deploy -a tanzu-build-service -f- -y
+    ```
 
-  Where:
+    Where:
 
-  * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-      <p class="note">
-      <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
-      </p>
-  * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-    as the username when using JSON key file authentication.
-  * `REGISTRY-PASSWORD` is the password you use to access the registry.
-      <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
-  * `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
-  * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
-  * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
-    * `full` contains all dependencies - for production use.
-    * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
+    * `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
+        <p class="note">
+        <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
+        </p>
+    * `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
+      as the username when using JSON key file authentication.
+    * `REGISTRY-PASSWORD` is the password you use to access the registry.
+        <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
+    * `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
+    * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
+    * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
+      * `full` contains all dependencies.
+      * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
 
-  <p class="note"><strong>Note:</strong> You may want to pin your Tanzu Build Service to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
+    <p class="note"><strong>Note:</strong> You may want to pin your Tanzu Build Service to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
 
 #### <a id='ca-cert'></a> Installing with a CA certificate for internal registry
 

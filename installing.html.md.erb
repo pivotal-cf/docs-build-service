@@ -128,12 +128,12 @@ The local machine must have write access to the install registry.
 
 1. Create a secret to pull in the package repository:
 
-```
-tanzu secret registry add tbs-install-registry \
-  --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
-  --server ${INSTALL_REGISTRY_HOSTNAME} \
-  --export-to-all-namespaces --yes --namespace tbs-install
-```
+    ```
+    tanzu secret registry add tbs-install-registry \
+      --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
+      --server ${INSTALL_REGISTRY_HOSTNAME} \
+      --export-to-all-namespaces --yes --namespace tbs-install
+    ```
 
 1. Add the Tanzu Build Service package repository to the cluster by running:
 
@@ -171,8 +171,8 @@ tanzu secret registry add tbs-install-registry \
     * `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
     * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
     * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
-    * `DESCRIPTOR_NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
-      * `full` contains all dependencies - for production use.
+    * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
+      * `full` contains all dependencies.
       * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
     * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate.
 
