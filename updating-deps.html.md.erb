@@ -51,29 +51,55 @@ spec:
 
 ### <a id='online-bulk-update'></a> Bulk update
 
-<p class="note"><strong>Note:</strong> If you want to be alerted when a new descriptor file is published, we recommend using an RSS reader and watching the Tanzu Build Service Dependencies TanzuNet feed for updates https://network.tanzu.vmware.com/rss </p>
+<p class="note">
+  <strong>Note:</strong> If you want to be alerted when a new descriptor file is published,
+  we recommend using an RSS reader and watching the Tanzu Build Service Dependencies
+  Tanzu Network feed for updates https://network.tanzu.vmware.com/rss.
+</p>
 
+The bulk update workflow can update all dependencies in Tanzu Build Service,
+such as ClusterStacks, ClusterStores, and ClusterBuilders, using the `kp import` command.
 
-The Bulk Update workflow can update all dependencies (ClusterStacks, ClusterStores, and ClusterBuilders) in Tanzu Build Service using the `kp import` command.
+1. Download the dependency descriptor file (`descriptor-<version>.yaml`) from the
+  latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/)
+  page on Tanzu Network.
 
-1. Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
+    <p class="note">
+      <strong>Note:</strong> You can see all of the buildpackages versions that are
+      imported by looking at the <code>buildpackage-versions-<version>.yaml</code> file from the
+      <a href="https://network.tanzu.vmware.com/products/tbs-dependencies/">Tanzu Build Service Dependencies</a>
+      release.
+    </p>
 
-<p class="note"><strong>Note:</strong> You can see all of the buildpackages versions that are imported by looking at the `buildpackage-versions-<version>.yaml` file from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) release.</p>
+2. Log in to the TanzuNet registry, using both URLs.
 
-2. Docker login to the TanzuNet registry (both URLs).
+    - If using the `docker` CLI, run:
 
-```
-docker login registry.tanzu.vmware.com
-docker login registry.pivotal.io
-```
+        ```
+        docker login registry.tanzu.vmware.com
+        docker login registry.pivotal.io
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```
+        crane auth login registry.tanzu.vmware.com
+        crant auth login registry.pivotal.io
+        ```
 
 3. Use the `kp` CLI.
 
-<p class="warning"><strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials, you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
+    <p class="warning">
+      <strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater.
+      If you have enabled this feature during install by passing in your TanzuNet credentials,
+      you <strong>must</strong> skip this step.
+      To check if you have a TanzuNetDependencyUpdater in your cluster, run:
+      <code>kubectl get TanzuNetDependencyUpdaters -A</code>
+    </p>
 
-```
-kp import -f descriptor-<version>.yaml
-```
+    ```
+    kp import -f descriptor-<version>.yaml
+    ```
 
 The following ClusterStacks are updated with the latest operating system patches: `base`, `default`, `full`, and `tiny`.
 
@@ -214,42 +240,66 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
 1. Find the latest version of the Dependency Descriptor bundle image (`registry.tanzu.vmware.com/tbs-dependencies/full`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Download the following CLIs for your operating system:
+1. Download the following CLIs for your operating system:
 
- - [kp](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service)
- - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
- - [kbld](https://network.tanzu.vmware.com/products/kbld)
+    - [kp](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service)
+    - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
+    - [kbld](https://network.tanzu.vmware.com/products/kbld)
 
-3. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg` using the `VERSION` found from Tanzu Network in step 1:
+1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-	```
-	docker login registry.tanzu.vmware.com
+    - If using the `docker` CLI, run:
 
-	imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
-	  --to-tar=tbs-dependencies.tar
-	```
+        ```
+        docker login registry.tanzu.vmware.com
+        ```
 
-4. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment.
+    - If using the `crane` CLI, run:
 
-5. Upload the dependency images to the registry used to deploy Tanzu Build Service:
+        ```
+        crane auth login registry.tanzu.vmware.com
+        ```
 
-	```
-	docker login <build-service-registry>
+1. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg` using the `VERSION` found from Tanzu Network in step 1:
 
-	imgpkg copy --tar=tbs-dependencies.tar \
-	  --to-repo <IMAGE-REPOSITORY>
-	```
+    ```
+    imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
+      --to-tar=tbs-dependencies.tar
+    ```
 
-	Where: `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
+1. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment.
 
-6. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
+1. Log in to the image registry used to deploy Tanzu Build Service:
 
-	```
-	imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
-	  -o /tmp/descriptor-bundle \
-	  --registry-ca-cert-path <PATH-TO-CA>
+    - If using the `docker` CLI, run:
 
-	kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
-	  -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
-	  | kp import -f -
-	```
+        ```
+        docker login <build-service-registry>
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```
+        crane auth login <build-service-registry>
+        ```
+
+1. Upload the dependency images to the registry used to deploy Tanzu Build Service by running:
+
+    ```
+    imgpkg copy --tar=tbs-dependencies.tar \
+      --to-repo <IMAGE-REPOSITORY>
+    ```
+
+    Where `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
+
+1. Now that you have relocated the dependencies to the internal registry, update the resources by running:
+
+    ```
+    imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
+      -o /tmp/descriptor-bundle \
+      --registry-ca-cert-path <PATH-TO-CA>
+
+    kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
+      -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
+      | kp import -f -
+    ```

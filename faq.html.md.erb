@@ -98,7 +98,7 @@ This can be accomplished by using `kp secret create`.
 
 There is a known bug in Harbor that, at times, prevents the UI from showing images.
 If you are unable to see a recently built image in the Harbor UI, try pulling
-it using the `docker` CLI to verify that it exists.
+it using the `docker` or `crane` CLI to verify that it exists.
 
 ---
 
@@ -117,15 +117,17 @@ You can use Google Container Registry for your Tanzu Build Service installation 
 
 If you have trouble configuring the registry credentials for gcr when following the [install docs](installing.html#other-install), use the following to set the gcr credentials:
 
-	registry_name="_json_key"
-	registry_password="$(cat /path/to/gcp/service/account/key.json)"
-	ytt -f /tmp/bundle/config/ \
-		-v docker_repository='<IMAGE-REPOSITORY>' \
-		-v docker_username="$registry_name" \
-		-v docker_password="$registry_password" \
-		| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-		| kapp deploy -a tanzu-build-service -f- -y
-
+```console
+registry_name="_json_key"
+registry_password="$(cat /path/to/gcp/service/account/key.json)"
+ytt -f /tmp/bundle/config/ \
+  -v kp_default_repository='<IMAGE-REPOSITORY>' \
+  -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+  -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+  --data-value-yaml pull_from_kp_default_repo=true \
+  | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+  | kapp deploy -a tanzu-build-service -f- -y
+```
 
 ---
 
@@ -142,14 +144,15 @@ This is a known limitation and can be circumvented by using <code>no_proxy</code
 
 ```
 ytt -f /tmp/bundle/config/ \
-	-v docker_repository='<IMAGE-REPOSITORY>' \
-	-v docker_username='<REGISTRY-USERNAME>' \
-	-v docker_password='<REGISTRY-PASSWORD>' \
-	-v http_proxy='<HTTP-PROXY-URL>' \
-	-v https_proxy='<HTTPS-PROXY-URL>' \
-	-v no_proxy='<KUBERNETES-API-SERVER-URL>' \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
+  -v kp_default_repository='<IMAGE-REPOSITORY>' \
+  -v kp_default_repository_username='<REGISTRY-USERNAME>' \
+  -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
+  --data-value-yaml pull_from_kp_default_repo=true \
+  -v http_proxy='<HTTP-PROXY-URL>' \
+  -v https_proxy='<HTTPS-PROXY-URL>' \
+  -v no_proxy='<KUBERNETES-API-SERVER-URL>' \
+  | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+  | kapp deploy -a tanzu-build-service -f- -y
 ```
 
 ---
@@ -158,7 +161,10 @@ ytt -f /tmp/bundle/config/ \
 
 You can use the [pack cli](https://buildpacks.io/docs/tools/pack/) with your kpack builders to test them locally before checking in your code. By using your kpack builder locally, you can guarantee that the buildpacks, stacks, and lifecycle used to build the image config will also be used by the pack CLI, resulting in a container image that is the exact same, whether it is built by `kpack` or `pack`.
 
-<p class="note"><strong>Note:</strong> Make sure that you `docker login` to the image repository containing your kpack builder.</p>
+<p class="note">
+  <strong>Note:</strong> Make sure that you <code>docker login</code> or <code>crane auth login</code>
+  to the image repository containing your kpack builder.
+</p>
 
 ```
 pack build my-app --path ~/workspace/my-app --builder gcr.io/my-project/my-image:latest --trust-builder
@@ -266,26 +272,76 @@ $ kubectl describe clusterbuilder <clusterbuilder-name>
 
 1. Ensure you are logged in locally to both registries with:
 
-```
-docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
-docker logout <tbs-registry> && docker login <tbs-registry>
-```
+    - If using the `docker` CLI, run:
 
-2. On linux, if you have installed `docker` with `snap` you will need to copy `/root/snap/docker/471/.docker/config.json` to `~/.docker/config.json` which is where `imgpkg` is looking for the docker credentials
-3. Ensure your credentials have write access to your registry with `docker push <registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
+        ```console
+        docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
+        docker logout <tbs-registry> && docker login <tbs-registry>
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```console
+        rm ~/.docker/config.json
+        crane auth login <tbs-registry>
+        crane auth login registry.tanzu.vmware.com
+        ```
+
+2. On linux, if you have installed `docker` with `snap` you will need to copy `/root/snap/docker/471/.docker/config.json` to `~/.docker/config.json` which is where `imgpkg` is looking for the `docker` credentials.
+
+3. Ensure your credentials have write access to your registry.
+This is the same repository used during installation with the `ytt/kapp` command.
+
+    - For the `docker` CLI:
+
+        ```console
+        docker push <tbs-registry>/<build-service-repository>
+        ```
+
+    - For the `crane` CLI:
+
+        ```console
+        crane pull alpine alpine.tar && crane push alpine.tar <tbs-registry>/<build-service-repository>
+        ```
 
 **During `kp import`**
 
 1. Ensure you are logged in locally to both registries with:
 
-```
-docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
-docker logout <tbs-registry> && docker login <tbs-registry>
-```
+    - If using the `docker` CLI, run:
 
-2. Ensure the credentials used to install TBS have write access to your registry as they sometimes differ from local credentials
-  - Use `docker login <tbs-registry>` using the credentials used to install TBS with `ytt/kapp`
-  - Try to `docker push <tbs-registry>/<build-service-repository>` this is the same repository used during install with the `ytt/kapp` command
+        ```console
+        docker logout registry.tanzu.vmware.com && docker login registry.tanzu.vmware.com
+        docker logout <tbs-registry> && docker login <tbs-registry>
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```console
+        rm ~/.docker/config.json
+        crane auth login <tbs-registry>
+        crane auth login registry.tanzu.vmware.com
+        ```
+
+2. Ensure the credentials used to install TBS have write access to your registry
+as they sometimes differ from local credentials:
+
+    - Run `docker login <tbs-registry>` or `crane auth login <tbs-registry>` using
+      the credentials used to install TBS with `ytt/kapp`. <!-- duplication of the step above? -->
+
+    - Try to write to the image repository used during installation with the `ytt/kapp` command:
+
+        - For the `docker` CLI:
+
+            ```console
+            docker push <tbs-registry>/<build-service-repository>
+            ```
+
+        - For the `crane` CLI:
+
+            ```console
+            crane pull alpine alpine.tar && crane push alpine.tar <tbs-registry>/<build-service-repository>
+            ```
 
 ## <a id='faq-18'></a> Why does TBS leave behind pods after builds on my Cluster?
 
