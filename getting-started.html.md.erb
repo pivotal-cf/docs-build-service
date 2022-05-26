@@ -36,6 +36,8 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
 	* These docs assume kp cli v0.5.* from TBS release v1.5.*. If a feature is not working, you may need to upgrade your cli.
 
+* Download either the `docker` CLI or `crane` CLI for authentication with registries.
+
 ## <a id='Assumptions'></a> Assumptions
 
 For this example setup, we make the following assumptions:
@@ -56,46 +58,61 @@ This procedure relocates images from the Tanzu Network registry to your registry
 
 1. Log in to your image registry:
 
-		```
-		docker login my.registry.io --tlscacert /tmp/ca.crt
-		```
+    - If using the `docker` CLI, run:
+
+        ```
+        docker login my.registry.io --tlscacert /tmp/ca.crt
+        ```
+
+    - If uisng the `crane` CLI, run:
+
+        ```
+        crane auth login my.registry.io --tlscacert /tmp/ca.crt
+        ```
 
 2. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-		```
-		docker login registry.tanzu.vmware.com
-		```
+    - If using the `docker` CLI, run:
+
+        ```
+        docker login registry.tanzu.vmware.com
+        ```
+    - If using the `crane` CLI, run:
+
+        ```
+        crane auth login registry.tanzu.vmware.com
+        ```
 
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-		```
-		imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.5.1" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
-		```
+    ```
+    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.5.1" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
+    ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
-		```
-		imgpkg pull -b "my.registry.io/tbs:1.5.1" -o /tmp/bundle
-		```
+    ```
+    imgpkg pull -b "my.registry.io/tbs:1.5.1" -o /tmp/bundle
+    ```
 
 ### <a id='install'></a> Install Tanzu Build Service
 
 Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
-	```
-	ytt -f /tmp/bundle/config/ \
-		-f /tmp/ca.crt \
-		-v kp_default_repository='my.registry.io/tbs' \
-		-v kp_default_repository_username='my-user' \
-		-v kp_default_repository_password='my-password' \
-		--data-value-yaml pull_from_kp_default_repo=true \
-		-v tanzunet_username='tanzunet-username' \
-		-v tanzunet_password='tanzunet-password' \
-		-v descriptor_name='lite' \
-		--data-value-yaml enable_automatic_dependency_updates=true \
-		| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-		| kapp deploy -a tanzu-build-service -f- -y
-	```
+```
+ytt -f /tmp/bundle/config/ \
+  -f /tmp/ca.crt \
+  -v kp_default_repository='my.registry.io/tbs' \
+  -v kp_default_repository_username='my-user' \
+  -v kp_default_repository_password='my-password' \
+  --data-value-yaml pull_from_kp_default_repo=true \
+  -v tanzunet_username='tanzunet-username' \
+  -v tanzunet_password='tanzunet-password' \
+  -v descriptor_name='lite' \
+  --data-value-yaml enable_automatic_dependency_updates=true \
+  | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+  | kapp deploy -a tanzu-build-service -f- -y
+```
 
 ## <a id='verify-installation'></a> Verify Installation
 
@@ -103,19 +120,19 @@ To verify your Build Service installation:
 
 List the cluster builders available in your installation:
 
-	```
-	kp clusterbuilder list
-	```
+```
+kp clusterbuilder list
+```
 
 You should see an output that looks as follows:
 
-	```
-	NAME       READY    STACK                          IMAGE
-	base       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-	default    true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-	full       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-	tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
-	```
+```
+NAME       READY    STACK                          IMAGE
+base       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+default    true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+full       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
+```
 
 ## <a id='create-image'></a> Create an Image
 
@@ -125,16 +142,16 @@ We assume you are using the `default` namespace, use `-n` when using `kp` to set
 
 1. Create a Kubernetes Secret that allows your Builds to push to the desired registry with the `kp` cli:
 
-		```
-		kp secret create my-registry-creds --registry my.registry.io --registry-user my-user
-		```
+    ```
+    kp secret create my-registry-creds --registry my.registry.io --registry-user my-user
+    ```
 
-	You are prompted for your password (`my-password`).
+    You are prompted for your password (`my-password`).
 
 2. Create the Tanzu Build Service Image:
 
-	We use a [sample java-maven app](https://github.com/buildpacks/samples/tree/098946cf3d9ce2d6b42d6b33a12b0799b288f873/apps/java-maven):
+    We use a [sample java-maven app](https://github.com/buildpacks/samples/tree/098946cf3d9ce2d6b42d6b33a12b0799b288f873/apps/java-maven):
 
-		```
-		kp image create my-image --tag my.registry.io/tbs/test-app --git https://github.com/buildpacks/samples --sub-path ./apps/java-maven --wait
-		```
+    ```
+    kp image create my-image --tag my.registry.io/tbs/test-app --git https://github.com/buildpacks/samples --sub-path ./apps/java-maven --wait
+    ```
