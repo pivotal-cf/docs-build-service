@@ -48,7 +48,7 @@ For information about packaging buildpacks, see [Package a buildpack](https://bu
 
 Users can view the existing stores by running:
 
-```
+```console
 kp clusterstore list
 ```
 
@@ -138,19 +138,19 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
     - If you are using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login registry.tanzu.vmware.com
         ```
 
     - If you are using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login registry.tanzu.vmware.com
         ```
 
 1. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
       --to-tar=tbs-dependencies.tar
     ```
@@ -161,19 +161,19 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
     - If you are using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login <build-service-registry>
         ```
 
     - If you are using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login <build-service-registry>
         ```
 
 1. Upload the dependency images to the registry used to deploy Tanzu Build Service by running:
 
-    ```
+    ```console
     imgpkg copy --tar=tbs-dependencies.tar \
       --to-repo <IMAGE-REPOSITORY>
     ```
@@ -184,7 +184,7 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
 1. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
 
-    ```
+    ```console
     imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
       -o /tmp/descriptor-bundle \
       --registry-ca-cert-path <PATH-TO-CA>
@@ -217,14 +217,14 @@ Users can use the `kp` CLI to get details about a store including buildpackages 
 
 To view the buildpackages in a store, run:
 
-```
+```console
 kp clusterstore status <store-name>
 ```
 
 For example:
 
-```
-$kp clusterstore status default
+```console
+$ kp clusterstore status default
 
 Status:    Ready
 

@@ -62,7 +62,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 Create a kubernetes cluster where you would like to install build service and target the cluster as follows:
 
-```
+```console
 kubectl config use-context <CONTEXT-NAME>
 ```
 
@@ -74,7 +74,7 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login <IMAGE-REGISTRY>
         ```
 
@@ -82,7 +82,7 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login <IMAGE-REGISTRY>
         ```
 
@@ -92,19 +92,19 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login registry.tanzu.vmware.com
         ```
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login registry.tanzu.vmware.com
         ```
 
 1. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION>" --to-repo <IMAGE-REPOSITORY>
     ```
 
@@ -340,7 +340,7 @@ The local machine must have write access to the internal registry.
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login <IMAGE-REGISTRY>
         ```
 
@@ -348,7 +348,7 @@ The local machine must have write access to the internal registry.
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login <IMAGE-REGISTRY>
         ```
 
@@ -358,19 +358,19 @@ The local machine must have write access to the internal registry.
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login registry.tanzu.vmware.com
         ```
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login registry.tanzu.vmware.com
         ```
 
 3. Copy the Tanzu Build Service bundle to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b registry.tanzu.vmware.com/build-service/bundle:<TBS-VERSION> --to-tar=/tmp/tanzu-build-service.tar
     ```
 
@@ -380,7 +380,7 @@ The local machine must have write access to the internal registry.
 
 5. Unpackage the images from your local machine to the internal registry:
 
-    ```
+    ```console
     imgpkg copy --tar /tmp/tanzu-build-service.tar \
       --to-repo=<IMAGE-REPOSITORY> \
       --registry-ca-cert-path <PATH-TO-CA>

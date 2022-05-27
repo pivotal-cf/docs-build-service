@@ -97,13 +97,13 @@ The local machine must have write access to the install registry.
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login registry.tanzu.vmware.com
         ```
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login registry.tanzu.vmware.com
         ```
 
@@ -111,20 +111,20 @@ The local machine must have write access to the install registry.
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login ${INSTALL_REGISTRY_HOSTNAME}
         ```
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login ${INSTALL_REGISTRY_HOSTNAME}
         ```
 
 1. Copy the Tanzu Build Service package repository to your registry with the
 [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
     ```
 
@@ -325,19 +325,19 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login registry.tanzu.vmware.com
         ```
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login registry.tanzu.vmware.com
         ```
 
 1. Copy the Tanzu Build Service package repository to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
     ```
 
@@ -347,19 +347,19 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login ${INSTALL_REGISTRY_HOSTNAME}
         ```
 
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login ${INSTALL_REGISTRY_HOSTNAME}
         ```
 
 1. Copy the images from your local machine to the internal registry:
 
-    ```
+    ```console
     imgpkg copy --tar /tmp/tanzu-build-service.tar \
       --to-repo=${INSTALL_REPOSITORY} \
       --registry-ca-cert-path <PATH-TO-CA>

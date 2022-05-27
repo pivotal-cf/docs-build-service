@@ -60,13 +60,13 @@ This procedure relocates images from the Tanzu Network registry to your registry
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login my.registry.io --tlscacert /tmp/ca.crt
         ```
 
     - If uisng the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login my.registry.io --tlscacert /tmp/ca.crt
         ```
 
@@ -74,24 +74,24 @@ This procedure relocates images from the Tanzu Network registry to your registry
 
     - If using the `docker` CLI, run:
 
-        ```
+        ```console
         docker login registry.tanzu.vmware.com
         ```
     - If using the `crane` CLI, run:
 
-        ```
+        ```console
         crane auth login registry.tanzu.vmware.com
         ```
 
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.5.1" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
     ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
-    ```
+    ```console
     imgpkg pull -b "my.registry.io/tbs:1.5.1" -o /tmp/bundle
     ```
 
@@ -99,7 +99,7 @@ This procedure relocates images from the Tanzu Network registry to your registry
 
 Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters by running:
 
-```
+```console
 ytt -f /tmp/bundle/config/ \
   -f /tmp/ca.crt \
   -v kp_default_repository='my.registry.io/tbs' \
@@ -120,7 +120,7 @@ To verify your Build Service installation:
 
 List the cluster builders available in your installation:
 
-```
+```console
 kp clusterbuilder list
 ```
 
@@ -142,7 +142,7 @@ We assume you are using the `default` namespace, use `-n` when using `kp` to set
 
 1. Create a Kubernetes Secret that allows your Builds to push to the desired registry with the `kp` cli:
 
-    ```
+    ```console
     kp secret create my-registry-creds --registry my.registry.io --registry-user my-user
     ```
 
@@ -152,6 +152,6 @@ We assume you are using the `default` namespace, use `-n` when using `kp` to set
 
     We use a [sample java-maven app](https://github.com/buildpacks/samples/tree/098946cf3d9ce2d6b42d6b33a12b0799b288f873/apps/java-maven):
 
-    ```
+    ```console
     kp image create my-image --tag my.registry.io/tbs/test-app --git https://github.com/buildpacks/samples --sub-path ./apps/java-maven --wait
     ```
