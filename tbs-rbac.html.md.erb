@@ -5,17 +5,6 @@ owner: Build Service Team
 
 Given that Tanzu Build Service supports functionality most customers would likely want to restrict to only certain users, we encourage utilization of role-based access control (RBAC) as a best practice if Tanzu Build Service is to be broadly deployed to many users.
 
-
-## <a id='projects-operator'></a> RBAC using Projects Operator
-
-[Projects Operator](https://github.com/vmware-tanzu/projects-operator) can be installed on the cluster to simplify RBAC management.
-
-Projects Operator extends Kubernetes with a `Project` CRD and corresponding controller. Projects are intended to provide isolation of Kubernetes resources on a single Kubernetes cluster. A `Project` is essentially a Kubernetes namespace along with a corresponding set of RBAC rules.
-
-As part of the Projects Operator [installation](https://github.com/vmware-tanzu/projects-operator#install), you can specify the ClusterRole to apply for each `Project` using the `CLUSTER_ROLE_REF` environment variable.
-The Tanzu Build Service installation comes with a ClusterRole called [build-service-user-role](#user-role), which can be used for this purpose.
-
-
 ## <a id='rbac'></a> RBAC support in Tanzu Build Service
 
 Tanzu Build Service is installed with 2 Kubernetes [ClusterRoles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) that can be used for RBAC for Build Service users and admins:
