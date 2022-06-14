@@ -35,7 +35,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
 * Download Carvel [imgpkg](https://network.tanzu.vmware.com/products/imgpkg/). Version 0.12.0 or higher is required.
 
-* Download and install the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-install-tanzu-cli.html).
+* Install the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-install-tanzu-cli.html).
   - Only the `package` and `secret` plug-ins are required.
 
 * Install Carvel [kapp controller](https://carvel.dev/kapp-controller/docs/latest/install/) and [secret gen controller](https://github.com/vmware-tanzu/carvel-secretgen-controller/blob/develop/docs/install.md) on your cluster.
@@ -51,11 +51,14 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. See the `kp` CLI [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
 	* These docs assume kp cli v0.5.* from Tanzu Build Service release v1.5.*. If a feature is not working, you may need to upgrade your cli.
 
-* Download the `docker` CLI to authenticate with registries.
+* Download either the [`docker` CLI](https://docs.docker.com/get-docker/) or
+[`crane` CLI](https://github.com/google/go-containerregistry/tree/main/cmd/crane)
+for authentication with registries.
 
 <p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1, 1.5.6, and 1.5.7 are not compatible with Tanzu Build Service. Notably, TKG 1.2.1 and TKGi 1.13.0 & 1.13.1 use these versions of Containerd, so a different version must be used.</p>
 
 <p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with Tanzu Build Service.</p>
+
 
 ## <a id='install-tbs'></a> Install Tanzu Build Service
 
@@ -78,43 +81,61 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
       * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
       * gcr.io has the form `gcr.io/my-project/build-service`.
       * Harbor has the form `my-harbor.io/my-project/build-service`.
-    * `REGISTRY-USERNAME` is the user name of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
-    * `REGISTRY-PASSWORD` is the password of the registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+    * `REGISTRY-USERNAME` is the user name of the registry. You must be able to write to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
+    * `REGISTRY-PASSWORD` is the password of the registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
     * `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
     * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
       * For Google Cloud Registry, use the contents of the service account JSON key.
     * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
-### <a id='relocate-images'></a> Relocate Images to a registry
+### <a id='relocate-images'></a> Relocate images to a registry
 
-This procedure relocates images from the Tanzu Network registry to an internal image registry through a local machine.
+This procedure relocates images from the Tanzu Network registry to an internal
+image registry through a local machine.
 
 The local machine must have write access to the install registry.
 
-1. Log in to the Tanzu Network registry with your Tanzu Network credentials (`TANZUNET_REGISTRY_USERNAME` & `TANZUNET_REGISTRY_PASSWORD`):
+1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-    ```
-    docker login registry.tanzu.vmware.com
-    ```
+    - If using the `docker` CLI, run:
 
-1. Log in to the image registry where you want to store the images by running:
+        ```console
+        docker login registry.tanzu.vmware.com
+        ```
 
-    ```
-    docker login ${INSTALL_REGISTRY_HOSTNAME}
-    ```
+    - If using the `crane` CLI, run:
 
-1. Copy the Tanzu Build Service package repository to your registry with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
+        ```console
+        crane auth login registry.tanzu.vmware.com
+        ```
 
-    ```
+1. Log in to the image registry where you want to store the images:
+
+    - If using the `docker` CLI, run:
+
+        ```console
+        docker login ${INSTALL_REGISTRY_HOSTNAME}
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```console
+        crane auth login ${INSTALL_REGISTRY_HOSTNAME}
+        ```
+
+1. Copy the Tanzu Build Service package repository to your registry with the
+[Carvel](https://carvel.dev/) tool `imgpkg` by running:
+
+    ```console
     imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
     ```
 
-  For example:
+    For example:
 
-  * Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
-  * GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
-  * Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
-  * Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
+    * Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
+    * GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
+    * Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
+    * Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
 
 ### <a id='install'></a> Installation
 
@@ -289,8 +310,8 @@ CA certificate file to install Tanzu Build Service.
     * `IMAGE-REGISTRY` is the host name of the private registry.
     * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
       * Harbor has the form `my-harbor.io/my-project/build-service`
-    * `REGISTRY-USERNAME` is the user name of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
-    * `REGISTRY-PASSWORD` is the password of the private registry. You should be able to `docker push` to `IMAGE-REPOSITORY` with this credential.
+    * `REGISTRY-USERNAME` is the user name of the private registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
+    * `REGISTRY-PASSWORD` is the password of the private registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
     * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
 
     <p class="note">
@@ -304,13 +325,21 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-    ```
-    docker login registry.tanzu.vmware.com
-    ```
+    - If using the `docker` CLI, run:
+
+        ```console
+        docker login registry.tanzu.vmware.com
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```console
+        crane auth login registry.tanzu.vmware.com
+        ```
 
 1. Copy the Tanzu Build Service package repository to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
-    ```
+    ```console
     imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
     ```
 
@@ -318,13 +347,21 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
 1. Log in to the image registry where you want to store the images by running:
 
-    ```
-    docker login ${INSTALL_REGISTRY_HOSTNAME}
-    ```
+    - If using the `docker` CLI, run:
+
+        ```console
+        docker login ${INSTALL_REGISTRY_HOSTNAME}
+        ```
+
+    - If using the `crane` CLI, run:
+
+        ```console
+        crane auth login ${INSTALL_REGISTRY_HOSTNAME}
+        ```
 
 1. Copy the images from your local machine to the internal registry:
 
-    ```
+    ```console
     imgpkg copy --tar /tmp/tanzu-build-service.tar \
       --to-repo=${INSTALL_REPOSITORY} \
       --registry-ca-cert-path <PATH-TO-CA>

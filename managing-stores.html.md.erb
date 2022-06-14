@@ -46,9 +46,11 @@ For information about packaging buildpacks, see [Package a buildpack](https://bu
 
 ## <a id='list-stores'></a> Listing ClusterStores
 
-Users can view the existing stores with:
+Users can view the existing stores by running:
 
-    kp clusterstore list
+```console
+kp clusterstore list
+```
 
 ## <a id='create-store'></a> Creating a ClusterStore
 
@@ -126,59 +128,86 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
 1. Find the latest version of the Dependency Descriptor bundle image (`registry.tanzu.vmware.com/tbs-dependencies/full`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
-2. Download the following CLIs for your operating system:
- - [kp](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service).
- - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
- - [kbld](https://network.tanzu.vmware.com/products/kbld)
+1. Download the following CLIs for your operating system:
 
-4. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg`:
+    - [kp](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service).
+    - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
+    - [kbld](https://network.tanzu.vmware.com/products/kbld)
 
-```
-docker login registry.tanzu.vmware.com
+1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
-imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
-  --to-tar=tbs-dependencies.tar
-```
+    - If you are using the `docker` CLI, run:
 
-5. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment.
+        ```console
+        docker login registry.tanzu.vmware.com
+        ```
 
-6. Upload the dependency images to the registry used to deploy Tanzu Build Service:
+    - If you are using the `crane` CLI, run:
 
-```
-docker login <build-service-registry>
+        ```console
+        crane auth login registry.tanzu.vmware.com
+        ```
 
-imgpkg copy --tar=tbs-dependencies.tar \
-  --to-repo <IMAGE-REPOSITORY>
-```
+1. Download the dependency images for Tanzu Build Service to your local machine with `imgpkg` by running:
 
-Where:
+    ```console
+    imgpkg copy -b registry.tanzu.vmware.com/tbs-dependencies/full:<VERSION> \
+      --to-tar=tbs-dependencies.tar
+    ```
 
-- `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
+1. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment.
 
-7. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
+1. Log in to the image registry used to deploy Tanzu Build Service:
 
-```
-imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
-  -o /tmp/descriptor-bundle \
-  --registry-ca-cert-path <PATH-TO-CA>
+    - If you are using the `docker` CLI, run:
 
-kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
-  -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
-  | kp import -f -
-```
+        ```console
+        docker login <build-service-registry>
+        ```
+
+    - If you are using the `crane` CLI, run:
+
+        ```console
+        crane auth login <build-service-registry>
+        ```
+
+1. Upload the dependency images to the registry used to deploy Tanzu Build Service by running:
+
+    ```console
+    imgpkg copy --tar=tbs-dependencies.tar \
+      --to-repo <IMAGE-REPOSITORY>
+    ```
+
+    Where:
+
+    - `IMAGE-REPOSITORY` is the repository used to install Tanzu Build Service. This should be the same value as `IMAGE-REPOSITORY` used in the [Installation Steps](installing.html#other-install).
+
+1. Now that dependencies are relocated to the internal registry, you can use the following commands to update the necessary resources:
+
+    ```console
+    imgpkg pull -b <IMAGE-REPOSITORY>:<VERSION> \
+      -o /tmp/descriptor-bundle \
+      --registry-ca-cert-path <PATH-TO-CA>
+
+    kbld -f /tmp/descriptor-bundle/.imgpkg/images.yml \
+      -f /tmp/descriptor-bundle/tanzu.descriptor.v1alpha3/descriptor-<VERSION>.yaml \
+      | kp import -f -
+    ```
 
 ## <a id='remove-buildpackages-from-store'></a> Removing buildpackages from a ClusterStore
 
 Users can remove a buildpackage from a ClusterStore by referencing the buildpackage Id and version.
 
-    ```
-    kp clusterstore remove <store> -b <buildpackage-id>@<buildpackage-version>
-    ```
+```
+kp clusterstore remove <store> -b <buildpackage-id>@<buildpackage-version>
+```
 
 For example:
 
-    kp clusterstore remove my-store -b buildpackage@1.0.0
-    kp clusterstore remove my-store -b buildpackage@1.0.0 -b other-buildpackage@2.0.0
+```
+kp clusterstore remove my-store -b buildpackage@1.0.0
+kp clusterstore remove my-store -b buildpackage@1.0.0 -b other-buildpackage@2.0.0
+```
 
 The ClusterStore status shows the list of buildpackage ID and version
 
@@ -188,13 +217,14 @@ Users can use the `kp` CLI to get details about a store including buildpackages 
 
 To view the buildpackages in a store, run:
 
-    ```kp clusterstore status <store-name>
-    ```
+```console
+kp clusterstore status <store-name>
+```
 
 For example:
 
-```
-$kp clusterstore status default
+```console
+$ kp clusterstore status default
 
 Status:    Ready
 
@@ -231,9 +261,9 @@ tanzu-buildpacks/php                  0.0.5
 
 To view buildpackages & their individual buildpacks, and display the order of meta-buildpacks, use the `--verbose` flag:
 
-    ```
-    kp clusterstore status <store-name> --verbose
-    ```
+```
+kp clusterstore status <store-name> --verbose
+```
 
 ## <a id='kpack-resources'></a> Migrating buildpacks
 
@@ -241,8 +271,9 @@ Build Service never automatically removea buildpackages from the store unless yo
 In this way, users can continue to use older buildpacks until the operator is ready to migrate them.
 
 How you migrate is entirely dependent on the configuration of your Builder resources:
-    * Builders that do not provide a buildpack version automatically update to the latest buildpack version if it is available.
-    * Builders that explicitly specify a buildpack version do not update automatically.
+
+* Builders that do not provide a buildpack version automatically update to the latest buildpack version if it is available.
+* Builders that explicitly specify a buildpack version do not update automatically.
 
 With the above in mind, migrating buildpackages in the store is as simple as `kp clusterstore add`ing newer buildpackages and `kp clusterstore remove`ing older buildpackages as necessary.
 
