@@ -283,7 +283,7 @@ To upgrade Tanzu Build Service to a newer version, take the following steps.
 1. Install the package with the same `tbs-values.yml` file used during initial installation by running:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
+    tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
     ```
 
 ## <a id='offline-install-tbs'></a> Installing Tanzu Build Service (air-gapped)
