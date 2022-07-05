@@ -203,21 +203,23 @@ You may not want to install TBS with passwords saved in plaintext in the `tbs-va
 
 You can store these credentials in `Secrets` and reference them in the `tbs-values.yml` using the following process:
 
-1. Create the secret for the `kp-default-repository` credentials using the `kp` cli:
+1. Create the secret for the `kp-default-repository` credentials using the `tanzu` cli:
+
+    ```
+    tanzu secret registry add kp-default-repository-creds \
+      --username ${INSTALL_REGISTRY_USERNAME} \
+      --password ${INSTALL_REGISTRY_PASSWORD} \
+      --server ${INSTALL_REGISTRY_HOSTNAME} \
+      --namespace tbs-install
+    ```
+
+1. When leveraging automatic updates, create the secret for the Tanzu Network credentials using the `tanzu` cli:
 
 	```
-	kp secret create kp-default-repository-creds \
-	  --registry "${INSTALL_REGISTRY_HOSTNAME}" \
-	  --registry-user "${INSTALL_REGISTRY_USERNAME}" \
-	  --namespace tbs-install
-	```
-
-1. When leveraging automatic updates, create the secret for the Tanzu Network credentials using the `kp` cli:
-
-	```
-	kp secret create tanzunet-creds \
-	  --registry "registry.tanzu.vmware.com" \
-	  --registry-user "${TANZUNET_REGISTRY_USERNAME}" \
+	tanzu secret registry add tanzunet-creds \
+	  --server "registry.tanzu.vmware.com" \
+	  --username "${TANZUNET_REGISTRY_USERNAME}" \
+	  --password ${TANZUNET_REGISTRY_PASSWORD} \
 	  --namespace tbs-install
 	```
 
