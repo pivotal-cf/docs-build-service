@@ -207,9 +207,9 @@ You can store these credentials in `Secrets` and reference them in the `tbs-valu
 
     ```
     tanzu secret registry add kp-default-repository-creds \
-      --username ${INSTALL_REGISTRY_USERNAME} \
-      --password ${INSTALL_REGISTRY_PASSWORD} \
-      --server ${INSTALL_REGISTRY_HOSTNAME} \
+      --username "${INSTALL_REGISTRY_USERNAME}" \
+      --password "${INSTALL_REGISTRY_PASSWORD}" \
+      --server "${INSTALL_REGISTRY_HOSTNAME}" \
       --namespace tbs-install
     ```
 
@@ -219,7 +219,7 @@ You can store these credentials in `Secrets` and reference them in the `tbs-valu
 	tanzu secret registry add tanzunet-creds \
 	  --server "registry.tanzu.vmware.com" \
 	  --username "${TANZUNET_REGISTRY_USERNAME}" \
-	  --password ${TANZUNET_REGISTRY_PASSWORD} \
+	  --password "${TANZUNET_REGISTRY_PASSWORD}" \
 	  --namespace tbs-install
 	```
 
