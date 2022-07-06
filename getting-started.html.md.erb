@@ -34,7 +34,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume kp cli v0.5.* from TBS release v1.5.*. If a feature is not working, you may need to upgrade your cli.
+	* These docs assume kp cli v0.6.* from TBS release v1.6.*. If a feature is not working, you may need to upgrade your cli.
 
 * Download either the [`docker` CLI](https://docs.docker.com/get-docker/) or
 [`crane` CLI](https://github.com/google/go-containerregistry/tree/main/cmd/crane)
@@ -44,7 +44,7 @@ for authentication with registries.
 
 For this example setup, we make the following assumptions:
 
-* You are installing TBS 1.5.1 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
+* You are installing TBS 1.6.0 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
 * You are using a registry named `my.registry.io` with credentials
   * Username: `my-user`
   * Password: `my-password`
@@ -88,13 +88,13 @@ This procedure relocates images from the Tanzu Network registry to your registry
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
     ```console
-    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.5.1" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
+    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.6.0" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
     ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
     ```console
-    imgpkg pull -b "my.registry.io/tbs:1.5.1" -o /tmp/bundle
+    imgpkg pull -b "my.registry.io/tbs:1.6.0" -o /tmp/bundle
     ```
 
 ### <a id='install'></a> Install Tanzu Build Service
