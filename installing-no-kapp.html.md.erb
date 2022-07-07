@@ -3,8 +3,6 @@ title: Installing Tanzu Build Service without kapp controller
 owner: Build Service Team
 ---
 
-<p class="note"><strong>Note:</strong> This method of installation is being deprecated and will not be updated with new features.</p>
-
 This topic describes the method of installing Tanzu Build Service without kapp controller. The recommended method uses the `tanzu` cli and kapp controller and can be found [here](installing.html).
 
 Reasons to use the previous installation method include:
@@ -250,41 +248,6 @@ installation command with the CA certificate file passed in with a `-f` flag:
   * `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
   * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
 
-### <a id='import'></a> Import Tanzu Build Service Dependencies
-
-<p class="warning"><strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
-
-The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
-
-These must be imported with the `kp` CLI and the Dependency Descriptor (`descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page:
-
-When importing with `kp` CLI, you must `docker login` or `crane auth login` to both `registry.tanzu.vmware.com` and `registry.pivotal.io`.
-
-  ```
-  kp import -f /tmp/descriptor-<version>.yaml
-  ```
-
-When importing to a registry that uses a self-signed CA certificate:
-
-  ```
-  kp import -f /tmp/descriptor-<version>.yaml --registry-ca-cert-path <path-to-ca-cert>
-  ```
-
-Using the `--show-changes` flag gives a summary of the resource changes for the import. You are also be asked to confirm the import. Confirmation can be skipped with `--force`.
-
-Successfully performing a `kp import` command requires that your Tanzu Network account has access to the images specified in the Dependency Descriptor file.
-Users can only access these images if they agree to the dependency EULAs.
-
-Users must navigate to the following dependencies pages in Tanzu Network and accept all EULAs highlighted in yellow.
-
-1. [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/)
-1. [Buildpacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-buildpacks-suite)
-1. [Stacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-stacks-suite)
-
-<p class="note"><strong>Note:</strong> `kp import` fails if it cannot access the images in all of the above Tanzu Network pages.</p>
-
-<p class="note"><strong>Note:</strong> You must be logged in locally to the registry used for `IMAGE-REGISTRY` during relocation and both urls for the Tanzu Network registry (`registry.tanzu.vmware.com` and `registry.pivotal.io`).</p>
-
 #### <a id='additional-config'></a> Additional Configuration
 
 Other optional parameters can be added using the `-v` flag:
@@ -298,6 +261,59 @@ Other optional parameters can be added using the `-v` flag:
 <p class="note"><strong>Note:</strong> When proxy server is enabled using <code>http_proxy</code> and/or <code>https_proxy</code>, traffic to the Kubernetes API server also flows through the proxy server.
 This is a known limitation and can be circumvented by using <code>no_proxy</code> to specify the kubernetes API server.
 </p>
+
+#### <a id='aws-iam-auth'></a> Using AWS IAM for Authentication with ECR
+
+TBS can be installed using AWS IAM roles for authentication with ECR on EKS clusters.
+
+There are two additional steps required: the installation configuration and the build namespace configuration.
+
+##### <a id='aws-iam-auth-install'></a> Installing TBS with AWS IAM for Authentication with ECR
+
+1. Before installing TBS, Create a repository in ECR that will be used for the `kp_default_repository`.
+
+2. Configure an AWS IAM role that has read and write access to the `kp_default_repository` as well as a trust policy for the EKS cluster.
+
+3. Follow the normal TBS installation steps until the `ytt` command and use the following config in lieu of `kp_default_repository_username/password`:
+
+```console
+  ytt -f /tmp/bundle/config/ \
+    -v kp_default_repository='<IMAGE-REPOSITORY>' \
+    -v kp_default_repository_aws_iam_role_arn='<INSTALL-IAM-ROLE-ARN>'
+    -v tanzunet_username='<TANZUNET-USERNAME>' \
+    -v tanzunet_password='<TANZUNET-PASSWORD>' \
+    -v descriptor_name='<DESCRIPTOR-NAME>' \
+    --data-value-yaml enable_automatic_dependency_updates=true \
+    | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
+    | kapp deploy -a tanzu-build-service -f- -y
+```
+
+Where:
+
+- `INSTALL-IAM-ROLE-ARN` is the AWS IAM role ARN for the role configured in the above step ex. `arn:aws:iam::xyz:role/my-install-role`
+
+##### <a id='aws-iam-auth-build-ns'></a> Configuring the build namespace for IAM Auth with ECR
+
+Similar to configuring a secret in the build namespace for registry authentication, the build namespace requires configuration for TBS to use AWS IAM authentication for ECR in builds.
+
+1. Configure an AWS IAM role that has read and write access to the ECR registry location where build images will be stored. (This can be the same repository used during installation, in which case the same AWS arn can be used.)
+
+2. For the service account used for `Image` resources (`default` if unset), add an annotation including the role ARN configured above.
+
+```console
+kubectl annotate serviceaccount -n <build-namespace> <service-account-name> \
+  eks.amazonaws.com/role-arn=${BUILD-IAM-ROLE-ARN}
+```
+
+Where:
+
+- `BUILD-IAM-ROLE-ARN` is the AWS IAM role ARN for the role configured in step 1 ex. `arn:aws:iam::xyz:role/my-build-role`
+
+3. `Image` resources can now be created with this service account
+
+```
+kp image save my-ecr-image --tag 12345.ecr.com/my-repo --service-acount=<service-account-name> -n <build-namespace>
+```
 
 ### <a id='tkgi-as-oidc-provider'></a> Configuring TKGI as an OIDC Provider
 
@@ -434,6 +450,7 @@ Once the images have been relocated, installation is the same as a regular insta
       -v kp_default_repository_username='<REGISTRY-USERNAME>' \
       -v kp_default_repository_password='<REGISTRY-PASSWORD>' \
       --data-value-yaml pull_from_kp_default_repo=true \
+      --data-value-yaml exclude_dependencies=true \
       | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
       | kapp deploy -a tanzu-build-service -f- -y
     ```
