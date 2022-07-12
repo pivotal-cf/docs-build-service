@@ -251,67 +251,87 @@ You can store these credentials in `Secrets` and reference them in the `tbs-valu
 
 #### <a id='additional-config'></a> Additional configuration
 
-1. Additional fields can be added to `tbs-values.yml`:
+1. You can add additional fields to the  `tbs-values.yml`:
 
     * `admin_users` is a comma-separated list of users granted admin privileges on Build Service.
     * `admin_groups` is a comma-separated list of groups granted admin privileges on Build Service.
     * `http_proxy` is the HTTP proxy to use for network traffic.
     * `https_proxy` is the HTTPS proxy to use for network traffic.
-    * `no_proxy` is a comma-separated list of host names, IP addresses, or IP ranges in CIDR format that should not use a proxy.
+    * `no_proxy` is a comma-separated list of host names, IP addresses, or IP address ranges in CIDR format.
+    These must not use a proxy.
 
 1. You can see the full values schema by running:
 
-    ```
+    ```console
     tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
     ```
 
-
 #### <a id='aws-iam-auth'></a> Using AWS IAM for Authentication with ECR
 
-TBS can be installed using AWS IAM roles for authentication with ECR on EKS clusters.
+You can install Tanzu Build Service using AWS IAM roles for authentication with
+Amazon Elastic Container Registry (ECR) on Amazon Elastic Kubernetes Service (EKS) clusters.
 
-There are two additional steps required: the installation configuration and the build namespace configuration.
+There are two additional steps required:
 
-##### <a id='aws-iam-auth-install'></a> Installing TBS with AWS IAM for Authentication with ECR
+1. [Install Tanzu Build Service with AWS IAM for Authentication with ECR](#aws-iam-auth-install)
+1. [Configure the build namespace for IAM Auth with ECR](#aws-iam-auth-build-ns)
 
-1. Before installing TBS, Create a repository in ECR that will be used for the `kp_default_repository`.
+##### <a id='aws-iam-auth-install'></a> Install Tanzu Build Service with AWS IAM for Authentication with ECR
 
-2. Configure an AWS IAM role that has read and write access to the `kp_default_repository` as well as a trust policy for the EKS cluster.
+To install with AWS IAM for Authentication with ECR:
 
-3. Follow the normal TBS installation steps until the configuration of `tbs-values.yml` file and use the following config in lieu of `kp_default_repository_username/password` or `kp_default_repository_secret`:
+1. Before installing Tanzu Build Service, create a repository in ECR to use for the `kp_default_repository`.
 
-```yaml
-...
-kp_default_repository_aws_iam_role_arn: "INSTALL-IAM-ROLE-ARN"
-...
-```
+1. Configure an AWS IAM role that has read and write access to the `kp_default_repository`
+and a trust policy for the EKS cluster.
 
-Where:
+1. Follow the Tanzu Build Service installation steps until the `tbs-values.yml` file.
 
-- `INSTALL-IAM-ROLE-ARN` is the AWS IAM role ARN for the role configured in the above step ex. `arn:aws:iam::xyz:role/my-install-role`
+1. In the `tbs-values.yml` file, replace the `kp_default_repository_username`
+and `kp_default_repository_username` or `kp_default_repository_secret` with the following line:
 
-##### <a id='aws-iam-auth-build-ns'></a> Configuring the build namespace for IAM Auth with ECR
+    ```yaml
+    ...
+    kp_default_repository_aws_iam_role_arn: "INSTALL-IAM-ROLE-ARN"
+    ...
+    ```
 
-Similar to configuring a secret in the build namespace for registry authentication, the build namespace requires configuration for TBS to use AWS IAM authentication for ECR in builds.
+    Where:
 
-1. Configure an AWS IAM role that has read and write access to the registry location where build images will be stored.
+    * `INSTALL-IAM-ROLE-ARN` is the AWS IAM role Amazon Resource Name (ARN) for the role configured earlier.
+    For example, `arn:aws:iam::xyz:role/my-install-role`.
 
-2. For the service account used for `Image` resources (`default` if unset), add an annotation including the role ARN configured above.
+##### <a id='aws-iam-auth-build-ns'></a> Configure the build namespace for IAM Auth with ECR
 
-```console
-kubectl annotate serviceaccount -n <build-namespace> <service-account-name> \
-  eks.amazonaws.com/role-arn=${BUILD-IAM-ROLE-ARN}
-```
+Similar to configuring a secret in the build namespace for registry authentication,
+the build namespace requires configuration for Tanzu Build Service to use AWS IAM
+authentication for ECR in builds.
 
-Where:
+To configure the build namespace for IAM Auth with ECR:
 
-- `BUILD-IAM-ROLE-ARN` is the AWS IAM role ARN for the role configured in step 1 ex. `arn:aws:iam::xyz:role/my-build-role`
+1. Configure an AWS IAM role that has read and write access to the registry location to store build images.
 
-3. `Image` resources can now be created with this service account
+1. For the service account used for `Image` resources, add an annotation including
+the role ARN configured earlier.
 
-```
-kp image save my-ecr-image --tag 12345.ecr.com/my-repo --service-acount=<service-account-name> -n <build-namespace>
-```
+    ```console
+    kubectl annotate serviceaccount -n BUILD-NAMESPACE SERVICE-ACCOUNT-NAME \
+    eks.amazonaws.com/role-arn=${BUILD-IAM-ROLE-ARN}
+    ```
+
+    Where:
+
+    * `BUILD-NAMESPACE` is the name of your build namespace.
+    * `SERVICE-ACCOUNT-NAME` is the service account used for `Image` resources.
+    This is `default` if unset.
+    * `BUILD-IAM-ROLE-ARN` is the AWS IAM role ARN for the role configured earlier.
+    For example, `arn:aws:iam::xyz:role/my-build-role`.
+
+1. To create an `Image` resource with this service account, run:
+
+    ```console
+    kp image save my-ecr-image --tag 12345.ecr.com/my-repo --service-acount=SERVICE-ACCOUNT-NAME -n BUILD-NAMESPACE
+    ```
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
