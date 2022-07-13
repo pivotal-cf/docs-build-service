@@ -17,6 +17,10 @@ This mitigates issues with needing to recreate credentials when using ECR.
 
 - Installing in air-gapped environments requires an additional configuration
 value: `exclude_dependencies: true`.
+- Previously, [Secret Syncing](synced-secrets.html) was enabled by default and has now been switched to disabled by default.
+	- This may cause some builds that were previously able to pull ClusterBuilder images to give an authentication error after upgrade.
+	- This was done to ensure secrets were not exported unintentionally.
+	- To enable synced secrets use `enable_synced_secrets: true` in `tbs-values.yaml`
 
 ### Product Snapshot
 
