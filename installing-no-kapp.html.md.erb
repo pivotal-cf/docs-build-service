@@ -171,7 +171,6 @@ There are two ways to install Tanzu Build Service:
       -v tanzunet_password='<TANZUNET-PASSWORD>' \
       -v descriptor_name='<DESCRIPTOR-NAME>' \
       --data-value-yaml enable_automatic_dependency_updates=true \
-      --data-value-yaml enable_synced_secrets=true/false (optional) \
       | kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
       | kapp deploy -a tanzu-build-service -f- -y
     ```
@@ -208,7 +207,6 @@ There are two ways to install Tanzu Build Service:
     * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
       * `full` contains all dependencies.
       * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
-	* `enable_synced_secrets` can be used to toggle the [synced secrets](synced-secrets.html) feature which helps authorization access to ClusterBuilder images in build namespaces (default: `false`).
 
     <p class="note"><strong>Note:</strong> You may want to pin your Tanzu Build Service to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
 
