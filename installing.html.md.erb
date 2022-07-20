@@ -283,7 +283,7 @@ To install with AWS IAM for Authentication with ECR:
 1. Before installing Tanzu Build Service, create a repository in ECR to use for the `kp_default_repository`.
 
 1. Configure an AWS IAM role that has read and write access to the `kp_default_repository`
-and a trust policy for the EKS cluster.
+and a trust policy for the EKS cluster. The minimum required permission can be found [here](#aws-iam-auth-min-permissions).
 
 1. Follow the Tanzu Build Service installation steps until the `tbs-values.yml` file.
 
@@ -569,3 +569,66 @@ You can do this with the `kp` CLI:
 ## <a id='next-steps'></a> Next steps
 
 Visit the <a href="managing-images.html">Managing Images and Builds</a> page to learn how to create and manage a new image.
+
+##### <a id='aws-iam-auth-min-permissions'></a> Minimum AWS IAM permissions for ECR IAM auth
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:PutImageTagMutability",
+                "ecr:StartImageScan",
+                "ecr:DescribeImageReplicationStatus",
+                "ecr:ListTagsForResource",
+                "ecr:UploadLayerPart",
+                "ecr:BatchDeleteImage",
+                "ecr:ListImages",
+                "ecr:BatchGetRepositoryScanningConfiguration",
+                "ecr:DeleteRepository",
+                "ecr:CompleteLayerUpload",
+                "ecr:TagResource",
+                "ecr:DescribeRepositories",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:ReplicateImage",
+                "ecr:GetLifecyclePolicy",
+                "ecr:PutLifecyclePolicy",
+                "ecr:DescribeImageScanFindings",
+                "ecr:GetLifecyclePolicyPreview",
+                "ecr:PutImageScanningConfiguration",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:DeleteLifecyclePolicy",
+                "ecr:PutImage",
+                "ecr:UntagResource",
+                "ecr:BatchGetImage",
+                "ecr:DescribeImages",
+                "ecr:StartLifecyclePolicyPreview",
+                "ecr:InitiateLayerUpload",
+                "ecr:GetRepositoryPolicy"
+            ],
+            "Resource": "<your repository>"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetRegistryPolicy",
+                "ecr:BatchImportUpstreamImage",
+                "ecr:CreateRepository",
+                "ecr:DescribeRegistry",
+                "ecr:DescribePullThroughCacheRules",
+                "ecr:GetAuthorizationToken",
+                "ecr:PutRegistryScanningConfiguration",
+                "ecr:CreatePullThroughCacheRule",
+                "ecr:DeletePullThroughCacheRule",
+                "ecr:GetRegistryScanningConfiguration",
+                "ecr:PutReplicationConfiguration"
+            ],
+            "Resource": "<your repository>"
+        }
+    ]
+}
+```
