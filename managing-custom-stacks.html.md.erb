@@ -18,6 +18,8 @@ CustomStacks can be used to:
 
 ## <a id='creating-a-customstack'></a> Creating a CustomStack
 
+<p class='note'><strong>Note:</strong> CustomStacks make changes to a base image that require root permissions such as adding OS packages, setting the user or group id, or adding CA certificates to the OS trusted store. This means that CustomStack pods must run as privileged. However, TBS does NOT require any privileged containers to install or run – only when using CustomStacks is a privileged container ever created.</p>
+
 A CustomStack is created by running `kubectl apply` with a resource configuration file. The following defines the relevant fields of the CustomStack resource spec in more detail:
 
 * `source`: The location of base images used for building the stack. See more info in [Source Configuration](#source-config).
