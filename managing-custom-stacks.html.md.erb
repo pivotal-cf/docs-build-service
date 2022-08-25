@@ -3,22 +3,40 @@ title: Managing Custom Stacks
 owner: Build Service Team
 ---
 
+This topic explains how to create and manage CustomStacks.
 A CustomStack is a resource that allows users to create a customized [ClusterStack](managing-stacks.html) from Ubuntu 18.04 (Bionic Beaver) and UBI7/UBI8 non-minimal-based OCI images.
 
 <p class='note'><strong>Note:</strong> CustomStacks created with UBI7/UBI8 images do not currently support adding packages, mixins, or caCerts.  Currently, only the Java Tanzu Buildpacks support CustomStacks that use UBI images. </p>
 <p class='note'><strong>Note:</strong> Private registries which require a custom CA certificate are not currently supported as publishing destinations for CustomStack images.</p>
 
-CustomStacks can be used to:
+## <a id='overview'></a> Overview
+
+You can use CustomStacks to:
 
 * Convert a pre-existing base image that you'd like to use with Tanzu Build Service into a ClusterStack resource.
 * Add required stack metadata to base images.
-* Add CA certificates to build and/or run image.
-* Add packages and [mixin labels](https://buildpacks.io/docs/concepts/components/stack/#mixins) to build and/or run image.
-* Set CNB user and group IDs.
+* Add CA certificates to a build or run image.
+    <p class="note"><strong>Note:</strong>
+    As an alternative to using a CustomStack, you can inject the CA certificate
+    into the application image during build-time using the cert-injection webhook.
+    To do so, you must provide the certificate during Tanzu Build Service installation.
+    If you need the CA certificate at runtime, you can use the
+    [ca-certificates buildpack](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-config-config-buildpack-pack.html#ca-certificates).
+    </p>
+* Add packages and [mixin labels](https://buildpacks.io/docs/concepts/components/stack/#mixins) to a build or run image.
+* Set Cloud Native Buildpack (CNB) user and group IDs.
+
+CustomStacks make changes to a base image. These changes require root permissions for actions such as
+adding OS packages, setting the user or group ID, or adding CA certificates to the OS trusted store.
+This means that CustomStack pods must run as privileged.
+
+<p class="note"><strong>Note:</strong>
+  Tanzu Build Service does not require any privileged containers to install or run.
+  Privileged containers are only created when using CustomStacks.
+  If you are concerned about containers with root privileges, use an alternative to CustomStacks.
+</p>
 
 ## <a id='creating-a-customstack'></a> Creating a CustomStack
-
-<p class='note'><strong>Note:</strong> CustomStacks make changes to a base image that require root permissions such as adding OS packages, setting the user or group id, or adding CA certificates to the OS trusted store. This means that CustomStack pods must run as privileged. However, TBS does NOT require any privileged containers to install or run – only when using CustomStacks is a privileged container ever created.</p>
 
 A CustomStack is created by running `kubectl apply` with a resource configuration file. The following defines the relevant fields of the CustomStack resource spec in more detail:
 
