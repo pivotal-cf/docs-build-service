@@ -400,3 +400,14 @@ ytt -f /tmp/bundle/config/ \
 Where:
 
 * `DESCRIPTOR-VERSION` is the desired descriptor version from the [TBS Dependencies Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) page.
+
+## <a id='faq-23'></a> Build pods showing volume errors on EKS running Kubernetes 1.23
+
+In Kubernetes 1.23 on EKS, the [CSIMigrationAWS in this K8s version version](https://aws.amazon.com/blogs/containers/amazon-eks-now-supports-kubernetes-1-23/) means that users need to install the [Amazon EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
+in order to use the default storage class.
+
+If you have no installed the CSI Driver, you may see the following error in build pods:
+
+```console
+'running PreBind plugin "VolumeBinding": binding volumes: timed out waiting for the condition'
+```
