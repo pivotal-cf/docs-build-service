@@ -5,9 +5,9 @@ owner: Build Service Team
 
 This topic describes how to best leverage Tanzu Build Service in a continuous integration context to build applications and keep them up to date at scale.
 
-# <a id='using'></a> Using Tanzu Build Service in CI/CD
+## <a id='using'></a> Example: Using Tanzu Build Service in CI/CD
 
-<img src="images/ci_flow_full.png">
+![Diagram of an example CI workflow. This topic describes this example in full.](images/ci_flow_full.png)
 
 This example shows using an image resource with Git source in a development-to-production continuous integration/continuous delivery (CI/CD) pipeline flow.
 
@@ -15,7 +15,7 @@ Let's split this up into each step.
 
 1. Run unit tests & merge to branch:
 
-    <img src="images/ci_flow_step1.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step1.jpg)
 
     This step shows a typical initial unit testing CI flow.
 
@@ -25,7 +25,7 @@ Let's split this up into each step.
 
 2. Update Tanzu Build Service Image Configuration in CI/CD:
 
-    <img src="images/ci_flow_step2.png">
+    ![This diagram is described in the following text.](images/ci_flow_step2.png)
 
     After unit tests pass, CI/CD must tell Tanzu Build Service to build the registry image using the Git commit that passed tests.
 
@@ -39,13 +39,13 @@ Let's split this up into each step.
 
 3. Tanzu Build Service builds the OCI registry image using the Git commit:
 
-    <img src="images/ci_flow_step3.png">
+    ![This diagram is described in the following text.](images/ci_flow_step3.png)
 
     Here Tanzu Build Service works its magic and builds a new registry image using the Git commit set in the previous step and the latest app dependencies (stacks and buildpacks).
 
 4. Tanzu Build Service pushes the built image to your registry:
 
-    <img src="images/ci_flow_step4.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step4.jpg)
 
     After the build finishes, Tanzu Build Service writes the resulting image to a container registry such as Harbor.
 
@@ -63,7 +63,7 @@ Let's split this up into each step.
 
 5. Using CI/CD, deploy the built image to a Dev/QA Kubernetes cluster:
 
-    <img src="images/ci_flow_step5.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step5.jpg)
 
     Now that the image is available in your registry, it can be deployed to any Kubernetes cluster. In this example, it is deployed to a Dev cluster for acceptance testing and QA/manual approval.
 
@@ -75,13 +75,13 @@ Let's split this up into each step.
 
 6. Once the app has been vetted, deploy to production:
 
-    <img src="images/ci_flow_step6.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step6.jpg)
 
     The same way the image was deployed to the Dev cluster, the image can be pushed to production.
 
 7. Bonus: dependencies are kept up to date for secure app images:
 
-    <img src="images/ci_flow_deps.png">
+    ![This diagram is described in the following text.](images/ci_flow_deps.png)
 
     Images are kept up to date with the latest dependencies provided through stacks and buildpacks from the Cloud Native Buildpacks community, which are released for Tanzu Build Service as Tanzu Buildpacks on Tanzu Network.
 
