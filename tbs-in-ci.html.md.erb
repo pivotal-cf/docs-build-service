@@ -5,90 +5,90 @@ owner: Build Service Team
 
 This topic describes how to best leverage Tanzu Build Service in a Continuous Integration context to build applications and keep them up-to-date at scale.
 
-# <a id='using'></a> Using TBS in CI/CD
+## <a id='using'></a> Example: Using Tanzu Build Service in CI/CD
 
-<img src="images/ci_flow_full.png">
+![Diagram of an example CI workflow. This topic describes this example in full.](images/ci_flow_full.png)
 
 This example shows using an Image resource with git source in a development-to-production CI/CD pipeline flow.
 
 Let's split this up into each step.
 
-## 1. Run unit tests & merge to branch
+1. Run unit tests & merge to branch
 
-<img src="images/ci_flow_step1.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step1.jpg)
 
-This step shows a typical initial unit testing CI flow.
+    This step shows a typical initial unit testing CI flow.
 
-1. Developer pushes code to feature branch
-2. CI/CD runs unit tests on that branch
-3. Once tests have passed, the feature branch is merged to release branch (Git Branch A)
+    1. Developer pushes code to feature branch
+    2. CI/CD runs unit tests on that branch
+    3. Once tests have passed, the feature branch is merged to release branch (Git Branch A)
 
-## 2. Update Tanzu Build Service Image Configuration in CI/CD
+2. Update Tanzu Build Service Image Configuration in CI/CD
 
-<img src="images/ci_flow_step2.png">
+    ![This diagram is described in the following text.](images/ci_flow_step2.png)
 
-After unit tests pass, CI/CD must tell TBS to build the registry image using the git commit that passed tests.
+    After unit tests pass, CI/CD must tell TBS to build the registry image using the git commit that passed tests.
 
-Ex.
+    For example:
 
-Jenkins job that runs the following after unit tests with the successful `<git-commit>`:
+    Jenkins job that runs the following after unit tests with the successful `<git-commit>`:
 
-```
-kp image save my-image --git-revision <git-commit>
-```
+    ```
+    kp image save my-image --git-revision <git-commit>
+    ```
 
-## 3. Tanzu Build Service builds the OCI registry image using the git commit
+3. Tanzu Build Service builds the OCI registry image using the git commit
 
-<img src="images/ci_flow_step3.png">
+    ![This diagram is described in the following text.](images/ci_flow_step3.png)
 
-Here TBS works its magic and builds a new registry image using the git commit set in the previous step and the latest app dependencies (Stacks & Buildpacks).
+    Here TBS works its magic and builds a new registry image using the git commit set in the previous step and the latest app dependencies (Stacks & Buildpacks).
 
-## 4. Tanzu Build Service pushes the built image to your registry
+4. Tanzu Build Service pushes the built image to your registry
 
-<img src="images/ci_flow_step4.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step4.jpg)
 
-After the build finishes, TBS writes the resulting image to a container registry such as Harbor.
+    After the build finishes, TBS writes the resulting image to a container registry such as Harbor.
 
-This image reference can be found with:
+    This image reference can be found with:
 
-```
-kp image status <image-name>
-```
+    ```
+    kp image status <image-name>
+    ```
 
-or
+    or
 
-```
-kp build status <image-name> -b <build-number>
-```
+    ```
+    kp build status <image-name> -b <build-number>
+    ```
 
-## 5. Using CI/CD, deploy the built image to a Dev/QA Kubernetes cluster
+5. Using CI/CD, deploy the built image to a Dev/QA Kubernetes cluster
 
-<img src="images/ci_flow_step5.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step5.jpg)
 
-Now that the image is available in your registry, it can be deployed to any kubernetes cluster. In this example, it is deployed to a Dev Cluster for acceptance testing and QA/manual approval.
+    Now that the image is available in your registry, it can be deployed to any kubernetes cluster. In this example, it is deployed to a Dev Cluster for acceptance testing and QA/manual approval.
 
-There are a couple of ways to trigger this job:
+    There are a couple of ways to trigger this job:
 
-- Using registry webhooks (such as Harbor's) to trigger a CI/CD job
-- If you are using Concourse CI: the [Concourse kpack Resource](https://github.com/vmware-tanzu/concourse-kpack-resource)
-- Write your own polling mechanism to check for new images in your registry
+    - Using registry webhooks (such as Harbor's) to trigger a CI/CD job
+    - If you are using Concourse CI: the [Concourse kpack Resource](https://github.com/vmware-tanzu/concourse-kpack-resource)
+    - Write your own polling mechanism to check for new images in your registry
 
-## 6. Once the app has been vetted, deploy to production!
+6. Once the app has been vetted, deploy to production!
 
-<img src="images/ci_flow_step6.jpg">
+    ![This diagram is described in the following text.](images/ci_flow_step6.jpg)
 
-The same way the image was deployed to the Dev Cluster, the image can be pushed to production.
+    The same way the image was deployed to the Dev Cluster, the image can be pushed to production.
 
-## Bonus. Dependencies are kept up to date for secure app images
+7. Bonus: Dependencies are kept up to date for secure app images
 
-<img src="images/ci_flow_deps.png">
+    ![This diagram is described in the following text.](images/ci_flow_deps.png)
 
-Images are kept up to date with the latest dependencies provided via Stacks and Buildpacks from the Cloud Native Buildpacks community which are released for TBS as Tanzu Buildpacks on Tanzu Network.
+    Images are kept up to date with the latest dependencies provided via Stacks and Buildpacks from the Cloud Native Buildpacks community which are released for TBS as Tanzu Buildpacks on Tanzu Network.
 
-As of TBS 1.2, these dependencies are automatically updated. These dependency updates can also be done with the kp cli in CI/CD by running:
+    As of TBS 1.2, these dependencies are automatically updated. These dependency updates can also be done with the kp cli in CI/CD by running:
 
-```
-kp import -f descriptor.yaml
-```
+    ```
+    kp import -f descriptor.yaml
+    ```
 
-When dependencies are updated, affected apps are rebuilt to be promoted using steps 5 & 6.
+    When dependencies are updated, affected apps are rebuilt to be promoted using steps 5 & 6.
