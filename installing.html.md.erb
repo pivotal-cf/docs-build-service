@@ -33,12 +33,10 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. For information about defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
 
-* Download Carvel [imgpkg](https://network.tanzu.vmware.com/products/imgpkg/). Version 0.12.0 or higher is required.
+* Download [Tanzu Cluster Essentials](https://network.tanzu.vmware.com/products/tanzu-cluster-essentials) to install the `imgpkg` CLI tool and follow the README to install kapp controller.
 
 * Install the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.2/tap/GUID-install-tanzu-cli.html).
   - Only the `package` and `secret` plug-ins are required.
-
-* Install Carvel [kapp controller](https://carvel.dev/kapp-controller/docs/latest/install/) and [secret gen controller](https://github.com/vmware-tanzu/carvel-secretgen-controller/blob/develop/docs/install.md) on your cluster.
 
 * Navigate to the following pages in Tanzu Network and accept all EULAs highlighted in yellow.
   - [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/)

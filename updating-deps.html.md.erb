@@ -240,11 +240,10 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
 
 1. Find the latest version of the Dependency Descriptor bundle image (`registry.tanzu.vmware.com/tbs-dependencies/full`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
 
-1. Download the following CLIs for your operating system:
-
-    - [kp](https://network.tanzu.vmware.com/products/tbs-dependencies/build-service)
-    - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg)
-    - [kbld](https://network.tanzu.vmware.com/products/kbld)
+1 Download the [Tanzu Cluster Essentials](https://network.tanzu.vmware.com/products/tanzu-cluster-essentials) for your operating system and install the following CLIs:
+  - `ytt`
+  - `kbld`
+  - `imgpkg`
 
 1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
 
@@ -267,7 +266,8 @@ If your Tanzu Build Service installation is in an offline/air-gapped environment
       --to-tar=tbs-dependencies.tar
     ```
 
-1. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment.
+    1. Move the output file `tbs-dependencies.tar` to a machine that has access to the "offline" environment.
+
 
 1. Log in to the image registry used to deploy Tanzu Build Service:
 
