@@ -17,20 +17,21 @@ the source for this page in GitHub" at the bottom of the topic.
 
 ## Versions and Branching
 
-| **Branch Name** | **Content** | **Location** |
-|-----------------|-------------|--------------|
-| `master` | DO NOT USE | |
-| `v1.6`   | Tanzu Build Service 1.6  | https://docs.vmware.com/en/Tanzu-Build-Service/1.6/vmware-tanzu-build-service/GUID-index.html |
-| `v1.5`   | Tanzu Build Service 1.5  | https://docs.vmware.com/en/Tanzu-Build-Service/1.5/vmware-tanzu-build-service/GUID-index.html |
-| `v1.4`   | Tanzu Build Service 1.4  | https://docs.vmware.com/en/Tanzu-Build-Service/1.4/vmware-tanzu-build-service/GUID-index.html |
-| `v1.3`   | Tanzu Build Service 1.3  | https://docs.vmware.com/en/Tanzu-Build-Service/1.3/vmware-tanzu-build-service/GUID-index.html |
-| `v1.2`   | Tanzu Build Service 1.2  | https://docs.vmware.com/en/Tanzu-Build-Service/1.2/vmware-tanzu-build-service/GUID-index.html |
-| `v1.1`   | Tanzu Build Service 1.1  | https://docs.vmware.com/en/Tanzu-Build-Service/1.1/vmware-tanzu-build-service/GUID-index.html |
-| `v1.0`   | Tanzu Build Service 1.0  | https://docs-pcf-staging.cfapps.io/build-service/1-0/ |
-| `v0.2.0` | Tanzu Build Service 0.2.0  | https://docs.pivotal.io/build-service/0-2-0/ |
-| `v0.1.0` | Tanzu Build Service 0.1.0  | https://docs.pivotal.io/build-service/0-1-0/ |
-| `v0.0.4` | Tanzu Build Service 0.0.4  | https://docs.pivotal.io/build-service/0-0-4/ |
-| `v0.0.3` | Tanzu Build Service 0.0.3  | https://docs.pivotal.io/build-service/0-0-3/ |
+| **Branch Name** | **Content**               | **Location**                                                                                                         |
+|-----------------|---------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `master`        | DO NOT USE                |                                                                                                                      |
+| `v1.7`          | Tanzu Build Service 1.7   | https://docs.vmware.com/en/Tanzu-Build-Service/1.7/vmware-tanzu-build-service/GUID-index.html                        |
+| `v1.6`          | Tanzu Build Service 1.6   | https://docs.vmware.com/en/Tanzu-Build-Service/1.6/vmware-tanzu-build-service/GUID-index.html                        |
+| `v1.5`          | Tanzu Build Service 1.5   | https://docs.vmware.com/en/Tanzu-Build-Service/1.5/vmware-tanzu-build-service/GUID-index.html                        |
+| `v1.4`          | Tanzu Build Service 1.4   | https://docs.vmware.com/en/Tanzu-Build-Service/1.4/vmware-tanzu-build-service/GUID-index.html                    |
+| `v1.3`          | Tanzu Build Service 1.3   | https://docs.vmware.com/en/Tanzu-Build-Service/1.3/vmware-tanzu-build-service/GUID-index.html                    |
+| `v1.2`          | Tanzu Build Service 1.2   | https://docs.vmware.com/en/Tanzu-Build-Service/1.2/vmware-tanzu-build-service/GUID-index.html |
+| `v1.1`          | Tanzu Build Service 1.1   | https://docs.vmware.com/en/Tanzu-Build-Service/1.1/vmware-tanzu-build-service/GUID-index.html |
+| `v1.0`          | Tanzu Build Service 1.0   | https://docs-pcf-staging.cfapps.io/build-service/1-0/                                                                |
+| `v0.2.0`        | Tanzu Build Service 0.2.0 | https://docs.pivotal.io/build-service/0-2-0/                                                                         |
+| `v0.1.0`        | Tanzu Build Service 0.1.0 | https://docs.pivotal.io/build-service/0-1-0/                                                                         |
+| `v0.0.4`        | Tanzu Build Service 0.0.4 | https://docs.pivotal.io/build-service/0-0-4/                                                                         |
+| `v0.0.3`        | Tanzu Build Service 0.0.3 | https://docs.pivotal.io/build-service/0-0-3/                                                                         |
 
 ## Continuous Integration and Continuous Delivery
 
