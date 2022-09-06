@@ -29,8 +29,8 @@ Before you install Build Service, you must:
 * Ensure your Kubernetes cluster is configured with default `StorageClass`.
 Tanzu Build Service defaults to using 2G of cache if a default `StorageClass` is defined.
 Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds.
-
-    For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
+  * For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
+  * For users on EKS running Kubernetes 1.23, the [Amazon EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) is required due to the CSIMigrationAWS in [this K8s version version on EKS](https://aws.amazon.com/blogs/containers/amazon-eks-now-supports-kubernetes-1-23/)
 
 * Download four [Carvel](https://carvel.dev/) CLIs for your operating system. These tools facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
   - [kapp](https://network.tanzu.vmware.com/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
