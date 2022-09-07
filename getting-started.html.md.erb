@@ -25,11 +25,11 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. And for information on defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/)
 
-* Download three [Carvel](https://carvel.dev/) CLIs for your operating system. These tools facilitate the installation of Tanzu Build Service on your cluster. They can be found on their respective Tanzu Network pages:
-  - [kapp](https://network.tanzu.vmware.com/products/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
-  - [ytt](https://network.tanzu.vmware.com/products/ytt/) is a templating tool that understands YAML structure. Version 0.35.0 or higher is required.
-  - [kbld](https://network.tanzu.vmware.com/products/kbld/) is needed to map relocated images to k8s config.
-  - [imgpkg](https://network.tanzu.vmware.com/products/imgpkg/) is tool that relocates container images and pulls the release configuration files. Version 0.12.0 or higher is required.
+* Download the [Carvel](https://carvel.dev/) CLI tools for your operating system. These tools will facilitate the installation of Tanzu Build Service on your cluster. They can be found on Tanzu Network under the [Tanzu Cluster Essentials](https://network.tanzu.vmware.com/products/tanzu-cluster-essentials) page. The download comes with four binaries that you will use:
+  - [`kapp`](https://carvel.dev/kapp/) is a deployment tool that allows users to manage Kubernetes resources in bulk.
+  - [`ytt`](https://carvel.dev/ytt/) is a templating tool that understands YAML structure. Version 0.35.0 or higher is required.
+  - [`kbld`](https://carvel.dev/kbld/) is needed to map relocated images to k8s config.
+  - [`imgpkg`](https://carvel.dev/imgpkg/) is tool that relocates container images and pulls the release configuration files. Version 0.12.0 or higher is required.
 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
@@ -66,7 +66,7 @@ This procedure relocates images from the Tanzu Network registry to your registry
         docker login my.registry.io --tlscacert /tmp/ca.crt
         ```
 
-    - If uisng the `crane` CLI, run:
+    - If using the `crane` CLI, run:
 
         ```console
         crane auth login my.registry.io --tlscacert /tmp/ca.crt
