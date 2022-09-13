@@ -417,3 +417,14 @@ If you have no installed the CSI Driver, you may see the following error in buil
 Some managed Kubernetes services use dockerd as the default container runtime. Dockerd has a known limitation, in which the maximum supported layer depth is 125. When an image's layer depth exceeds 125, the docker runtime will report an error which reads, "max depth exceeded".
 
 This error can be avoided by configuring your cluster to use containerd as its default container runtime. Please refer to your Kubernetes cluster provider's documentation for specific instructions.
+
+### AWS
+* https://aws.amazon.com/blogs/containers/amazon-eks-1-21-released/
+* https://eksctl.io/usage/container-runtime/
+
+### AKS
+* https://docs.microsoft.com/en-us/azure/aks/cluster-configuration#container-runtime-configuration
+* https://techcommunity.microsoft.com/t5/apps-on-azure-blog/dockershim-deprecation-and-aks/ba-p/3055902
+
+### GKE
+* https://cloud.google.com/kubernetes-engine/docs/concepts/using-containerd
