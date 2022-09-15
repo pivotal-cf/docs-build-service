@@ -52,6 +52,14 @@ For this example setup, we make the following assumptions:
   * The nodes on your cluster must also be configured to trust this CA certificate so they can pull in images. Configuration for this depends on the cluster provider
 * You are using an "online" environment that has access to the internet
 
+## <a id='DeprecatedFeatures'></a> Deprecated Features
+
+* Users are encouraged to use the SBOM format published in
+[Buildpacks API 0.7.0](https://buildpacks.io/docs/reference/spec/migration/buildpack-api-0.6-0.7/#new-standardized-sbom-format).
+Older (legacy) SBOM formats are deprecated and are disabled by default in TBS. Support for legacy SBOM formats be
+enabled by either adding `include_legacy_bom: true` to the `tbs-values.yml` file or by passing
+`--data-value-yaml include_legacy_bom=true` to `ytt` when processing the TBS bundle.
+
 ## <a id='installation'></a> Installation
 
 ### <a id='relocate-images'></a> Relocate Images to a Registry

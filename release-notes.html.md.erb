@@ -37,6 +37,14 @@ Build Service can be installed on any Kubernetes cluster (v1.19 or later).
 
 v1.5.* can be upgraded to v1.7.*. Please follow the [install](installing.html) process to upgrade.
 
+### Deprecated Features
+
+* Users are encouraged to use the SBOM format published in
+[Buildpacks API 0.7.0](https://buildpacks.io/docs/reference/spec/migration/buildpack-api-0.6-0.7/#new-standardized-sbom-format).
+Older (legacy) SBOM formats are deprecated and are disabled by default in TBS. Support for legacy SBOM formats be
+enabled by either adding `include_legacy_bom: true` to the `tbs-values.yml` file or by passing
+`--data-value-yaml include_legacy_bom=true` to `ytt` when processing the TBS bundle.
+
 ## <a id="1-6-0"></a> v1.6.0
 
 **Release Date: July 11, 2022**

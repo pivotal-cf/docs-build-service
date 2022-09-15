@@ -785,6 +785,12 @@ Build successful
 ```
 ## <a id='build-status'></a> Viewing bill of materials
 
+> **Deprecation Note:**
+> Users are encouraged to use the SBOM format published in [Buildpacks API 0.7.0](https://buildpacks.io/docs/reference/spec/migration/buildpack-api-0.6-0.7/#new-standardized-sbom-format).
+> Older (legacy) SBOM formats are deprecated and are disabled by default in TBS. Support for legacy SBOM formats be
+> enabled by either adding `include_legacy_bom: true` to the `tbs-values.yml` file or by passing
+> `--data-value-yaml include_legacy_bom=true` to `ytt` when processing the TBS bundle.
+
 The kp cli allows you to view the bill of materials in an image built by a Build.
 
 ```

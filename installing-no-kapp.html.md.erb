@@ -59,6 +59,14 @@ for authentication with registries.
 
 <p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with Tanzu Build Service.</p>
 
+## <a id='DeprecatedFeatures'></a> Deprecated Features
+
+* Users are encouraged to use the SBOM format published in
+[Buildpacks API 0.7.0](https://buildpacks.io/docs/reference/spec/migration/buildpack-api-0.6-0.7/#new-standardized-sbom-format).
+Older (legacy) SBOM formats are deprecated and are disabled by default in TBS. Support for legacy SBOM formats be
+enabled by either adding `include_legacy_bom: true` to the `tbs-values.yml` file or by passing
+`--data-value-yaml include_legacy_bom=true` to `ytt` when processing the TBS bundle.
+
 ## <a id='install'></a> Installing
 
 Create a kubernetes cluster where you would like to install build service and target the cluster as follows:
