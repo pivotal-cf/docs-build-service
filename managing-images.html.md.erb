@@ -787,7 +787,9 @@ Build successful
 
 > **Deprecation Note:**
 > The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be disabled manually by passing
-> `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle.
+> `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle or by adding
+> `include_legacy_bom=false` to your `tbs-values.yml` file.
+
 
 The kp cli allows you to view the bill of materials in an image built by a Build.
 
