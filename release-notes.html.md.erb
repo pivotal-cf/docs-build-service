@@ -51,7 +51,8 @@ No HIGH or CRITICAL CVEs at time of release.
 
 ### Breaking Changes
 
-None
+- The `canonical-registry-serviceaccount` has been renamed to `kp-default-repository-serviceaccount`
+  - Any user-created `Builder` or `ClusterBuilder` resources using `canonical-registry-serviceaccount` should change it to `kp-default-repository-serviceaccount` before upgrading to ensure seamless upgrade.
 
 ### Bug Fixes
 
