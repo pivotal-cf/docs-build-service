@@ -52,6 +52,12 @@ For this example setup, we make the following assumptions:
   * The nodes on your cluster must also be configured to trust this CA certificate so they can pull in images. Configuration for this depends on the cluster provider
 * You are using an "online" environment that has access to the internet
 
+## <a id='DeprecatedFeatures'></a> Deprecated Features
+
+* The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be disabled manually by passing
+`--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle or by adding
+`include_legacy_bom=false` to your `tbs-values.yml` file.
+
 ## <a id='installation'></a> Installation
 
 ### <a id='relocate-images'></a> Relocate Images to a Registry
