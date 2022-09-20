@@ -5,7 +5,7 @@ owner: Build Service Team
 
 A Store is a cluster-level resource that provides a collection of buildpacks that can be utilized by Builders. Buildpacks are distributed and added to a store in buildpackages, which are docker images containing one or more buildpacks.
 
-Build Service ships with a curated collection of Tanzu buildpacks for Java, Nodejs, Go, PHP, nginx, and httpd and Paketo buildpacks for procfile, and .NET Core. Detailed documentation about the buildpacks installed with Tanzu Build Service can be found [here](https://docs.pivotal.io/tanzu-buildpacks/). It is important to keep these buildpacks up-to-date. Updates to these buildpacks are provided on [Tanzu Network](https://network.tanzu.vmware.com/).
+Build Service ships with a curated collection of Tanzu buildpacks for Java, Java Native Image, Node.js, Go, .NET Core, Python, Ruby, PHP, Web Servers (NGINX and Apache HTTPD), and Procfile. Detailed documentation about the buildpacks installed with Tanzu Build Service can be found [here](https://docs.pivotal.io/tanzu-buildpacks/). It is important to keep these buildpacks up-to-date. Updates to these buildpacks are provided on [Tanzu Network](https://network.tanzu.vmware.com/).
 
 In addition to supported Tanzu and Paketo buildpacks, custom buildpackages can be uploaded to Build Service stores.
 
@@ -105,21 +105,29 @@ This command is useful for users that want to only consume certain buildpacks ra
 Updated versions of all supported Buildpacks are available on [Tanzu Network](https://network.tanzu.vmware.com) as registry images. Updated Buildpacks are found in the following locations:
 
 * [Java](https://network.tanzu.vmware.com/products/tanzu-java-buildpack)
+* [Java Native Image](https://network.tanzu.vmware.com/products/tanzu-java-native-image-buildpack)
 * [NodeJS](https://network.tanzu.vmware.com/products/tanzu-nodejs-buildpack)
 * [Go](https://network.tanzu.vmware.com/products/tanzu-go-buildpack)
-* [PHP, .NET Core, nginx, httpd, procfile](https://network.tanzu.vmware.com/products/tbs-dependencies)
+* [.NET Core](https://network.tanzu.vmware.com/products/tanzu-dotnet-core-buildpack)
+* [Web Servers](https://network.tanzu.vmware.com/products/tanzu-web-servers-buildpack)
+* [Procfile](https://network.tanzu.vmware.com/products/tanzu-procfile-buildpack)
+* [Python](https://network.tanzu.vmware.com/products/tanzu-python-buildpack)
+* [Ruby](https://network.tanzu.vmware.com/products/tanzu-ruby-buildpack)
+* [PHP](https://network.tanzu.vmware.com/products/tbs-dependencies)
 
 Here is a list of how to update each buildpack included with Tanzu Build Service by default:
 
 ```
 kp clusterstore add default registry.tanzu.vmware.com/tanzu-java-buildpack/java:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-java-native-image-buildpack/java-native-image:<version>
 kp clusterstore add default registry.tanzu.vmware.com/tanzu-nodejs-buildpack/nodejs:<version>
 kp clusterstore add default registry.tanzu.vmware.com/tanzu-go-buildpack/go:<version>
-kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/paketo-buildpacks_dotnet-core:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-dotnet-core-buildpack/dotnet-core:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-web-servers-buildpack/web-servers:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-procfile-buildpack/procfile:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-python-buildpack/python:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-ruby-buildpack/ruby:<version>
 kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_php:<version>
-kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_nginx:<version>
-kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_httpd:<version>
-kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/paketo-buildpacks_procfile:<version>
 ```
 
 ### <a id='add-buildpackages-to-store-offline'></a> Offline Adding Buildpackages to a ClusterStore from Tanzu Network
@@ -262,7 +270,7 @@ kp clusterstore status <store-name> --verbose
 
 ## <a id='kpack-resources'></a> Migrating buildpacks
 
-Build Service never automatically removea buildpackages from the store unless you explicitly remove them.
+Build Service never automatically removes buildpackages from the store unless you explicitly remove them.
 In this way, users can continue to use older buildpacks until the operator is ready to migrate them.
 
 How you migrate is entirely dependent on the configuration of your Builder resources:
