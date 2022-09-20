@@ -412,7 +412,7 @@ If you have no installed the CSI Driver, you may see the following error in buil
 'running PreBind plugin "VolumeBinding": binding volumes: timed out waiting for the condition'
 ```
 
-## <a id='faq-24'></a> Why do some smart-warmer-image-fetcher pods report "max depth exceeded"?
+## <a id='faq-24'></a> Why do some pods report "max depth exceeded"?
 
 Some managed Kubernetes services use dockerd as the default container runtime. Dockerd has a known limitation, in which the maximum supported layer depth is 125. When an image's layer depth exceeds 125, the docker runtime will report an error which reads, "max depth exceeded".
 
