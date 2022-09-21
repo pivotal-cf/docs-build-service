@@ -130,6 +130,19 @@ kp clusterstore add default registry.tanzu.vmware.com/tanzu-ruby-buildpack/ruby:
 kp clusterstore add default registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_php:<version>
 ```
 
+If you have installed the `lite` descriptor, you will want to update your buildpacks using the lite image references below:
+
+```
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-java-buildpack/java-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-java-native-image-buildpack/java-native-image-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-nodejs-buildpack/nodejs-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-go-buildpack/go-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-dotnet-core-buildpack/dotnet-core-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-python-buildpack/python-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-web-servers-buildpack/web-servers-lite:<version>
+kp clusterstore add default registry.tanzu.vmware.com/tanzu-ruby-buildpack/ruby-lite:<version>
+```
+
 ### <a id='add-buildpackages-to-store-offline'></a> Offline Adding Buildpackages to a ClusterStore from Tanzu Network
 
 If your Tanzu Build Service installation is in an offline/air-gapped environment, you can update stores with the following offline workflow:
