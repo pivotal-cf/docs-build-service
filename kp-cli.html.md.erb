@@ -1,0 +1,37 @@
+---
+title: Using the kp cli with Tanzu Build Service
+owner: Build Service Team
+---
+
+This topic describes how to use the `kp` cli with Tanzu Build Service
+
+## <a id='kp-overview'></a> The kp cli
+
+`kp` is a cli that can be used to interact with Tanzu Build Service resources.
+In all cases, `kubectl` can be used to interact with TBS – however `kp` simplifies and improves the experience.
+
+The `kp` cli git repository can be found [here](https://github.com/vmware-tanzu/kpack-cli/)
+Documentation for the `kp` cli can be found [here](https://github.com/vmware-tanzu/kpack-cli/tree/main/docs)
+
+Some of the highlights of using the `kp` cli:
+- [Configuring secrets for TBS](managing-secrets.html)
+- [Getting logs for builds](managing-images.html#build-logs)
+- [Creating builders](managing-builders.html)
+
+## <a id='kp-limitations'></a> Limitations of the kp cli
+
+The `kp` cli includes almost all features of TBS. However, not all features are supported. Eventually, we hope to have all
+TBS behavior covered in `kp`.
+
+The set of unsupported features that are NOT in `kp` (current version: 0.7.0):
+
+- Custom Stacks
+- Images
+  - `successBuildHistoryLimit` and `failedBuildHistoryLimit`
+  - `imageTaggingStrategy`
+  - `defaultProcess`
+  - `cache.registry`
+  - `cache.volume.storageClassName`
+  - `cosign`
+
+
