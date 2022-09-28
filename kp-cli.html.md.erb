@@ -1,29 +1,32 @@
 ---
-title: Using the kp cli with Tanzu Build Service
+title: Using the kp CLI with Tanzu Build Service
 owner: Build Service Team
 ---
 
-This topic describes how to use the `kp` cli with Tanzu Build Service
+This topic describes how to use the kp CLI with Tanzu Build Service
 
-## <a id='kp-overview'></a> The kp cli
+## <a id='kp-overview'></a> About the kp CLI
 
-`kp` is a cli that can be used to interact with Tanzu Build Service resources.
-In all cases, `kubectl` can be used to interact with TBS – however `kp` simplifies and improves the experience.
+kp is a CLI that you can use to interact with Tanzu Build Service resources.
+You can use kubectl to interact with Tanzu Build Service in all cases, however,
+the kp CLI simplifies and improves this experience.
 
-The `kp` cli git repository can be found [here](https://github.com/vmware-tanzu/kpack-cli/)
-Documentation for the `kp` cli can be found [here](https://github.com/vmware-tanzu/kpack-cli/tree/main/docs)
+For more information, see the [kp CLI GitHub repository](https://github.com/vmware-tanzu/kpack-cli/)
+and the [kp CLI documentation](https://github.com/vmware-tanzu/kpack-cli/tree/main/docs).
 
-Some of the highlights of using the `kp` cli:
-- [Configuring secrets for TBS](managing-secrets.html)
+Some of the highlights of using the kp CLI:
+
+- [Configuring secrets for Tanzu Build Service](managing-secrets.html)
 - [Getting logs for builds](managing-images.html#build-logs)
 - [Creating builders](managing-builders.html)
 
-## <a id='kp-limitations'></a> Limitations of the kp cli
+## <a id='kp-limitations'></a> Limitations of the kp CLI
 
-The `kp` cli includes almost all features of TBS. However, not all features are supported. Eventually, we hope to have all
-TBS behavior covered in `kp`.
+The kp CLI includes almost all features of Tanzu Build Service.
+However, not all features are supported.
+VMware plans to increase the Tanzu Build Service features that the kp CLI supports.
 
-The set of unsupported features that are NOT in `kp` (current version: 0.7.0):
+The following features are unsupported in kp CLI v0.7.0:
 
 - Custom Stacks
 - Images
@@ -33,5 +36,3 @@ The set of unsupported features that are NOT in `kp` (current version: 0.7.0):
   - `cache.registry`
   - `cache.volume.storageClassName`
   - `cosign`
-
-

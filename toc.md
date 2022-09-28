@@ -14,7 +14,7 @@
 * [Descriptors](descriptors.html)
 * [**Managing Builders**](managing-builders.html)
 * [**Managing Custom Stacks**](managing-custom-stacks.html)
-* [**The kp cli**](kp-cli.html)
+* [**Using the kp CLI**](kp-cli.html)
 * [**RBAC in Tanzu Build Service**](tbs-rbac.html)
 * [**Using TBS in CI/CD**](tbs-in-ci.html)
 * [**Buildpacks Documentation**](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html)
