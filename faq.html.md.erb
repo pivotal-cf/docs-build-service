@@ -432,3 +432,22 @@ This error can be avoided by configuring your cluster to use containerd or CRI-O
 ### OpenShift
 * https://cloud.redhat.com/blog/containerd-support-for-windows-containers-in-openshift
 * https://docs.openshift.com/container-platform/3.11/crio/crio_runtime.html
+
+## <a id='faq-25'></a> Using custom CA certificates at build time
+
+If the  `ca_cert_data` field is set during the [installation of Tanzu Build Service](./installing.html#install),
+that certificate will be used to interact with the image registry.
+
+Tanzu Build Service will also automatically insert this certificate into the system truststore during the build process.
+
+## <a id='faq-26'></a> Using custom CA certificates at run time
+
+If your run image has been built with a builder that includes the Paketo CA Certificates Buildpack, you can
+provide a runtime [binding](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-config-config-buildpack-kp.html#bindings)
+of `type: ca-certificates` and it will be automatically added to the system truststore.
+
+<p class='note'>
+  <strong>Note:</strong> This requires the [language family buildpack](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html) used to include the Paketo CA Certificates Buildpack
+</p>
+
+For more information about using the buildpack, see [VMware Tanzu Buildpacks documentation](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-config-config-buildpack-kp.html#ca-certificates).
