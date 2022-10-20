@@ -9,33 +9,37 @@ owner: Build Service Team
 
 ### New Features
 
-* Support for installing on openshift out of the box
-  * Previously, installing on openshift would give `seccomp` errors and would require additional installation steps.
-* Support for the [ubuntu jammy](https://releases.ubuntu.com/22.04/) stack
-  * Jammy stacks can be found on [Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) and will be
-    installed automatically when using automatic dependency updates.
+- **Support for installing on Openshift after a standard install:** Previously, installing on Openshift
+resulted in `seccomp` errors and required additional installation steps.
+
+- **Support for the [Ubuntu Jammy](https://releases.ubuntu.com/22.04/) stack:** You can find
+Jammy stacks on [Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/).
+Automatic dependency updates automatically install Jammy stacks.
 
 ### Deprecated Features
 
-* Ubuntu Bionic stacks are being deprecated. The ubuntu bionic release is [removing support in April 2023](https://wiki.ubuntu.com/Releases)
-  and apps should migrate to the jammy stack.
-* The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be disabled manually by passing
-  `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle or by adding
-  `include_legacy_bom=false` to your `tbs-values.yml` file.
+- **Ubuntu Bionic stacks are deprecated:** The Ubuntu Bionic release is [removing support in April 2023](https://wiki.ubuntu.com/Releases).
+Migrate apps to the Jammy stack before this date.
+
+- **The legacy Cloud Native Buildpack Bill of Materials (CNB BOM) format is deprecated:**
+However, it is still activated by default in Tanzu Build Service. You can deactivate support manually
+by passing `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the Tanzu Build Service
+bundle or by adding `include_legacy_bom=false` to your `tbs-values.yml` file.
 
 ### Product Snapshot
 
-Tanzu Build Service 1.7.2 ships with the following components:
+Tanzu Build Service v1.7.2 ships with the following components:
 
-* [kpack 0.7.1](https://github.com/pivotal/kpack/releases/tag/v0.7.1)
-* [kpack cli v0.7.1](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.7.1)
-* [CNB lifecycle v0.14.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.14.2)
+- [kpack v0.7.1](https://github.com/pivotal/kpack/releases/tag/v0.7.1)
+- [kpack cli v0.7.1](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.7.1)
+- [CNB lifecycle v0.14.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.14.2)
 
-Tanzu Build Service supports and utilizes [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
+Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
 ### Security Scanning
 
-There are some HIGH and CRITICAL CVEs that may show up in scans of the TBS release, however none of the CVEs are exploitable.
+There are some HIGH and CRITICAL CVEs that might show up in scans of this Tanzu Build Service release.
+However, none of the CVEs are exploitable.
 
 Below is a list of CVEs that may show up in scans and justification for why they are not exploitable:
 
@@ -70,8 +74,9 @@ Below is a list of CVEs that may show up in scans and justification for why they
 
 ### Product Dependencies
 
-Build Service can be installed on any Kubernetes cluster (v1.22 or later).
+You can install Tanzu Build Service on any Kubernetes cluster v1.22 or later.
 
 ### Upgrade Path
 
-v1.6.* can be upgraded to v1.7.*. Please follow the [install](installing.html) process to upgrade.
+You can upgrade v1.6.x to v1.7.x. For upgrade instructions, follow the procedures in
+[Installing Tanzu Build Service](installing.html).
