@@ -45,7 +45,7 @@ Below is a list of CVEs that may show up in scans and justification for why they
 
 ```
 | Status | CVE ID | Severity | Dependency | Source | Version | Reason Not Affected |
-|-|-|-|-|-|-|
+|-|-|-|-|-|-|-|
 | Not Affected | CVE-2022-42003      | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The configuration `UNWRAP_SINGLE_VALUE_ARRAYS` is not used for deserializing data. |
 | Not Affected | CVE-2022-42004      | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The only configuration specified by `spring-boot-starter` is `FAIL_ON_UNKNOWN_PROPERTIES` which only affects whether it should continue parsing or not. The CVE requires specific deserializer configuration(s) which we aren't using. |
 | Not Affected | GHSA-jjjh-jjxp-wpff | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The configuration `UNWRAP_SINGLE_VALUE_ARRAYS` is not used for deserializing data. |
