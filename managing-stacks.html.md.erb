@@ -3,18 +3,27 @@ title: Managing ClusterStacks
 owner: Build Service Team
 ---
 
-A ClusterStack is a cluster scoped resource that provides the build and run images for the [Cloud Native Buildpack stack](https://buildpacks.io/docs/concepts/components/stack/) that will be used in a [Builder](managing-builders.html).
+A ClusterStack is a cluster scoped resource that provides the build and run images for the
+[Cloud Native Buildpack stack](https://buildpacks.io/docs/concepts/components/stack/) that will be used in a [Builder](managing-builders.html).
 
-Most users automatically configure three ClusterStack resources through the Tanzu Build Service installation process.  These ClusterStacks are referenced in three corresponding ClusterBuilder resources.
+TBS ships with stacks for [ubuntu bionic](https://releases.ubuntu.com/18.04/) and [ubuntu jammy](https://releases.ubuntu.com/22.04/) distributions.
 
-For more information about security and patching cadence for these stacks and their ideal use cases, see [Stacks](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). More detailed release notes for the stacks can be accessed by following the links:
+<p class="note"><strong>Note:</strong> Ubuntu Bionic will no longer receive support starting in April 2023. Users should migrate to jammy as soon as possible. </p>
 
+Stacks are installed automatically during installation via automatic dependency updates or installed manually via the `kp` cli.
+These ClusterStacks are referenced in corresponding ClusterBuilder resources.
+
+For more information about security and patching cadence for these stacks and their ideal use cases, see
+[Stacks](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). More detailed release notes for the stacks can be accessed by following the links:
 
 | Name | ID |
 |---|---|
-| [tiny](https://github.com/paketo-buildpacks/tiny-release/releases)| io.paketo.stacks.tiny |
-| [base](https://github.com/paketo-buildpacks/base-release/releases)| io.buildpacks.stacks.bionic |
-| [full](https://github.com/paketo-buildpacks/full-release/releases)| io.buildpacks.stacks.bionic |
+| [tiny](https://github.com/paketo-buildpacks/bionic-tiny-stack/releases)| io.paketo.stacks.tiny |
+| [base](https://github.com/paketo-buildpacks/bionic-base-stack/releases)| io.buildpacks.stacks.bionic |
+| [full](https://github.com/paketo-buildpacks/bionic-full-stack/releases)| io.buildpacks.stacks.bionic |
+| [tiny-jammy](https://github.com/paketo-buildpacks/jammy-tiny-stack/releases)| io.buildpacks.stacks.jammy.tiny |
+| [base-jammy](https://github.com/paketo-buildpacks/jammy-base-stack/releases)| io.buildpacks.stacks.jammy |
+| [full-jammy](https://github.com/paketo-buildpacks/jammy-full-stack/releases)| io.buildpacks.stacks.jammy |
 
 The `kp` CLI can be used to manage clusterstack. See the kpack-cli [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
 
@@ -42,14 +51,14 @@ Flags:
 Use "kp clusterstack [command] --help" for more information about a command.
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.6.* from Tanzu Build Service release v1.7.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'><strong>Note:</strong> These docs assume kp cli v0.7.* from Tanzu Build Service release v1.7.*. If a feature is not working, you may need to upgrade your cli.</p>
 
 <p class='note'><strong>Note:</strong> Only Build Service Admins (that is, users with the <code>pb-admin-role</code> kubernetes ClusterRole) can perform clusterstack commands.</p>
 
 ## <a id='create-stack'></a> Create a ClusterStack
 
 Users can create a clusterstack by using build and run images from a Docker registry or the local machine.
-The run and build images provided during clusterstack creation are uploaded to the `canonical repository`, which is the `docker-repository` specified during Tanzu Build Service install.
+The run and build images provided during clusterstack creation are uploaded to the `kp_default_repository`, which is the `docker-repository` specified during Tanzu Build Service install.
 
 
 - If you use a Docker registry for the stack images:
@@ -60,7 +69,7 @@ The run and build images provided during clusterstack creation are uploaded to t
      --run-image <location of run-image>
     ```
 
-    <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the canonical registry on the local machine.</p>
+    <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the kp default registry on the local machine.</p>
 
     For example:
 
@@ -78,7 +87,7 @@ The run and build images provided during clusterstack creation are uploaded to t
      --run-image <path to run-image>.tar
     ```
 
-    <p class='note'><strong>Note:</strong> The user must have write access to the canonical registry on the local machine.</p>
+    <p class='note'><strong>Note:</strong> The user must have write access to the kp default registry on the local machine.</p>
 
     For example:
 
@@ -91,7 +100,7 @@ The run and build images provided during clusterstack creation are uploaded to t
 ## <a id='update-stack'></a> Update a ClusterStack
 
 Users can update a stack by using build and run images from a Docker registry or the local machine.
-The run and build images provided during clusterstack update are uploaded to the `canonical repository`, which is the `docker-repository` specified during Tanzu Build Service install.
+The run and build images provided during clusterstack update are uploaded to the `kp-default-repository`, which is the `kp_default_repository` specified during Tanzu Build Service install.
 
 - If using a Docker registry:
 
@@ -101,7 +110,7 @@ The run and build images provided during clusterstack update are uploaded to the
      --run-image <location of run-image>
     ```
 
-    <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the canonical registry on the local machine.</p>
+    <p class='note'><strong>Note:</strong> The user must have read access to the source Docker registry and write access to the kp default registry on the local machine.</p>
 
     For example:
 
@@ -119,7 +128,7 @@ The run and build images provided during clusterstack update are uploaded to the
      --run-image <path to run-image>.tar
     ```
 
-    <p class='note'><strong>Note:</strong> The user must have write access to the canonical registry on the local machine.</p>
+    <p class='note'><strong>Note:</strong> The user must have write access to the kp default registry on the local machine.</p>
 
     For example:
 
@@ -167,11 +176,14 @@ Users can view the list of all ClusterStacks created:
 The following is an example of the output for this command:
 
 ```
-NAME       READY    ID
-base       True     io.buildpacks.stacks.bionic
-default    True     io.buildpacks.stacks.bionic
-full       True     org.cloudfoundry.stacks.cflinuxfs3
-tiny       True     io.paketo.stacks.tiny
+NAME             READY    ID
+base             True     io.buildpacks.stacks.bionic
+default          True     io.buildpacks.stacks.bionic
+full             True     io.buildpacks.stacks.bionic
+tiny             True     io.paketo.stacks.tiny
+base-jammy       True     io.buildpacks.stacks.bionic
+full-jammy       True     io.buildpacks.stacks.bionic
+tiny-jammy       True     io.buildpacks.stacks.jammy.tiny
 ```
 
 ## <a id='image-update-stack-updates-only'></a> How to update an image for Stack updates only?
