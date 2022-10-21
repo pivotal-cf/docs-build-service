@@ -209,7 +209,6 @@ The local machine must have write access to the install registry.
 
     <p class="note"><strong>Note:</strong> Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
 
-
 #### <a id='secret-references'></a> Using Secrets for credentials
 
 You may not want to install TBS with passwords saved in plaintext in the `tbs-values.yml`.
@@ -336,6 +335,45 @@ the role ARN configured earlier.
     ```console
     kp image save my-ecr-image --tag 12345.ecr.com/my-repo --service-acount=SERVICE-ACCOUNT-NAME -n BUILD-NAMESPACE
     ```
+
+#### <a id='install-openshift'></a> Installing on Openshift
+
+Installing TBS on Openshift requires a few extra steps.
+
+1. Follow the normal installation steps but when creating the `tbs-values.yaml` add the following property:
+
+    ```yaml
+    ---
+    ...
+    kubernetes_distribution: openshift
+    ...
+    ```
+
+2. After installing TBS, you will need to configure any namespaces that will have Image or Build resources.
+
+To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
+
+Apply the following `RoleBinding`:
+
+    ```yaml
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: tbs-restricted-with-seccomp
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: system:tbs:scc:restricted-with-seccomp
+    subjects:
+      - kind: ServiceAccount
+        namespace: <BUILD-NAMESPACE>
+        name: <BUILD-SERVICE-ACCOUNT>
+    ```
+    Where:
+
+        * `BUILD-NAMESPACE` is the namespace where Image and Build resources will be created.
+        * `BUILD-SERVICE-ACCOUNT` is the service account used for Image resources (`default` by default).
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
