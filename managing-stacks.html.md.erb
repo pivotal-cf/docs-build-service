@@ -6,15 +6,18 @@ owner: Build Service Team
 A ClusterStack is a cluster scoped resource that provides the build and run images for the
 [Cloud Native Buildpack stack](https://buildpacks.io/docs/concepts/components/stack/) that will be used in a [Builder](managing-builders.html).
 
-TBS ships with stacks for [ubuntu bionic](https://releases.ubuntu.com/18.04/) and [ubuntu jammy](https://releases.ubuntu.com/22.04/) distributions.
+Tanzu Build Service includes stacks for [Ubuntu Bionic](https://releases.ubuntu.com/18.04/) and [Ubuntu Jammy](https://releases.ubuntu.com/22.04/) distributions.
 
-<p class="note"><strong>Note:</strong> Ubuntu Bionic will no longer receive support starting in April 2023. Users should migrate to jammy as soon as possible. </p>
+<p class="note">
+  <strong>Note:</strong> Ubuntu Bionic will no longer receive support starting in April 2023.
+  Migrate to Jammy stacks as soon as possible before this date.
+</p>
 
-Stacks are installed automatically during installation via automatic dependency updates or installed manually via the `kp` cli.
+Stacks are installed automatically during installation by automatic dependency updates or installed manually using the `kp` CLI.
 These ClusterStacks are referenced in corresponding ClusterBuilder resources.
 
 For more information about security and patching cadence for these stacks and their ideal use cases, see
-[Stacks](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). More detailed release notes for the stacks can be accessed by following the links:
+[Stacks](https://docs.pivotal.io/tanzu-buildpacks/stacks.html). You can access more detailed release notes for the stacks by following these links:
 
 | Name | ID |
 |---|---|
@@ -51,7 +54,10 @@ Flags:
 Use "kp clusterstack [command] --help" for more information about a command.
 ```
 
-<p class='note'><strong>Note:</strong> These docs assume kp cli v0.7.* from Tanzu Build Service release v1.7.*. If a feature is not working, you may need to upgrade your cli.</p>
+<p class='note'>
+  <strong>Note:</strong> These docs assume you are using kp CLI v0.7.x with Tanzu Build Service v1.7.x.
+  If a feature is not working, you might need to upgrade your CLI.
+</p>
 
 <p class='note'><strong>Note:</strong> Only Build Service Admins (that is, users with the <code>pb-admin-role</code> kubernetes ClusterRole) can perform clusterstack commands.</p>
 
