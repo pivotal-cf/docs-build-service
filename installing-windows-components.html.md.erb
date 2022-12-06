@@ -3,35 +3,42 @@ title: Installing Windows Components (Beta)
 owner: Build Service Team
 ---
 
-<p class="note warning"><strong>Important:</strong> 
-  This feature is in beta because of its limitations. 
+<p class="note warning"><strong>Important:</strong>
+  This feature is in beta because of its limitations.
   Beta features might undergo changes before the end of the beta stage.
-  
-  This beta feature receives full VMware support. 
+
+  This beta feature receives full VMware support.
 </p>
 
 
-Tanzu Build Service supports building [.NET Framework](https://docs.pivotal.io/tanzu-buildpacks/dotnet-framework/dotnet-framework-buildpack.html) application images. Building .NET Framework images will require a Kubernetes cluster with Windows nodes provisioned. 
+Tanzu Build Service supports building [.NET Framework](https://docs.pivotal.io/tanzu-buildpacks/dotnet-framework/dotnet-framework-buildpack.html)
+application images. Building .NET Framework images requires a Kubernetes cluster with Windows nodes
+provisioned.
 
-To set up Tanzu Build Service for Windows-based builds, please follow the following steps:
+To set up Tanzu Build Service for Windows-based builds, complete the following steps:
 
 1. Complete the standard Tanzu Build Service installation process.
 
-<p class='note'><strong>Note:</strong> Tanzu Build Service on Windows does not currently support self-signed registry certificates. Please use a public registry or a non-self-signed cert. </p>
+<p class='note'><strong>Note:</strong> Tanzu Build Service on Windows does not currently support
+self-signed registry certificates. Use a public registry or a non-self-signed certificate. </p>
 
-2. Ensure you have a Kubernetes cluster with Windows nodes provisioned. 
+2. Ensure that you have a Kubernetes cluster with Windows nodes provisioned.
 
-3. Navigate to the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page in Tanzu Net and accept the EULA
+3. Navigate to the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/)
+in VMware Tanzu Network and accept the EULA.
 
-4. Import the Tanzu Build Service Windows Dependencies
+4. Import the Tanzu Build Service Windows Dependencies.
 
-The Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) can be used to build .NET Framework applications and keep them patched. These must be imported with the `kp` cli and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page:
+The Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) are used to
+build .NET Framework applications and keep them patched. These must be imported with the `kp` cli
+and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the
+[Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page.
 ```
 kp import -f /tmp/windows-descriptor-<version>.yaml
 ```
 
-The following features are not yet supported on Windows nodes of Tanzu Build Service
+The following features are not currently supported on Windows nodes of Tanzu Build Service:
 
-* Caching of build artifacts (which reduces the time of subsequent builds)
-* Preloading of ClusterBuilder images
-* Usage of self-signed registry certificate
+* Caching build artifacts (which reduces the time of subsequent builds)
+* Preloading ClusterBuilder images
+* Using self-signed registry certificates
