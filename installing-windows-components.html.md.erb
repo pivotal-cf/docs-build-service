@@ -15,12 +15,15 @@ Tanzu Build Service supports building [.NET Framework](https://docs.pivotal.io/t
 application images. Building .NET Framework images requires a Kubernetes cluster with Windows nodes
 provisioned.
 
+The following features are not currently supported on Windows nodes of Tanzu Build Service:
+
+* Caching build artifacts (which reduces the time of subsequent builds)
+* Preloading ClusterBuilder images
+* Using self-signed registry certificates. Use a public registry or a non-self-signed certificate.
+
 To set up Tanzu Build Service for Windows-based builds, complete the following steps:
 
 1. Complete the standard Tanzu Build Service installation process.
-
-<p class='note'><strong>Note:</strong> Tanzu Build Service on Windows does not currently support
-self-signed registry certificates. Use a public registry or a non-self-signed certificate. </p>
 
 2. Ensure that you have a Kubernetes cluster with Windows nodes provisioned.
 
@@ -29,16 +32,11 @@ in VMware Tanzu Network and accept the EULA.
 
 4. Import the Tanzu Build Service Windows Dependencies.
 
-The Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) are used to
-build .NET Framework applications and keep them patched. These must be imported with the `kp` cli
-and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the
-[Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page.
-```
-kp import -f /tmp/windows-descriptor-<version>.yaml
-```
+    The Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) are used to
+    build .NET Framework applications and keep them patched. These must be imported with the `kp` cli
+    and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the
+    [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page.
+    ```
+    kp import -f /tmp/windows-descriptor-<version>.yaml
+    ```
 
-The following features are not currently supported on Windows nodes of Tanzu Build Service:
-
-* Caching build artifacts (which reduces the time of subsequent builds)
-* Preloading ClusterBuilder images
-* Using self-signed registry certificates
