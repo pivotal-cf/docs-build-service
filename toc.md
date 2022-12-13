@@ -7,7 +7,7 @@
 * [**Accessing Tanzu Build Service**](accessing-tbs.html)
 * [**Updating Tanzu Build Service Dependencies**](updating-deps.html)
 * [**Managing Secrets**](managing-secrets.html)
-    * [Using SecretGen controller Secrets to use private cluster builders](synced-secrets.html)
+    * [Using Cluster Builders in Private Registries](synced-secrets.html)
 * [**Managing Images and Builds**](managing-images.html)
 * [**Managing ClusterStacks**](managing-stacks.html)
 * [Managing ClusterStores](managing-stores.html)
