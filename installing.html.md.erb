@@ -345,7 +345,7 @@ the role ARN configured earlier.
     * `BUILD-IAM-ROLE-ARN` is the AWS IAM role ARN for the role configured earlier.
     For example, `arn:aws:iam::xyz:role/my-build-role`.
 
-1. To create an `Image` resource with this service account, run:
+1. Create an `Image` resource with this service account:
 
     ```console
     kp image save my-ecr-image --tag 12345.ecr.com/my-repo --service-acount=SERVICE-ACCOUNT-NAME -n BUILD-NAMESPACE
@@ -367,22 +367,22 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
 2. After installing, you must configure any namespaces that will have Image or Build resources.
    To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
 
-Apply the following `RoleBinding`:
+    Apply the following `RoleBinding`:
 
     ```yaml
     ---
     apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
     metadata:
-      name: tbs-restricted-with-seccomp
+    name: tbs-restricted-with-seccomp
     roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: system:tbs:scc:restricted-with-seccomp
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: system:tbs:scc:restricted-with-seccomp
     subjects:
-      - kind: ServiceAccount
-        namespace: <BUILD-NAMESPACE>
-        name: <BUILD-SERVICE-ACCOUNT>
+    - kind: ServiceAccount
+    namespace: <BUILD-NAMESPACE>
+    name: <BUILD-SERVICE-ACCOUNT>
     ```
     Where:
 
