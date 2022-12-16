@@ -347,8 +347,7 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
     ```
 
 2. After installing, you must configure any namespaces that will have Image or Build resources.
-
-To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
+   To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
 
 Apply the following `RoleBinding`:
 
@@ -417,7 +416,7 @@ CA certificate file to install Tanzu Build Service.
 
     * `IMAGE-REGISTRY` is the host name of the private registry.
     * `IMAGE-REPOSITORY` is the repository in your registry where you want to relocate images to.
-      * Harbor has the form `my-harbor.io/my-project/build-service`
+       Harbor has the form `my-harbor.io/my-project/build-service`
     * `REGISTRY-USERNAME` is the user name of the private registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
     * `REGISTRY-PASSWORD` is the password of the private registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
     * `LATEST-TBS-VERSION` is available from the [VMware Tanzu Network](https://network.pivotal.io/products/build-service/).
@@ -477,12 +476,22 @@ This procedure relocates images from the VMware Tanzu Network registry to an int
 
     Where:
 
-    * `PATH-TO-CA` is the path to the registry CA certificate file.
+    `PATH-TO-CA` is the path to the registry CA certificate file.
 
-    For example:
+    Artifactory example:
 
-    * Artifactory `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=artifactory.com/my-project/build-service --registry-ca-cert-path ca.crt`
-    * Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
+    ```console
+    imgpkg copy --tar /tmp/tanzu-build-service.tar \
+    --to-repo=artifactory.com/my-project/build-service \
+    --registry-ca-cert-path ca.crt
+    ```
+    Harbor example
+
+    ```console
+    imgpkg copy --tar /tmp/tanzu-build-service.tar /
+    --to-repo=harbor.io/my-project/build-service /
+    --registry-ca-cert-path ca.crt
+    ```
 
 ### <a id='offline-install'></a> Installation (air-gapped)
 
