@@ -14,22 +14,20 @@ Reasons to use the previous installation method include:
 
 ## <a id='prerequisites'></a> Prerequisites
 
-Before you install Build Service, you must:
+* Have a Kubernetes cluster v1.19 or later.
 
-* Be on Kubernetes cluster v1.19 or later.
-
-* Ensure that all worker nodes have at least 50 GB of ephemeral storage allocated to them.
-	* To do this on TKGs, mount a 50GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your TKGs cluster. For information about configuring storage on worker nodes, see [Cluster with Separate Disks and Storage Parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
+* Ensure that all worker nodes have at least 50&nbsp;GB of ephemeral storage allocated to them.
+	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see [Cluster with Separate Disks and Storage Parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
 
 * Have access to a container registry to install Tanzu Build Service and store application images.
   * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
-  * If installing using the `lite` descriptor, VMware recommends 1 GB of registry storage.
-  * If installing using the `full` descriptor, which is intended for production use and offline environments, VMware recommends 10 GB of available storage.
+  * If installing using the `lite` descriptor, VMware recommends 1&nbsp;GB of registry storage.
+  * If installing using the `full` descriptor, which is intended for production use and offline environments, VMware recommends 10&nbsp;GB of available storage.
   * This registry space suggestion does not include the space used for application images built by Tanzu Build Service.
 
 * Ensure your Kubernetes cluster is configured with a default `StorageClass`.
-Tanzu Build Service defaults to using 2 GB of cache if a default `StorageClass` is defined.
-Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which reduces the time of subsequent builds.
+  If a default `StorageClass` is defined, 2&nbsp;GB of cache is the default.
+  `PersistentVolumeClaims` is used to cache build artifacts, which reduces the time of subsequent builds.
 
     For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. For information about defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
 
@@ -38,30 +36,29 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Install the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.3/tap/GUID-install-tanzu-cli.html).
   - Only the `package` and `secret` plug-ins are required.
 
-* Navigate to the following pages in Tanzu Network and accept all EULAs highlighted in yellow.
+* Navigate to the following pages in VMware Tanzu Network and accept all EULAs highlighted in yellow.
   - [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/)
   - [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/)
   - [Buildpacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-buildpacks-suite)
   - [Stacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-stacks-suite)
 
-* Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
+* To find the latest version, see [VMware Tanzu Network](https://network.tanzu.vmware.com/products/build-service/).
 
-* Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. See the `kp` CLI [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume you are using kp CLI v0.7.x with Tanzu Build Service v1.7.x.
-  If a feature is not working, you might need to upgrade your CLI.
+* Download the `kp` CLI for your operating system from the [VMware Tanzu Network](https://network.tanzu.vmware.com/products/build-service/). See the `kp` CLI [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
+	* This installation procedure requires kp CLI v0.7.x with Tanzu Build Service v1.7.x.
 
 * Download either the [`docker` CLI](https://docs.docker.com/get-docker/) or
 [`crane` CLI](https://github.com/google/go-containerregistry/tree/main/cmd/crane)
 for authentication with registries.
 
-<p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1, 1.5.6, and 1.5.7 are not compatible with Tanzu Build Service. Notably, TKG 1.2.1 and TKGi 1.13.0 & 1.13.1 use these versions of Containerd, so a different version must be used.</p>
+<p class="note"><strong>Note:</strong> Clusters running with Containerd v1.4.1, v1.5.6, and v1.5.7 are not compatible with Tanzu Build Service. Notably, Tanzu Kubernetes Grid 1.2.1 and TKGi 1.13.0 & 1.13.1 use these versions of Containerd, so a different version must be used.</p>
 
-<p class="note"><strong>Note:</strong> TKGs clusters running Kubernetes 1.20.0-1.20.6 are not compatible with Tanzu Build Service.</p>
+<p class="note"><strong>Note:</strong> vSphere with Tanzu clusters running Kubernetes v1.20.0-v1.20.6 are not compatible with Tanzu Build Service.</p>
 
 ## <a id='DeprecatedFeatures'></a> Deprecated Features
 
-* The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be disabled manually by passing
-`--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle or by adding
+* The (legacy) CNB BOM format is deprecated, but enabled by default in Tanzu Build Service. Support can be disabled manually by passing
+`--data-value-yaml include_legacy_bom=false` to `ytt` when processing the Tanzu Build Service bundle or by adding
 `include_legacy_bom=false` to your `tbs-values.yml` file.
 
 ## <a id='install-tbs'></a> Install Tanzu Build Service
@@ -80,9 +77,9 @@ for authentication with registries.
 
     Where:
 
-    * `IMAGE-REGISTRY` is the host name of the registry. If you are using DockerHub as your registry, use the value `https://index.docker.io/v1/`.
+    * `IMAGE-REGISTRY` is the host name of the registry. If you are using Docker Hub as your registry, use the value `https://index.docker.io/v1/`.
     * `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
-      * Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
+      * Docker hub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
       * gcr.io has the form `gcr.io/my-project/build-service`.
       * Harbor has the form `my-harbor.io/my-project/build-service`.
     * `REGISTRY-USERNAME` is the user name of the registry. You must be able to write to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
@@ -90,16 +87,16 @@ for authentication with registries.
     * `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
     * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
       * For Google Cloud Registry, use the contents of the service account JSON key.
-    * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
+    * `LATEST-TBS-VERSION` is available from [VMware Tanzu Network](https://network.pivotal.io/products/build-service/).
 
 ### <a id='relocate-images'></a> Relocate images to a registry
 
-This procedure relocates images from the Tanzu Network registry to an internal
+This procedure relocates images from the VMware Tanzu Network registry to an internal
 image registry through a local machine.
 
 The local machine must have write access to the install registry.
 
-1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
+1. Log in to the VMware Tanzu Network registry:
 
     - If using the `docker` CLI, run:
 
@@ -136,7 +133,7 @@ The local machine must have write access to the install registry.
 
     For example:
 
-    * Dockerhub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
+    * Docker Hub `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=my-dockerhub-account/build-service`
     * GCR `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=gcr.io/my-project/build-service`
     * Artifactory `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=artifactory.com/my-project/build-service`
     * Harbor `imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-repo=harbor.io/my-project/build-service`
@@ -168,13 +165,13 @@ The local machine must have write access to the install registry.
         --namespace tbs-install
     ```
 
-1. You should be able to get the status of the package repository and ensure the status updates to `Reconcile succeeded` by running:
+1. Get the status of the package repository (the status should be `Reconcile succeeded`):
 
     ```
     tanzu package repository get tbs-repository --namespace tbs-install
     ```
 
-1. Create a `tbs-values.yml` file by using the following sample as a guide. This file should be kept for future use.
+1. Create a `tbs-values.yml` file by using the following sample as a guide. Keep this file for future use.
 
     ```yaml
     ---
@@ -194,12 +191,12 @@ The local machine must have write access to the install registry.
     * `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
     * `INSTALL_REGISTRY_USERNAME` is the registry username. Same value as used during relocation.
     * `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
-    * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from tanzu network. Same value used during relocation
-    * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from tanzu network. Same value used during relocation
+    * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network. Same value used during relocation
+    * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network. Same value used during relocation
     * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
       * `full` contains all dependencies.
       * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
-    * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
+    * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
 
 1. Install the package by running:
 
@@ -207,11 +204,11 @@ The local machine must have write access to the install registry.
     tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
     ```
 
-    <p class="note"><strong>Note:</strong> Installing with Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
+    <p class="note"><strong>Note:</strong> Installing with VMware Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
 
 #### <a id='secret-references'></a> Using Secrets for credentials
 
-You may not want to install TBS with passwords saved in plaintext in the `tbs-values.yml`.
+You may not want to install Tanzu Build Service with passwords saved in plaintext in the `tbs-values.yml`.
 
 You can store these credentials in `Secrets` and reference them in the `tbs-values.yml` using the following process:
 
@@ -225,7 +222,7 @@ You can store these credentials in `Secrets` and reference them in the `tbs-valu
       --namespace tbs-install
     ```
 
-1. When leveraging automatic updates, create the secret for the Tanzu Network credentials using the `tanzu` cli:
+1. When leveraging automatic updates, create the secret for the VMware Tanzu Network credentials using the `tanzu` cli:
 
 	```
 	tanzu secret registry add tanzunet-creds \
@@ -256,8 +253,8 @@ You can store these credentials in `Secrets` and reference them in the `tbs-valu
 
 1. You can add additional fields to the  `tbs-values.yml`:
 
-    * `admin_users` is a comma-separated list of users granted admin privileges on Build Service.
-    * `admin_groups` is a comma-separated list of groups granted admin privileges on Build Service.
+    * `admin_users` is a comma-separated list of users granted admin privileges.
+    * `admin_groups` is a comma-separated list of groups granted admin privileges.
     * `http_proxy` is the HTTP proxy to use for network traffic.
     * `https_proxy` is the HTTPS proxy to use for network traffic.
     * `no_proxy` is a comma-separated list of host names, IP addresses, or IP address ranges in CIDR format.
@@ -283,10 +280,10 @@ There are two additional steps required:
 
 To install with AWS IAM for Authentication with ECR:
 
-1. Before installing Tanzu Build Service, create a repository in ECR to use for the `kp_default_repository`.
+1. Create a repository in ECR to use for the `kp_default_repository`.
 
 1. Configure an AWS IAM role that has read and write access to the `kp_default_repository`
-and a trust policy for the EKS cluster. The minimum required permissions can be found [here](#aws-iam-auth-min-permissions).
+and a trust policy for the EKS cluster. The minimum required permissions are found [here](#aws-iam-auth-min-permissions).
 
 1. Follow the Tanzu Build Service installation steps until the `tbs-values.yml` file.
 
@@ -338,9 +335,9 @@ the role ARN configured earlier.
 
 #### <a id='install-openshift'></a> Installing on Openshift
 
-Installing TBS on Openshift requires a few extra steps.
+Installing Tanzu Build Service on Openshift requires a some extra steps.
 
-1. Follow the normal installation steps but when creating the `tbs-values.yaml` add the following property:
+1. Follow the [installation](#install) steps above, but when creating the `tbs-values.yml` add the following property:
 
     ```yaml
     ---
@@ -349,7 +346,7 @@ Installing TBS on Openshift requires a few extra steps.
     ...
     ```
 
-2. After installing TBS, you will need to configure any namespaces that will have Image or Build resources.
+2. After installing, you must configure any namespaces that will have Image or Build resources.
 
 To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
 
@@ -377,15 +374,13 @@ Apply the following `RoleBinding`:
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
-To upgrade Tanzu Build Service to a newer version, take the following steps.
-
 1. Relocate the new package repository:
 
     ```
     imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$NEW_TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
     ```
 
-1. Add the Tanzu Build Service package repository to the cluster by running:
+1. Add the Tanzu Build Service package repository to the cluster:
 
     ```
     tanzu package repository add tbs-repository \
@@ -393,7 +388,7 @@ To upgrade Tanzu Build Service to a newer version, take the following steps.
         --namespace tbs-install
     ```
 
-1. Install the package with the same `tbs-values.yml` file used during initial installation by running:
+1. Install the package with the same `tbs-values.yml` file used during the initial installation by running:
 
     ```
     tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
@@ -425,7 +420,7 @@ CA certificate file to install Tanzu Build Service.
       * Harbor has the form `my-harbor.io/my-project/build-service`
     * `REGISTRY-USERNAME` is the user name of the private registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
     * `REGISTRY-PASSWORD` is the password of the private registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
-    * `LATEST-TBS-VERSION` is from the [Tanzu Network Release](https://network.pivotal.io/products/build-service/) page.
+    * `LATEST-TBS-VERSION` is available from the [VMware Tanzu Network](https://network.pivotal.io/products/build-service/).
 
     <p class="note">
     <strong>Note:</strong> The IMAGE-REPOSITORY must be the IMAGE-REGISTRY appended with the destination repository for the images.
@@ -434,9 +429,9 @@ CA certificate file to install Tanzu Build Service.
 
 ### <a id='offline-relocate-images'></a> Relocate images to a registry (air-gapped)
 
-This procedure relocates images from the Tanzu Network registry to an internal image registry through local machine(s).
+This procedure relocates images from the VMware Tanzu Network registry to an internal image registry through local machine(s).
 
-1. Log in to the Tanzu Network registry with your Tanzu Network credentials:
+1. Log in to the VMware Tanzu Network registry:
 
     - If using the `docker` CLI, run:
 
@@ -450,7 +445,7 @@ This procedure relocates images from the Tanzu Network registry to an internal i
         crane auth login registry.tanzu.vmware.com
         ```
 
-1. Copy the Tanzu Build Service package repository to your local machine as a tar with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
+1. Copy the Tanzu Build Service package repository to your local machine as a TAR with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
     ```console
     imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$TBS_VERSION --to-tar=/tmp/tanzu-build-service.tar
@@ -507,13 +502,13 @@ This procedure relocates images from the Tanzu Network registry to an internal i
         --namespace tbs-install
     ```
 
-1. You should be able to get the status of the package repository, and ensure the status updates to `Reconcile succeeded` by running:
+1. Get the status of the package repository (the status should be `Reconcile succeeded`):
 
     ```
     tanzu package repository get tbs-repository --namespace tbs-install
     ```
 
-1. Create a `tbs-values.yml` file by using the following sample as a guide. This file should be kept for future use.
+1. Create a `tbs-values.yml` file by using the following sample as a guide. Keep this file for future use.
 
     ```yaml
     ---
@@ -530,14 +525,14 @@ This procedure relocates images from the Tanzu Network registry to an internal i
     * `INSTALL_REPOSITORY` is a writable repository in your internal registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
     * `INSTALL_REGISTRY_USERNAME` is the internal registry username. Same value as used during relocation.
     * `INSTALL_REGISTRY_PASSWORD` is the internal registry password. Same value as used during relocation.
-    * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
+    * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
 
 #### <a id='offline-additional-config'></a> Additional configuration
 
 1. Additional fields can be added to `tbs-values.yml`.
 
-    * `admin_users` is a comma-separated list of users who are granted admin privileges on Build Service.
-    * `admin_groups` is a comma-separated list of groups that are granted admin privileges on Build Service.
+    * `admin_users` is a comma-separated list of users who are granted admin privileges.
+    * `admin_groups` is a comma-separated list of groups that are granted admin privileges.
     * `http_proxy` is the HTTP proxy to use for network traffic.
     * `https_proxy` is the HTTPS proxy to use for network traffic.
     * `no_proxy` is a comma-separated list of hostnames, IP addresses, or IP ranges in CIDR format that should not use a proxy.
@@ -554,23 +549,23 @@ This procedure relocates images from the Tanzu Network registry to an internal i
     tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml
     ```
 
-### <a id='offline-update-deps'></a> Updating Build Service Dependencies (air-gapped)
+### <a id='offline-update-deps'></a> Updating Tanzu Build Service Dependencies (air-gapped)
 
-When running in an air-gapped environment, Tanzu Build Service cannot pull dependencies automatically from external Internet. Therefore, dependencies must be imported manually as a part of installation for Tanzu Build Service to work.
+When running in an air-gapped environment, Tanzu Build Service cannot pull dependencies automatically from external Internet. Dependencies must be imported manually as a part of the Tanzu Build Service installation.
 
-Tanzu Build Service dependencies must be kept up to date manually or in a CI/CD automated way in order to keep application images patched. To learn more about keeping dependencies up to date in an offline environment, see [Updating Build Service Dependencies](updating-deps.html#offline-update).
+Dependencies must be updated manually or using CI/CD automation. For more information about keeping dependencies up to date in an offline environment, see [Updating Build Service Dependencies](updating-deps.html#offline-update).
 
 ### <a id='offline-upgrade-tbs'></a> Upgrading Tanzu Build Service (air-gapped)
 
-1. To upgrade Tanzu Build Service to a newer version in an air-gapped environment, the same relocation steps listed [here](#offline-relocate-images) must be followed with a new `TBS_VERSION`.
+1. Follow the relocation steps in [Relocate images to a registry (air-gapped)](#offline-relocate-images) and add a new `TBS_VERSION`.
 
-1. Then the same installation steps can be followed by using the same `tbs-values.yml` file used for initial installation.
+1. Follow the installation steps in [Installation](#offline-install), use the same `tbs-values.yml` file that was used for the initial installation.
 
     Re-importing dependencies is not required for upgrading Tanzu Build Service.
 
 ## <a id='uninstall-tbs'></a> Uninstalling Tanzu Build Service
 
-1. To uninstall Tanzu Build Service, uninstall the package using the `tanzu` cli:
+1. Uninstall the package:
 
     ```
     tanzu package installed delete tbs -n tbs-install -y
@@ -594,19 +589,19 @@ If you do not want to do this, see [When to use Synchronized Secrets](synced-sec
 
 Build Service relies on the run image being publicly readable or readable with the registry credentials configured in a project/namespace for the builds to be executed successfully.
 
-The location of the run image can be identified by running:
+Identify the location of the run image:
 
   ```
   kp clusterstack status <stack-name>
   ```
 
-If the cluster stack run image is not public, you might need to create a registry secret in any namespace where images or builds are used. For more details on secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
-
-You can do this with the `kp` CLI:
+If the cluster stack run image is not public, create a registry secret in any namespace where images or builds are used:
 
   ```
   kp secret create my-registry-creds --registry example-registry.io --registry-user my-registry-user --namespace build-namespace
   ```
+
+For more details about secrets in Tanzu Build Service, see [Managing Secrets](managing-secrets.html)
 
 ## <a id='next-steps'></a> Next steps
 
