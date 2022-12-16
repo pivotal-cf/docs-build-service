@@ -432,7 +432,7 @@ When you successfully delete an image resource, you see this message:
 
 ## <a id='image-with-YAML'></a> Managing image resources with YAML
 
-Build Services image resources can be created by applying the [kpack image resources](https://github.com/pivotal/kpack/blob/master/docs/image.md) to cluster through `kubectl`.
+Build Services image resources can be created by applying the [kpack image resources](https://github.com/pivotal/kpack/blob/main/docs/image.md) to cluster through `kubectl`.
 
 Use the `default` service account for Build Service registry and Git secrets.
 
@@ -789,7 +789,7 @@ Build successful
 ## <a id='build-status'></a> Viewing bill of materials
 
 > **Deprecation Note:**
-> * The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be disabled manually by passing
+> * The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be deactivated manually by passing
 > `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle or by adding
 > `include_legacy_bom=false` to your `tbs-values.yml` file.
 >
