@@ -47,7 +47,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume you are using kp CLI v0.7.x with Tanzu Build Service v1.7.x.
+	* These docs assume you are using kp CLI v0.9.x with Tanzu Build Service v1.9.x.
   If a feature is not working, you might need to upgrade your CLI.
 
 * Download either the [`docker` CLI](https://docs.docker.com/get-docker/) or
@@ -118,7 +118,7 @@ This procedure relocates images from the Tanzu Network registry to an internal i
 
     Where:
 
-    - `TBS-VERSION` is the version full version (1.7.x) of Tanzu Build Service that you want to install.
+    - `TBS-VERSION` is the version full version (1.9.x) of Tanzu Build Service that you want to install.
     - `IMAGE-REPOSITORY` is the repository in your registry that you want to relocate images to.
 
     <p class="note">
