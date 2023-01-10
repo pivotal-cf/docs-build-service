@@ -3,71 +3,37 @@ title: TBS Release Notes
 owner: Build Service Team
 ---
 
-## <a id="1-7-2"></a> v1.7.2
+## <a id="1-9-0"></a> v1.9.0
 
-**Release Date: October 21, 2022**
+**Release Date: January 10, 2023**
 
 ### New Features
 
-- **Support for installing on Openshift after a standard install:** Previously, installing on Openshift
-resulted in `seccomp` errors and required additional installation steps.
-
-- **Support for the [Ubuntu Jammy](https://releases.ubuntu.com/22.04/) stack:** You can find
-Jammy stacks on [Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/).
-Automatic dependency updates automatically install Jammy stacks.
+- All TBS images are built on Ubuntu Jammy
+- TBS now includes experimental support for Tanzu Service Mesh and Istio
 
 ### Deprecated Features
 
 - **Ubuntu Bionic stacks are deprecated:** The Ubuntu Bionic release is [removing support in April 2023](https://wiki.ubuntu.com/Releases).
 Migrate apps to Jammy stacks before this date.
-
-- **The legacy Cloud Native Buildpack Bill of Materials (CNB BOM) format is deprecated:**
-However, it is still activated by default in Tanzu Build Service. You can deactivate support manually
-by passing `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the Tanzu Build Service
-bundle or by adding `include_legacy_bom=false` to your `tbs-values.yml` file.
+- Non-inclusive configuraton keys have been deprecated. It is recommended to switch to the inclusive equivalents:
+    ```
+    disable_smart_warmer -> deactivate_smart_warmer
+    ```
 
 ### Product Snapshot
 
-Tanzu Build Service v1.7.2 ships with the following components:
+Tanzu Build Service v1.9.0 ships with the following components:
 
-- [kpack v0.7.1](https://github.com/pivotal/kpack/releases/tag/v0.7.1)
-- [kpack cli v0.7.1](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.7.1)
-- [CNB lifecycle v0.14.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.14.2)
+- [kpack v0.9.1](https://github.com/pivotal/kpack/releases/tag/v0.9.1)
+- [kpack cli v0.9.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.9.0)
+- [CNB lifecycle v0.14.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.14.3)
 
 Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
 ### Security Scanning
 
-There are some HIGH and CRITICAL CVEs that might show up in scans of this Tanzu Build Service release.
-However, none of the CVEs are exploitable.
-
-Below is a list of CVEs that may show up in scans and justification for why they are not exploitable:
-
-| Status | CVE ID | Severity | Dependency | Source | Version | Reason Not Affected |
-|-|-|-|-|-|-|-|
-| Not Affected | CVE-2022-42003      | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The configuration `UNWRAP_SINGLE_VALUE_ARRAYS` is not used for deserializing data. |
-| Not Affected | CVE-2022-42004      | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The only configuration specified by `spring-boot-starter` is `FAIL_ON_UNKNOWN_PROPERTIES`, which only affects whether it continues parsing or not. The CVE requires specific deserializer configurations that Tanzu Build Service does not use. |
-| Not Affected | GHSA-jjjh-jjxp-wpff | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The configuration `UNWRAP_SINGLE_VALUE_ARRAYS` is not used for deserializing data. |
-| Not Affected | GHSA-rgv9-q543-rqg4 | High      |    jackson-databind               | java functions buildpack | 2.13.3 | The only configuration specified by `spring-boot-starter` is `FAIL_ON_UNKNOWN_PROPERTIES`, which only affects whether it continues parsing or not. The CVE requires specific deserializer configurations that Tanzu Build Service does not use. |
-| Not Affected | CVE-2021-37714      | High      |    jsoup                          | java functions buildpack | 1.12.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | GHSA-m72m-mhq2-9p6c | High      |    jsoup                          | java functions buildpack | 1.12.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-artifact                 | java functions buildpack | 3.6.2 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-builder-support          | java functions buildpack | 3.6.2 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-model                    | java functions buildpack | 3.6.2 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-model-builder            | java functions buildpack | 3.6.2 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-repository-metadata      | java functions buildpack | 3.6.2 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-api             | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-connector-basic | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-impl            | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-provider        | java functions buildpack | 3.6.2 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-spi             | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2007-1536       | High      |    maven-resolver-transport-file  | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-transport-file  | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-transport-http  | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-transport-wagon | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | CVE-2021-26291      | Critical  |    maven-resolver-util            | java functions buildpack | 1.4.1 | These maven dependencies come from `spring-cloud-function-deployer`. They are used for specifying the location of the function using `maven:`. However, this property is defined at runtime by the buildpack to point to a local path `/workspace`, thus not using any maven resolution to download a function. |
-| Not Affected | GHSA-3mc7-4q67-w48m | High      |    snakeyaml                      | java functions buildpack | 1.30 | Spring uses this library to read local trusted configuration 'application.yml'. For more information, see the [spring-boot](https://github.com/spring-projects/spring-boot/issues/32221) repository in GitHub. |
-| Not Affected | CVE-2016-1000027    | Critical  |    spring-core                    | java functions buildpack | 5.3.22 | Most Spring applications do not use Java deserialization of untrusted content. |
+There are some HIGH and CRITICAL CVEs that might show up in scans of this Tanzu Build Service release. The only exploitable cve is `CVE-2022-4378` This CVE impacts the kernel which is not packaged within the container image. When a Jammy patch is available an update will be provided that resolve security scans.
 
 ### Product Dependencies
 
@@ -75,5 +41,5 @@ You can install Tanzu Build Service on any Kubernetes cluster v1.22 or later.
 
 ### Upgrade Path
 
-You can upgrade v1.6.x to v1.7.x. For upgrade instructions, follow the procedures in
+You can upgrade v1.7.x to v1.9.x. For upgrade instructions, follow the procedures in
 [Installing Tanzu Build Service](installing.html).
