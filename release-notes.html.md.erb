@@ -9,14 +9,14 @@ owner: Build Service Team
 
 ### New Features
 
-- All TBS images are built on Ubuntu Jammy
-- TBS now includes experimental support for Tanzu Service Mesh and Istio
+- All Tanzu Build Service images are built on Ubuntu Jammy
+- Tanzu Build Service now includes experimental support for Tanzu Service Mesh and Istio
 
 ### Deprecated Features
 
 - **Ubuntu Bionic stacks are deprecated:** The Ubuntu Bionic release is [removing support in April 2023](https://wiki.ubuntu.com/Releases).
 Migrate apps to Jammy stacks before this date.
-- Non-inclusive configuraton keys have been deprecated. It is recommended to switch to the inclusive equivalents:
+- Non-inclusive configuration keys have been deprecated. It is recommended to switch to the inclusive equivalents:
     ```
     disable_smart_warmer -> deactivate_smart_warmer
     ```
@@ -33,7 +33,9 @@ Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com
 
 ### Security Scanning
 
-There are some HIGH and CRITICAL CVEs that might show up in scans of this Tanzu Build Service release. The only exploitable cve is `CVE-2022-4378` This CVE impacts the kernel which is not packaged within the container image. When a Jammy patch is available an update will be provided that resolve security scans.
+There are some HIGH and CRITICAL CVEs that might show up in scans of this Tanzu Build Service release.
+The only exploitable cve is `CVE-2022-4378` This CVE impacts the kernel which is not packaged within the container image.
+When a Jammy patch is available an update will be provided that resolves security scans.
 
 ### Product Dependencies
 
