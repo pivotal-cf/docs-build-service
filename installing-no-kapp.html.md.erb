@@ -54,7 +54,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 [`crane` CLI](https://github.com/google/go-containerregistry/tree/main/cmd/crane)
 for authentication with registries.
 
-* Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/Tanzu Build Service-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
+* Download the Dependency Descriptor file (`descriptor-<version>.yaml`) from the latest release on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network. This file contains paths to images that contain dependency resources Tanzu Build Service needs to execute image builds.
 
 <p class="note"><strong>Note:</strong> Clusters running with Containerd 1.4.1, 1.5.6, and 1.5.7 are not compatible with Tanzu Build Service. Notably, TKG 1.2.1 and TKGi 1.13.0 & 1.13.1 use these versions of Containerd, a different version must be used.</p>
 
