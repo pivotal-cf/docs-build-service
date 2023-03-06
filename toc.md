@@ -1,4 +1,4 @@
-* [**Tanzu Build Service v1.9 Documentation**](index.html)
+* [**Tanzu Build Service v1.10 Documentation**](index.html)
 * [**Release Notes**](release-notes.html)
 * [**Installation**](installing.html)
     * [Installing Windows Components](installing-windows-components.html)

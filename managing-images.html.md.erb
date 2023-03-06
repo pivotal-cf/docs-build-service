@@ -57,7 +57,7 @@ Use "kp build [command] --help" for more information about a command.
 ```
 
 <p class='note'>
-  <strong>Note:</strong> These docs assume you are using kp CLI v0.9.x with Tanzu Build Service v1.9.x.
+  <strong>Note:</strong> These docs assume you are using kp CLI v0.10.x with Tanzu Build Service v1.10.x.
   If a feature is not working, you might need to upgrade your CLI.
 </p>
 
@@ -819,7 +819,7 @@ $ kp build status --bom my-app-image | jq
       "name": "Node Engine",
       "sha256": "b981046a0ea3d5594a7f04fae3afdfa1983bc65f4e26e768b38a2d67057ac75c",
       "stacks": [
-        "io.buildpacks.stacks.bionic",
+        "io.buildpacks.stacks.jammy",
         "org.cloudfoundry.stacks.cflinuxfs3"
       ],
       "uri": "file:///dependencies/b981046a0ea3d5594a7f04fae3afdfa1983bc65f4e26e768b38a2d67057ac75c",
