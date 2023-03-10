@@ -34,7 +34,7 @@ Build Service utilizes `PersistentVolumeClaims` to cache build artifacts, which 
 * Find the latest Tanzu Build Service version by checking the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. Just knowing the version is sufficient.
 
 * Download the `kp` CLI for your operating system from the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page on Tanzu Network. The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md).
-	* These docs assume you are using kp CLI v0.9.x with Tanzu Build Service v1.7.x.
+	* These docs assume you are using kp CLI v0.10.x with Tanzu Build Service v1.10.x.
     If a feature is not working, you might need to upgrade your CLI.
 
 * Download either the [`docker` CLI](https://docs.docker.com/get-docker/) or
@@ -45,7 +45,7 @@ for authentication with registries.
 
 For this example setup, we make the following assumptions:
 
-* You are installing TBS 1.9.0 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
+* You are installing TBS 1.10.3 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
 * You are using a registry named `my.registry.io` with credentials
   * Username: `my-user`
   * Password: `my-password`
@@ -95,13 +95,13 @@ This procedure relocates images from the Tanzu Network registry to your registry
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
     ```console
-    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.9.0" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
+    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.10.3" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
     ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
     ```console
-    imgpkg pull -b "my.registry.io/tbs:1.9.0" -o /tmp/bundle
+    imgpkg pull -b "my.registry.io/tbs:1.10.3" -o /tmp/bundle
     ```
 
 ### <a id='install'></a> Install Tanzu Build Service
@@ -136,11 +136,10 @@ kp clusterbuilder list
 You should see an output that looks as follows:
 
 ```
-NAME       READY    STACK                          IMAGE
-base       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-default    true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-full       true     io.buildpacks.stacks.bionic    <image@sha256:digest>
-tiny       true     io.paketo.stacks.tiny          <image@sha256:digest>
+NAME          READY    STACK                          IMAGE
+base          true     io.buildpacks.stacks.bionic    <image@sha256:digest>
+base-jammy    true     io.buildpacks.stacks.jammy     <image@sha256:digest>
+default       true     io.buildpacks.stacks.jammy     <image@sha256:digest>
 ```
 
 ## <a id='create-image'></a> Create an Image

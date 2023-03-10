@@ -3,7 +3,7 @@ title: Managing Custom Stacks
 owner: Build Service Team
 ---
 
-A CustomStack is a resource that allows users to create a customized [ClusterStack](managing-stacks.html) from Ubuntu 18.04 (Bionic Beaver) and UBI7/UBI8 non-minimal-based OCI images.
+A CustomStack is a resource that allows users to create a customized [ClusterStack](managing-stacks.html) from Ubuntu 22.04 (Jammy Jellyfish) and UBI7/UBI8 non-minimal-based OCI images.
 
 <p class='note'><strong>Note:</strong> CustomStacks created with UBI7/UBI8 images do not currently support adding packages, mixins, or caCerts.  Currently, only the Java Tanzu Buildpacks support CustomStacks that use UBI images. </p>
 <p class='note'><strong>Note:</strong> Private registries which require a custom CA certificate are not currently supported as publishing destinations for CustomStack images.</p>
@@ -25,7 +25,7 @@ A CustomStack is created by running `kubectl apply` with a resource configuratio
 * `source`: The location of base images used for building the stack. See more info in [Source Configuration](#source-config).
 * `destination`: The location to publish built images and optional ClusterStack. See more info in [Destination Configuration](#destination-config).
 * `caCerts`: References to config maps of CA certificates to add to one or both of the stack images.
-* `packages`: List of packages to install on one or both of the stack images. A list of all available packages can be found in [Software Packages in "bionic"](https://packages.ubuntu.com/bionic/allpackages) on the ubuntu packages web page.
+* `packages`: List of packages to install on one or both of the stack images. A list of all available packages can be found in [Software Packages in "jammy"](https://packages.ubuntu.com/jammy/allpackages) on the ubuntu packages web page.
 * `mixins`: List of mixin labels to add to one or both of the stack images. Information on the mixins concept can be found in [Stack](https://buildpacks.io/docs/concepts/components/stack/#mixins) on the Buildpacks.io website.
 * `service-account-name`: Name of service account with secret containing credentials to push to registry.
 * `user`: User and group ID of the CNB user.
