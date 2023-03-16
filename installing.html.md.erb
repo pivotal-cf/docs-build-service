@@ -2,10 +2,9 @@
 title: Installing Tanzu Build Service
 owner: Build Service Team
 ---
+NOTE: This method of installation is now deprecated in favor of [Installation via the TBS profile in TAP](installing-tap-profile.html)
 
-This topic describes how to install and configure Tanzu Build Service.
-
-VMware recommends installing Tanzu Build Service with the Tanzu CLI and kapp controller. If you want to view the previous method of installation, see [Installing without kapp controller](installing-no-kapp.html).
+This topic describes how to install and configure Tanzu Build Service with the Tanzu CLI and kapp controller. If you want to view the previous method of installation, see [Installing without kapp controller](installing-no-kapp.html).
 
 Reasons to use the previous installation method include:
 
@@ -14,7 +13,7 @@ Reasons to use the previous installation method include:
 
 ## <a id='prerequisites'></a> Prerequisites
 
-* Have a Kubernetes cluster v1.19 or later.
+* Have a Kubernetes cluster v1.23 or later.
 
 * Ensure that all worker nodes have at least 50&nbsp;GB of ephemeral storage allocated to them.
 	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see [Cluster with Separate Disks and Storage Parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
@@ -33,7 +32,7 @@ Reasons to use the previous installation method include:
 
 * Download [Tanzu Cluster Essentials](https://network.tanzu.vmware.com/products/tanzu-cluster-essentials) to install the `imgpkg` CLI tool and follow the README to install kapp controller.
 
-* Install the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.3/tap/GUID-install-tanzu-cli.html).
+* Install the [Tanzu CLI](https://docs.vmware.com/en/Tanzu-Application-Platform/1.5/tap/GUID-install-tanzu-cli.html).
   Only the `package` and `secret` plug-ins are required.
 
 * Navigate to the following pages in VMware Tanzu Network and accept all EULAs highlighted in yellow.
@@ -376,15 +375,15 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
     apiVersion: rbac.authorization.k8s.io/v1
     kind: RoleBinding
     metadata:
-    name: tbs-restricted-with-seccomp
+      name: tbs-restricted-with-seccomp
     roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: system:tbs:scc:restricted-with-seccomp
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: system:tbs:scc:restricted-with-seccomp
     subjects:
     - kind: ServiceAccount
-    namespace: <BUILD-NAMESPACE>
-    name: <BUILD-SERVICE-ACCOUNT>
+      namespace: <BUILD-NAMESPACE>
+      name: <BUILD-SERVICE-ACCOUNT>
     ```
     Where:
 
