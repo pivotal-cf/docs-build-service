@@ -1,0 +1,45 @@
+---
+title: Adding Buildpacks to Builders
+owner: Build Service Team
+---
+
+Create a buildpack using [this guide](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/).
+
+As descibed [here](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/), the output of the buildpack creation is a buildpackage.
+
+# Add a buildpack to a builder
+
+### Add a buildpack to an existing ClusterStore
+```
+kp clusterstore save <store> -b <buildpackage>
+```
+
+### Add a buildpack to a builder
+A buildpack can be added either to a new custom builder or to an existing one.
+
+Below described the instructions on how to add the buildpack in each of the options.
+
+#### Create a new custom builder with a buildpack
+* Create a cluster stack
+```
+kp clusterstack save <stack> --build-image paketobuildpacks/build:base-cnb --run-image paketobuildpacks/run:base-cnb
+```
+* Create a builder
+```
+kp builder save <builder> --tag <IMAGE-TAG> --stack <stack> --store <store>  --buildpack <buildpackage>
+```
+
+#### Change the order in a custom builder
+```
+kp builder save <builder> -o <order>
+```
+`<order>` is a yaml file describing the new order. 
+
+If there is only one detection group (with one or multiple buildpacks), there is no need to use an `<order>` file:
+```
+kp builder save <builder> -b <buildpackage1> -b <buildpackage2>...
+```
+
+
+### Update an image to use the updated builder
+`kp image save <image> --builder <builder>`
