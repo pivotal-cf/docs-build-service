@@ -199,7 +199,7 @@ This package now includes a profile that installs Tanzu Build Service as a stand
 #### <a id='about-dependencies'></a> About TBS Dependencies
 
 TBS supports multiple methods of installing dependencies (buildpacks, stacks, and builders).
-The method of dependency installation must be detecided before installing TBS and each has a slightly different installaion process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](dependencies.html).
+The method of dependency installation must be detecided before installing TBS and each has a slightly different installaion process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
 
 If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of TBS to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
