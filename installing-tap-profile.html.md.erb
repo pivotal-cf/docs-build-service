@@ -197,14 +197,14 @@ The `tap.tanzu.vmware.com` package installs predefined sets of packages based on
 
 This package now includes a profile that installs Tanzu Build Service as a standalone component.
 
-#### <a id='about-dependencies'></a> About TBS Dependencies
+#### <a id='about-dependencies'></a> About Tanzu Build Service Dependencies
 
-TBS supports multiple methods of installing dependencies, for example, buildpacks, stacks, and builders.
-The method of dependency installation must be decided before installing TBS and each has a slightly different installation process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
+Tanzu Build Service supports multiple methods of installing dependencies, for example, buildpacks, stacks, and builders.
+The method of dependency installation must be decided before installing Tanzu Build Service and each has a slightly different installation process. Tanzu Build Service dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
 
-If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of TBS to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
+If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of Tanzu Build Service to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
-If installing the `lite` dependencies, you can use the bundled dependencies that are in the TBS package or enable the automatic dependency updates. 
+If installing the `lite` dependencies, you can use the bundled dependencies that are in the Tanzu Build Service package or enable the automatic dependency updates. 
 
 
 #### <a id='install-secrets'></a> Set Up Install Secrets
@@ -272,7 +272,7 @@ Where:
 	* gcr.io has the form `gcr.io/my-project/build-service`.
 	* Harbor has the form `my-harbor.io/my-project/build-service`. 
 * `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required. 
-* `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents TBS from installing its bundled lite dependencies.
+* `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents Tanzu Build Service from installing its bundled lite dependencies.
 * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
   * `full` contains all dependencies.
   * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
@@ -411,7 +411,7 @@ Installing Tanzu Build Service on OpenShift requires some extra steps.
 
 To install `full` dependencies:
 
-1. Get the version of the TBS by running:
+1. Get the version of the Tanzu Build Service by running:
 
 	```console
     tanzu package available list buildservice.tanzu.vmware.com --namespace tap-install
