@@ -1,30 +1,34 @@
 ---
-title: Installing Tanzu Build Service (TAP Package)
+title: Installing using a profile (recommended)
 owner: Build Service Team
 ---
 
 This topic describes how to install and configure Tanzu Build Service.
 
-VMware recommends installing Tanzu Build Service with the Tanzu CLI and kapp controller through the Tanzu Application Platform (TAP) `buildservice` install profile. If you want to view the previous method of installation, see [Installing without kapp controller](installing-no-kapp.html).
+VMware recommends installing Tanzu Build Service with the Tanzu CLI and kapp controller through the Tanzu Application Platform `buildservice` install profile.
+
+To view the previous methods of installation, see [Installing without kapp controller](installing-no-kapp.html) and [Installing with kapp controller](installing.html).
 
 ## <a id='prerequisites'></a> Prerequisites
 
 * Have a Kubernetes cluster v1.23 or later.
 
 * Ensure that all worker nodes have at least 50&nbsp;GB of ephemeral storage allocated to them.
-	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see [Cluster with Separate Disks and Storage Parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
+	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see the [VMware Vsphere documenation](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
 
-* Have access to a container registry to install Tanzu Build Service and store application images.
+* Have access to a container image registry to install Tanzu Build Service and store application images.
   * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
   * If installing using the `lite` descriptor or bundled dependencies, VMware recommends at least 1&nbsp;GB of registry storage.
   * If installing using the `full` descriptor, which is intended for production use and offline environments, VMware recommends at least  10&nbsp;GB of available storage.
   * This registry space suggestion does not include the space used for application images built by Tanzu Build Service.
 
-* Ensure your Kubernetes cluster is configured with a default `StorageClass`.
+* Ensure that your Kubernetes cluster is configured with a default `StorageClass`.
   If a default `StorageClass` is defined, 2&nbsp;GB of cache is the default.
-  `PersistentVolumeClaims` is used to cache build artifacts, which reduces the time of subsequent builds.
+  `PersistentVolumeClaims` caches build artifacts, which reduces the time of subsequent builds.
 
-    * For more information, see [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) in the Kubernetes documentation. For information about defining a default StorageClass, see [Changing the default StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
+    * For more information about persistent volumes see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/).
+    
+    * For information about defining a default StorageClass, see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
 
 ## <a id='accept-eulas'></a> Accept Required Eulas
 
@@ -32,7 +36,7 @@ VMware recommends installing Tanzu Build Service with the Tanzu CLI and kapp con
   - [Tanzu Application Platform](https://network.tanzu.vmware.com/products/tanzu-application-platform/)
   - [Tanzu Cluster Essentials](https://network.tanzu.vmware.com/products/tanzu-cluster-essentials/)
 
-* To use the Automatic Dependency Updater, you will also need to accept the following:
+* To use the Automatic Dependency Updater, accept the following:
   - [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/)
   - [Buildpacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-buildpacks-suite)
   - [Stacks for VMware Tanzu](https://network.tanzu.vmware.com/products/tanzu-stacks-suite)
@@ -47,8 +51,8 @@ VMware recommends installing Tanzu Build Service with the Tanzu CLI and kapp con
 * Install the `kp` CLI for your operating system from the [VMware Tanzu Network](https://network.tanzu.vmware.com/products/build-service/).
   This installation procedure requires kp CLI v0.10.x with Tanzu Build Service v1.10.x.
 
-* Install either the [`docker` CLI](https://docs.docker.com/get-docker/) or
-[`crane` CLI](https://github.com/google/go-containerregistry/tree/main/cmd/crane)
+* Install either the [Docker CLI](https://docs.docker.com/get-docker/) or
+[crane CLI](https://github.com/google/go-containerregistry/tree/main/cmd/crane)
 for authentication with registries.
 
 * Install the [Carvel imgpkg CLI](https://docs.vmware.com/en/Cluster-Essentials-for-VMware-Tanzu/1.4/cluster-essentials/deploy.html#optionally-install-clis-onto-your-path).
@@ -61,7 +65,7 @@ for authentication with registries.
     docker login MY-REGISTRY
     ```
 
-	Where MY-REGISTRY is your own container registry. 
+	Where MY-REGISTRY is your own registry.
 
 2. Log in to the VMware Tanzu Network registry with your VMware Tanzu Network credentials by running:
 
@@ -71,7 +75,8 @@ for authentication with registries.
 
 ## <a id='relocation'></a> Relocate images to a registry
 
-To query for the available versions of Tanzu Application Platform on VMWare Tanzu Network Registry, run:
+To query for the available versions of Tanzu Application Platform on VMware Tanzu Network Registry, run:
+
 ```console
 imgpkg tag list -i registry.tanzu.vmware.com/tanzu-application-platform/tap-packages | grep -v sha | sort -V
 ```
@@ -89,9 +94,9 @@ imgpkg tag list -i registry.tanzu.vmware.com/tanzu-application-platform/tap-pack
    Where:
    - `MY-REGISTRY-USER` is the user with write access to `MY-REGISTRY`.
    - `MY-REGISTRY-PASSWORD` is the password for `MY-REGISTRY-USER`.
-   - `MY-REGISTRY` is your own container registry.
+   - `MY-REGISTRY` is your own registry.
    - `VERSION-NUMBER` is the Tanzu Application Platform version. NOTE: To find the latest version, see [VMware Tanzu Network](https://network.tanzu.vmware.com/products/tanzu-application-platform/).
-   - `TARGET-REPOSITORY` is your target repository, a folder/repository on `MY-REGISTRY` that serves as the location
+   - `TARGET-REPOSITORY` is your target repository, a directory or repository on `MY-REGISTRY` that serves as the location
      for the installation files for Tanzu Application Platform.
    
    VMware recommends using a JSON key file to authenticate with Google Container Registry. 
@@ -103,13 +108,13 @@ imgpkg tag list -i registry.tanzu.vmware.com/tanzu-application-platform/tap-pack
 
 2. Relocate the images with the `imgpkg` CLI by running:
 
-	Non-Airgapped Environments:
+	Non-Air-gapped Environments:
 	
    ```console
    imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${INSTALL_REPO}/tap-packages
    ```
    
-   Airgapped Environments: 
+   Air-gapped Environments: 
    
    ```console
     imgpkg copy \
@@ -166,7 +171,7 @@ To add the Tanzu Application Platform package repository to your cluster:
       --namespace tap-install
     ```
 
-1. Get the status of the Tanzu Application Platform package repository, and ensure the status updates to `Reconcile succeeded` by running:
+1. Get the status of the Tanzu Application Platform package repository, and ensure that the status updates to `Reconcile succeeded` by running:
 
     ```console
     tanzu package repository get tanzu-tap-repository --namespace tap-install
@@ -189,16 +194,16 @@ To add the Tanzu Application Platform package repository to your cluster:
 
 The `tap.tanzu.vmware.com` package installs predefined sets of packages based on your profile settings. This is done by using the package manager installed by Tanzu Cluster Essentials.
 
-This package now includes a profile that is designed to install TBS as a standalone component.
+This package now includes a profile that installs Tanzu Build Service as a standalone component.
 
 #### <a id='about-dependencies'></a> About TBS Dependencies
 
-TBS ships will multiple methods of installing dependencies (buildpacks, stacks, and builders). 
-The method of dependency installation will need to be determined before installing TBS and each has a slightly different installaion process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. A comparison can be found [here](dependencies.html)
+TBS supports multiple methods of installing dependencies (buildpacks, stacks, and builders).
+The method of dependency installation must be detecided before installing TBS and each has a slightly different installaion process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](dependencies.html).
 
-If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports airgapped environments, but needs to be upgraded with new releases of TBS to stay up to date. Alternatively, there is an automatic dependency updater that will pull new dependencies from Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster internet access and has a longer initial install due to the relocation of dependencies that happens during install.
+If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of TBS to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
-If installing the `lite` dependencies, you can use the bundled dependencies that are included in the TBS package or enable the automatic dependency updates. 
+If installing the `lite` dependencies, you can use the bundled dependencies that are in the TBS package or enable the automatic dependency updates. 
 
 
 #### <a id='install-secrets'></a> Set Up Install Secrets
@@ -214,11 +219,11 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
 	```
 	
 	Where:
-	* `REGISTRY_HOSTNAME` is the hostname for your registry. (i.e. `gcr.io`)
-	* `KP_DEFAULT_REPOSITORY_USERNAME` is the registry username. Same value as used during relocation.
+	* `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
+	* `KP_DEFAULT_REPOSITORY_USERNAME` is the registry user name. Same value as used during relocation.
 	* `KP_DEFAULT_REPOSITORY_PASSWORD` is the registry password. Same value as used during relocation.
 
-2. Create a secret for Tanzu Network in the `tap-install` namespace
+2. Create a secret for VMware Tanzu Network in the `tap-install` namespace
 
 	This is only required if enabling automatic dependency updates.
 	
@@ -260,18 +265,18 @@ buildservice:
 Where:
 
 * `REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. 
-	* Dockerhub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
+	* Docker Hub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
 	* gcr.io has the form `gcr.io/my-project/build-service`.
 	* Harbor has the form `my-harbor.io/my-project/build-service`. 
-* `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` if you want to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in airgapped envs. If this is set to `true`, `exclude_dependencies: true` is required. 
+* `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required. 
 * `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents TBS from installing its bundled lite dependencies.
 * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
   * `full` contains all dependencies.
   * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
-* `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
-* `INJECTED_SIDECAR_SUPPORT` Optionally enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/pivotal/kpack/blob/main/docs/injected_sidecars.md))
-* `KUBERNETES_VERSION` is the major.minor version of kubernetes (i.e. `1.25`)(Optional when not installing on Openshift)
-* `KUBERNETES_DISTRIBUTION` is the kubernetes provider that you are using. This field is required to [deploy on Openshift](#install-openshift). 
+* `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that is used during the build time. For more information about adding CA certificate to the run image, see [Using custom CA certificates at run time](./faq.html#faq-26).
+* `INJECTED_SIDECAR_SUPPORT` (Optional) enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/pivotal/kpack/blob/main/docs/injected_sidecars.md))
+* `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift)
+* `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift). 
 
 #### <a id='example-values'></a> Example `tap-values.yml`
 
@@ -357,11 +362,11 @@ buildservice:
 	tanzu package installed get tap -n tap-install
 	```
 	
-This may take 30 minutes if automatic dependency updates are being used
+This might take 30 minutes if automatic dependency updates are being used
 
-#### <a id='install-openshift'></a> Installing on Openshift
+#### <a id='install-openshift'></a> Installing on OpenShift
 
-Installing Tanzu Build Service on Openshift requires some extra steps.
+Installing Tanzu Build Service on OpenShift requires some extra steps.
 
 1. Follow the [installation](#profile-install) steps above, but when creating the `tap-values.yml` add the following under the `buildservice` key:
 
@@ -372,7 +377,7 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
     ...
     ```
 
-2. On Openshift version 4.10 and below, you must configure any namespaces that will have Image or Build resources after installation.
+2. On OpenShift v4.10 and below, you must configure any namespaces that will have Image or Build resources after installation.
    
    To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
 
@@ -395,10 +400,10 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
     ```
     Where:
 
-    * `BUILD-NAMESPACE` is the namespace where Image and Build resources will be created.
+    * `BUILD-NAMESPACE` is the namespace where Image and Build resources are created.
     * `BUILD-SERVICE-ACCOUNT` is the service account used for Image resources (`default` by default).
 
-       
+
 ## <a id='full-deps-package-install'></a> Install the Full Dependencies Package
 
 To install `full` dependencies:
@@ -411,14 +416,14 @@ To install `full` dependencies:
 
 1. Relocate the Tanzu Build Service `full` dependencies package repository by running:
 
-    For Non-Airgapped Environments:
+    For Non-Air-gapped Environments:
     
     ```console
     imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:VERSION \
     --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/tbs-full-deps
     ```
     
-    For Airgapped Environments:
+    For Air-gapped Environments:
     
     ```console
     imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:VERSION \
@@ -431,7 +436,7 @@ To install `full` dependencies:
     Where:
 
     - `VERSION` is the version of the Tanzu Build Service package you retrieved earlier.
-    - `INSTALL-REGISTRY-HOSTNAME` is your container registry.
+    - `INSTALL-REGISTRY-HOSTNAME` is your registry.
     - `TARGET-REPOSITORY` is your target repository.
 
 1. Add the Tanzu Build Service `full` dependencies package repository by running:
@@ -444,7 +449,7 @@ To install `full` dependencies:
 
     Where:
 
-    - `INSTALL-REGISTRY-HOSTNAME` is your container registry.
+    - `INSTALL-REGISTRY-HOSTNAME` is your registry.
     - `TARGET-REPOSITORY` is your target repository.
     - `VERSION` is the version of the Tanzu Build Service package you retrieved earlier.
 
