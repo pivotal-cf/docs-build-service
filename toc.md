@@ -1,6 +1,6 @@
 * [**Tanzu Build Service v1.10 Documentation**](index.html)
 * [**Release Notes**](release-notes.html)
-* [**Installing Tanzu Build Service**](installing-tap-profile.html)
+* [**Installing using a profile (recommended)**](installing-tap-profile.html)
     * [Installing Windows Components](installing-windows-components.html)
     * [Getting Started with Tanzu Build Service](getting-started.html)
     * [Installing with kapp controller](installing.html)
