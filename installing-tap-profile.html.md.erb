@@ -14,7 +14,7 @@ To view the previous methods of installation, see [Installing without kapp contr
 * Have a Kubernetes cluster v1.23 or later.
 
 * Ensure that all worker nodes have at least 50&nbsp;GB of ephemeral storage allocated to them.
-	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see the [VMware vSphere documenation](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
+	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see the [VMware vSphere documentation](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
 
 * Have access to a container image registry to install Tanzu Build Service and store application images.
   * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
@@ -200,7 +200,7 @@ This package now includes a profile that installs Tanzu Build Service as a stand
 #### <a id='about-dependencies'></a> About TBS Dependencies
 
 TBS supports multiple methods of installing dependencies, for example, buildpacks, stacks, and builders.
-The method of dependency installation must be decided before installing TBS and each has a slightly different installaion process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
+The method of dependency installation must be decided before installing TBS and each has a slightly different installation process. TBS dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
 
 If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of TBS to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
@@ -220,7 +220,7 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
 	```
 	
 	Where:
-  
+
 	* `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
 	* `KP_DEFAULT_REPOSITORY_USERNAME` is the registry user name. Same value as used during relocation.
 	* `KP_DEFAULT_REPOSITORY_PASSWORD` is the registry password. Same value as used during relocation.
@@ -238,6 +238,7 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
 	```
 	
 	Where:
+
 	* `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network. 
 	* `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network. 
 	
