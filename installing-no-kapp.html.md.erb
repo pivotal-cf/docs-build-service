@@ -133,54 +133,7 @@ imgpkg pull -b "<IMAGE-REPOSITORY>:<TBS-VERSION>" -o /tmp/bundle
 
 Where `TBS-VERSION` and `IMAGE-REPOSITORY` are the same values used during relocation.
 
-2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters:
-
-Tanzu Build Service ships with a dependency updater that can update ClusterStacks, ClusterStores, ClusterBuilders, and the CNB Lifecycle from TanzuNet automatically. Enabling this feature will keep Images up to date with the latest security patches and fixes, and is *highly recommended*. To enable this feature, include your TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` when running the install command below:
-
-```
-ytt -f /tmp/bundle/config/ \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	-v tanzunet_username='<TANZUNET-USERNAME>' \
-	-v tanzunet_password='<TANZUNET-PASSWORD>' \
-	-v descriptor_name='<DESCRIPTOR-NAME>' \
-	--data-value-yaml enable_automatic_dependency_updates=true \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-You can check the status of the DependencyUpdater by running `kubectl -n build-service get TanzuNetDependencyUpdater dependency-updater -o yaml`
-
-Alternatively, if you prefer to manage dependencies manually, leave the TanzuNet credentials, `descriptor_name`, and `enable_automatic_dependency_updates` out of the install.
-
-```
-ytt -f /tmp/bundle/config/ \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-
-Where:
-
-* `IMAGE-REPOSITORY` is the image repository where Tanzu Build Service images exist.
-    <p class="note">
-    <strong>Note:</strong> This is identical to the IMAGE-REPOSITORY argument provided during imgpkg relocation command.
-    </p>
-* `REGISTRY-USERNAME` is the username you use to access the registry. `gcr.io` expects `_json_key`
-   as the username when using JSON key file authentication.
-* `REGISTRY-PASSWORD` is the password you use to access the registry.
-    <p class="note"><strong>Note:</strong> [Managing Secrets](managing-secrets.html) for more information about how the registry username and password are used in Tanzu Build Service.</p>
-* `TANZUNET-USERNAME` is the username you use to access [TanzuNet](https://network.tanzu.vmware.com)
-* `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
-* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. Available options can be found on the [Tanzu Network Build Service Dependencies](https://network.pivotal.io/products/tbs-dependencies/) page. Current available options at time of release:
-  * `full` contains all dependencies - for production use.
-  * `lite` smaller footprint used for speeding up installs. Requires internet access on the cluster.
-
-<p class="note"><strong>Note:</strong> You may want to pin your TBS to a specific descriptor version and temporarily pause the automatic update of dependencies. For details, see the FAQ section <a href="faq.html">"Pinning the Tanzu Net Updater"</a></p>
+2. Use the [Carvel](https://carvel.dev/) tools `kapp`, `ytt`, and `kbld` to install Build Service and define the required Build Service parameters.
 
 #### <a id='ca-cert'></a> Installing with a CA certificate for internal registry
 
@@ -197,7 +150,6 @@ ytt -f /tmp/bundle/config/ \
 	-v tanzunet_username='<TANZUNET-USERNAME>' \
 	-v tanzunet_password='<TANZUNET-PASSWORD>' \
 	-v descriptor_name='<DESCRIPTOR-NAME>' \
-	--data-value-yaml enable_automatic_dependency_updates=true \
 	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
 	| kapp deploy -a tanzu-build-service -f- -y
 ```
@@ -221,8 +173,6 @@ Where:
 * `TANZUNET-PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com)
 
 ### <a id='import'></a> Import Tanzu Build Service Dependencies
-
-<p class="warning"><strong>Warning:</strong> Tanzu Build Service ships with a automatic dependency updater. If you have enabled this feature during install by passing in your TanzuNet credentials you **MUST** skip this step. To check if you have a TanzuNetDependencyUpdater in your cluster, run: `kubectl get TanzuNetDependencyUpdaters -A` </p>
 
 The Tanzu Build Service Dependencies (Stacks, Buildpacks, Builders, etc.) are used to build applications and keep them patched.
 
@@ -295,8 +245,6 @@ To configure UAA as an OIDC provider for your TKGI deployment:
 
 ## <a id='offline-installation'></a> Installation to Air-Gapped Environment
 
-<p class="note"><strong>Note:</strong> The TanzuNetDependencyUpdater cannot be used in air-gapped environments. Do not include Tanzu Net credentials for air-gapped installations.</p>
-
 Tanzu Build Service can be installed to a Kubernetes Cluster and registry that are air-gapped from external traffic.
 
 An air-gapped environment will often use an internal registry with a self-signed CA certificate and you will need access to this
@@ -364,8 +312,6 @@ For example:
 * Harbor `imgpkg copy --tar /tmp/tanzu-build-service.tar --to-repo=harbor.io/my-project/build-service --registry-ca-cert-path ca.crt`
 
 ### <a id='offline-ca-cert-install'></a> Installing (Air-Gapped)
-
-<p class="note"><strong>Note:</strong> The TanzuNetDependencyUpdater cannot be used in air-gapped environments. Do not include Tanzu Net credentials for air-gapped installations.</p>
 
 Once the images have been relocated, installation is the same as a regular install.
 
@@ -498,8 +444,6 @@ To uninstall Tanzu Build Service simply run the following `kapp` command:
 <p class="note"><strong>Note:</strong> All Tanzu Build Service resources will be deleted. Registry images created by TBS will not be deleted. </p>
 
 ## <a id='update-deps'></a> Updating Build Service Dependencies
-
-<p class="note"><strong>Note:</strong> If you enabled the TanzuNetDependencyUpdater during install (This can be verified by running `kubectl get TanzuNetDependencyUpdater -A` you do not need to do anything to manage your TBS dependencies </p>
 
 Use the following documentation to keep applications patched and up-to-date with Tanzu Build Service:
 
