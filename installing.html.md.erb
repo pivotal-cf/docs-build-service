@@ -391,26 +391,21 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
         * `BUILD-SERVICE-ACCOUNT` is the service account used for Image resources (`default` by default).
 
 ### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
+	    
+In order to upgrade to Tanzu Build Service versions 1.10 or higher, you will need to migrate to the new installation workflow of Tanzu Build Service. 
+	    
+#### <a id='kapp-contoller-migration'></a> Migrating from kapp controller installation to TAP profile installation
 
-1. Relocate the new package repository:
+**Note:** This assumes that the Tanzu Build Service kapp controller install was deployed in the `tbs-install` namespace with the name `tbs` (this is what our kapp controller installation documentation instructs) and the new instllation of Tanzu Build Service will be installed in the `tap-install` namespace. 
 
-    ```
-    imgpkg copy -b registry.tanzu.vmware.com/build-service/package-repo:$NEW_TBS_VERSION --to-repo=${INSTALL_REPOSITORY}
-    ```
+1. kubectl -n tbs-install patch packageinstalls.packaging.carvel.dev tbs --type='json' -p='[{"op": "add", "path": "/spec/noopDelete", "value":true}]'
+2. tanzu package installed delete tbs -n tbs-install
+3. Verify tbs is still installed with `kubectl get clusterbuilders` 
+4. tanzu package repository delete tbs-repository -n tbs-install
+5. kubectl create ns tap-install
+6. kapp rename -a tbs.app -n tbs-install new-name buildservice.app --new-namespace tap-install
+7. Follow new Tanzu Build Service [install via `buildservice` profile instructions](installing-tap-profile.html) 
 
-1. Add the Tanzu Build Service package repository to the cluster:
-
-    ```
-    tanzu package repository add tbs-repository \
-        --url "${INSTALL_REPOSITORY}:${NEW_TBS_VERSION}" \
-        --namespace tbs-install
-    ```
-
-1. Install the package with the same `tbs-values.yml` file used during the initial installation:
-
-    ```
-    tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
-    ```
 
 ## <a id='offline-install-tbs'></a> Installing Tanzu Build Service (air-gapped)
 
