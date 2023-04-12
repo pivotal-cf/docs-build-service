@@ -45,7 +45,7 @@ for authentication with registries.
 
 For this example setup, we make the following assumptions:
 
-* You are installing TBS 1.10.3 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
+* You are installing TBS 1.10.8 (This is the latest version at the time of writing. Go to the [Tanzu Build Service](https://network.tanzu.vmware.com/products/build-service/) page to find the most up-to-date version).
 * You are using a registry named `my.registry.io` with credentials
   * Username: `my-user`
   * Password: `my-password`
@@ -95,13 +95,13 @@ This procedure relocates images from the Tanzu Network registry to your registry
 3. Relocate the images with the [Carvel](https://carvel.dev/) tool `imgpkg` by running:
 
     ```console
-    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.10.3" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
+    imgpkg copy -b "registry.tanzu.vmware.com/build-service/bundle:1.10.8" --to-repo my.registry.io/some-repo/tbs --registry-ca-cert-path /tmp/ca.crt
     ```
 
 4. Pull the Tanzu Build Service bundle locally using `imgpkg`:
 
     ```console
-    imgpkg pull -b "my.registry.io/tbs:1.10.3" -o /tmp/bundle
+    imgpkg pull -b "my.registry.io/tbs:1.10.8" -o /tmp/bundle
     ```
 
 ### <a id='install'></a> Install Tanzu Build Service
