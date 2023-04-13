@@ -598,15 +598,7 @@ To verify your Build Service installation:
 
 ## <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
-In order to upgrade to Tanzu Build Service versions 1.10 or higher, you will need to migrate to the new installation workflow of Tanzu Build Service. 
-
-### <a id='kapp-migration'></a> Migrating from kapp installation to TAP profile installation
-
-**Note:** this assumes that the kapp app was deployed with the name `tanzu-build-service` in the `default` namespace (this is what our kapp installation documentation instructs) and the new installation of Tanzu Build Service will be installed in the `tap-install` namespace. 
-
-1. kubectl create ns tap-install
-2. kapp rename -a tanzu-build-service --new-name buildservice.app --new-namespace tap-install
-3. Follow new Tanzu Build Service [installation via `buildservice` profile](installing-tap-profile.html) workflow
+To upgrade Tanzu Build Service to a newer version, run the same commands as [installation](installing.html#install), kapp updates resources if they already exist. Re-importing dependencies is not required for upgrading Tanzu Build Service.
 
 ## <a id='uninstall-tbs'></a> Uninstalling Tanzu Build Service
 
