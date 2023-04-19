@@ -17,7 +17,7 @@ To view the previous methods of installation, see [Installing without kapp contr
 	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see the [VMware vSphere documentation](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
 
 * Have access to a container image registry to install Tanzu Build Service and store application images.
-  * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
+  * Although the documentation references specific registries to provide examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
   * If installing using the `lite` descriptor or bundled dependencies, VMware recommends at least 1&nbsp;GB of registry storage.
   * If installing using the `full` descriptor, which is intended for production use and offline environments, VMware recommends at least  10&nbsp;GB of available storage.
   * This registry space suggestion does not include the space used for application images built by Tanzu Build Service.
@@ -200,9 +200,9 @@ This package now includes a profile that installs Tanzu Build Service as a stand
 #### <a id='about-dependencies'></a> About Tanzu Build Service Dependencies
 
 Tanzu Build Service supports multiple methods of installing dependencies, for example, buildpacks, stacks, and builders.
-The method of dependency installation must be decided before installing Tanzu Build Service and each has a slightly different installation process. Tanzu Build Service dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
+The method of dependency installation must be decided before installing Tanzu Build Service and each has a slightly different installation process. Tanzu Build Service dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
 
-If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of Tanzu Build Service to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
+If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but must be upgraded with new releases of Tanzu Build Service to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
 If installing the `lite` dependencies, you can use the bundled dependencies that are in the Tanzu Build Service package or enable the automatic dependency updates. 
 
@@ -271,7 +271,7 @@ Where:
 	* Docker Hub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
 	* gcr.io has the form `gcr.io/my-project/build-service`.
 	* Harbor has the form `my-harbor.io/my-project/build-service`. 
-* `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required. 
+* `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from VMware Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required. 
 * `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents Tanzu Build Service from installing its bundled lite dependencies.
 * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
   * `full` contains all dependencies.
@@ -380,7 +380,7 @@ Installing Tanzu Build Service on OpenShift requires some extra steps.
     ...
     ```
 
-2. On OpenShift v4.10 and below, you must configure any namespaces that will have Image or Build resources after installation.
+2. On OpenShift v4.10 and earlier, you must configure any namespaces that will have Image or Build resources after installation.
    
    To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
 
