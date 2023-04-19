@@ -2,17 +2,18 @@
 
 This topic describes how to opt out of the VMware Customer Experience Improvement Program (CEIP).
 By default, when you install Tanzu Build Service, you are opted into telemetry collection.
-To turn off telemetry collection, complete following the instructions.
+To turn off telemetry collection, complete the following the steps.
 
 >**Note** If you opt out of telemetry collection, VMware cannot offer you proactive support
 and the other benefits that accompany participation in the CEIP.
+
 ## <a id="turn-off"></a> Turn off telemetry collection
 
 To turn off telemetry collection on your Tanzu Build Service installation:
 
-1. Ensure your Kubernetes context is pointing to the cluster where Tanzu Application Platform is installed.
+1. Ensure that your Kubernetes context is pointing to the cluster where Tanzu Application Platform is installed.
 
-2. Run the following `kubectl` command:
+2. Run:
 
     ```console
     kubectl apply -f - <<EOF
@@ -38,3 +39,4 @@ To turn off telemetry collection on your Tanzu Build Service installation:
     ```
 
 Your Tanzu Build Service deployment no longer emits telemetry, and you are opted out of the CEIP.
+
