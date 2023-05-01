@@ -1,8 +1,8 @@
-This documentation describes how to migrate kapp or kapp-controller installations of Tanzu Build Service to a [profile-based installation](installing-tap-profile.html) of Tanzu Build Service
+This documentation describes how to migrate deployments Tanzu Build Service installed with olders installation workflows to be managed via newer installation workflows. It is recommended that you migrate to the the profile-based installations, which is the newest way to install and manage Tanzu Build Serice
 
-## <a id='kapp-contoller-migration'></a> Migrating from kapp controller installation to TAP profile installation
+## <a id='kapp-contoller-migration'></a> Migrating from kapp controller installation to TAP [profile-based installation](installing-tap-profile.html)
 
-**Note:** This assumes that the Tanzu Build Service kapp controller install was deployed in the `tbs-install` namespace with the name `tbs` (this is what our kapp controller installation documentation instructs) and the new instllation of Tanzu Build Service will be installed in the `tap-install` namespace.
+**Note:** This assumes that the Tanzu Build Service kapp controller install was deployed in the `tbs-install` namespace with the name `tbs` (what our kapp controller installation documentation instructs) and the new instllation of Tanzu Build Service will be installed in the `tap-install` namespace.
 
 
 1. `kubectl -n tbs-install patch packageinstalls.packaging.carvel.dev tbs --type='json' -p='[{"op": "add", "path": "/spec/noopDelete", "value":true}]'`
@@ -13,11 +13,18 @@ This documentation describes how to migrate kapp or kapp-controller installation
 6. `kapp rename -a tbs.app -n tbs-install new-name buildservice.app --new-namespace tap-install`
 7. Follow new Tanzu Build Service [installation via `buildservice` profile](installing-tap-profile.html) workflow
 
-## <a id='kapp-migration'></a> Migrating from kapp installation to TAP profile installation
+## <a id='kapp-migration'></a> Migrating from kapp installation to TAP [profile-based installation](installing-tap-profile.html)
 
-**Note:** this assumes that the kapp app was deployed with the name `tanzu-build-service` in the `default` namespace (this is what our kapp installation documentation instructs) and the new installation of Tanzu Build Service will be installed in the `tap-install` namespace. 
+**Note:** This assumes that the kapp app was deployed with the name `tanzu-build-service` in the `default` namespace (what our kapp installation documentation instructs) and the new installation of Tanzu Build Service will be installed in the `tap-install` namespace. 
 
 1. `kubectl create ns tap-install`
 2. `kapp rename -a tanzu-build-service --new-name buildservice.app --new-namespace tap-install`
 3. Follow new Tanzu Build Service [installation via `buildservice` profile](installing-tap-profile.html) workflow
 
+## <a id='kapp-to-kapp-controller-migration'></a> Migrating from kapp installation to kapp controller installation
+
+**Note:** this assumes that the kapp app was deployed with the name `tanzu-build-service` in the default namespace (what our kapp installation documentation instructs) and the kapp controller install will be deployed in the `tbs-install` namespace with the name `tbs` (also following our docs).
+
+1. `kubectl create ns tbs-install`
+2. `kapp rename -a tanzu-build-service --new-name tbs.app --new-namespace tbs-install`
+3. Follow kapp controller install instructions [here](installing-no-kapp.html)
