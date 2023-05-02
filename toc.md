@@ -6,6 +6,7 @@
     * [Installing with kapp controller](installing.html)
     * [Installing without kapp controller](installing-no-kapp.html)
     * [Opting out of telemetry collection](opt-out-of-telemetry-collection.html)
+    * [Migrating to new installation workflows](migrate-to-new-install.html)
 * [**Accessing Tanzu Build Service**](accessing-tbs.html)
 * [**Updating Tanzu Build Service Dependencies**](updating-deps.html)
 * [**Managing Secrets**](managing-secrets.html)
