@@ -3,12 +3,12 @@ title: Migrating to new installation workflows
 owner: Build Service Team
 ---
 
-This documentation describes how to migrate deployments Tanzu Build Service installed with olders installation workflows to be managed via newer installation workflows. It is recommended that you migrate to the the profile-based installations, which is the newest way to install and manage Tanzu Build Serice
+This documentation describes how to migrate deployments Tanzu Build Service installed with older installation workflows to be managed via newer installation workflows. It is recommended that you migrate to the profile-based installations, which is the newest way to install and manage Tanzu Build Service
 
 
 ## <a id='kapp-contoller-migration'></a> Migrating from kapp controller installation to TAP [profile-based installation](installing-tap-profile.html)
 
-**Note:** This assumes that the Tanzu Build Service kapp controller install was deployed in the `tbs-install` namespace with the name `tbs` (what our kapp controller installation documentation instructs) and the new instllation of Tanzu Build Service will be installed in the `tap-install` namespace.
+**Note:** This assumes that the Tanzu Build Service kapp controller install was deployed in the `tbs-install` namespace with the name `tbs` (what our kapp controller installation documentation instructs) and the new installation of Tanzu Build Service will be installed in the `tap-install` namespace.
 
 
 1. `kubectl -n tbs-install patch packageinstalls.packaging.carvel.dev tbs --type='json' -p='[{"op": "add", "path": "/spec/noopDelete", "value":true}]'`
@@ -29,7 +29,7 @@ This documentation describes how to migrate deployments Tanzu Build Service inst
 
 ## <a id='kapp-to-kapp-controller-migration'></a> Migrating from kapp installation to kapp controller installation
 
-**Note:** this assumes that the kapp app was deployed with the name `tanzu-build-service` in the default namespace (what our kapp installation documentation instructs) and the kapp controller install will be deployed in the `tbs-install` namespace with the name `tbs` (also following our docs).
+**Note:** This assumes that the kapp app was deployed with the name `tanzu-build-service` in the default namespace (what our kapp installation documentation instructs) and the kapp controller install will be deployed in the `tbs-install` namespace with the name `tbs` (also following our docs).
 
 1. `kubectl create ns tbs-install`
 2. `kapp rename -a tanzu-build-service --new-name tbs.app --new-namespace tbs-install`
