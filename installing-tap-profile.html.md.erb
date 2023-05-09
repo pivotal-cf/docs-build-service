@@ -246,7 +246,7 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
 Create a `tap-values.yaml` file that contains the following:
 
 ```yaml
-ceip_policy_disclosed: true
+ceip_policy_disclosed: FALSE-OR-TRUE-VALUE # Installation fails if this is not set to true. Not a string.
 profile: buildservice
 buildservice:
 	kp_default_repository: <REPOSITORY>
@@ -280,6 +280,12 @@ Where:
 * `INJECTED_SIDECAR_SUPPORT` (Optional) enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/pivotal/kpack/blob/main/docs/injected_sidecars.md))
 * `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift)
 * `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift). 
+	   
+#### <a id='ceip'></a> CEIP policy disclosure
+
+Tanzu Build Service is part of [VMware's CEIP program](https://www.vmware.com/solutions/trustvmware/ceip-products.html) where data is collected to help improve the customer experience. By setting `ceip_policy_disclosed` to `true` (not a string), you acknowledge the program is disclosed to you and you are aware data collection is happening. This field must be set for the installation to be completed.
+
+See [Opt out of telemetry collection](opt-out-of-telemetry-collection.md) for more information.   
 
 #### <a id='example-values'></a> Example `tap-values.yml`
 
