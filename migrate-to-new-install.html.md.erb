@@ -3,7 +3,7 @@ title: Migrating to new installation workflows
 owner: Build Service Team
 ---
 
-This documentation describes how to migrate deployments of Tanzu Build Service installed with older installation workflows to be managed with newer installation workflows. VMware recommends that you migrate to profile-based installation, which is the newest way to install and manage Tanzu Build Service.
+This topic describes how to migrate deployments of Tanzu Build Service installed with older installation workflows to be managed with newer installation workflows. VMware recommends that you migrate to profile-based installation, which is the newest way to install and manage Tanzu Build Service.
 
 
 ## <a id='kapp-contoller-migration'></a> Migrating from kapp controller installation to TAP profile-based installation
@@ -15,6 +15,7 @@ Complete the following steps to migrate from kapp controller installation to TAP
 - The Tanzu Build Service kapp controller install must be deployed in the `tbs-install` namespace with the name `tbs` as described in [Installing with kapp controller](installing.html).
 - The new installation of Tanzu Build Service must be installed in the `tap-install` namespace.
 
+### Procedure
 
 1. Run:
 
@@ -28,7 +29,7 @@ Complete the following steps to migrate from kapp controller installation to TAP
     tanzu package installed delete tbs -n tbs-install`
     ```
 
-3. To verify tbs is still installed, run:
+3. To verify Tanzu Build Service is still installed, run:
 
     ```console
     kubectl get clusterbuilders
@@ -64,6 +65,8 @@ Complete the following steps to migrage from kapp installation to TAP [profile-b
 - The kapp app was deployed with the name `tanzu-build-service` in the `default` namespace
 - The new installation of Tanzu Build Service will be installed in the `tap-install` namespace.
 
+### Procedure
+
 1. Run:
 
     ```console
@@ -88,6 +91,8 @@ more information about Kapp installation, see [Install without kapp controller](
 
 - The kapp app was deployed with the name `tanzu-build-service` in the default namespace.
 - The kapp controller install will be deployed in the `tbs-install` namespace with the name `tbs`.
+
+### Procedure
 
 1. Run:
 
