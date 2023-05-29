@@ -14,6 +14,7 @@
 * [**Managing Images and Builds**](managing-images.html)
 * [**Managing ClusterStacks**](managing-stacks.html)
 * [Managing ClusterStores](managing-stores.html)
+* [Adding Buildpacks to Builders](add-buildpack-to-builder.html)
 * [Descriptors](descriptors.html)
 * [**Managing Builders**](managing-builders.html)
 * [**Managing Custom Stacks**](managing-custom-stacks.html)
