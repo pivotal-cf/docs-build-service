@@ -17,14 +17,15 @@ Package a buildpack As descibed [here](https://buildpacks.io/docs/buildpack-auth
     kp clusterstore save <store> -b <buildpackage>
     ```
 
-2. (Optional) Create a clusterstack
-```
-kp clusterstack save <stack> --build-image paketobuildpacks/build:base-cnb --run-image paketobuildpacks/run:base-cnb
-```
+2. (Optional) Create a clusterstack:
+
+    ```
+    kp clusterstack save <stack> --build-image paketobuildpacks/build:base-cnb --run-image paketobuildpacks/run:base-cnb
+    ```
 
 3. Add a buildpack to a custom builder. A buildpack can be added either to a new custom builder or to an existing one.
 
-    To create a a new custom builder and add a buildpack, run:
+    To create a new custom builder and add a buildpack, run:
 
     ```
     kp builder save <builder> --tag <IMAGE-TAG> --stack <stack> --store <store>  --buildpack <buildpackage>
