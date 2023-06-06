@@ -209,8 +209,14 @@ and can be uploaded to a Tanzu Build Service to keep application images patched.
 New versions of the Java, NodeJS, and Go buildpacks are released on their respective Tanzu Network pages:
 
 - [Java](https://network.tanzu.vmware.com/products/tanzu-java-buildpack)
+- [Java Native Image](https://network.tanzu.vmware.com/products/tanzu-java-native-image-buildpack/)
 - [NodeJS](https://network.tanzu.vmware.com/products/tanzu-nodejs-buildpack)
 - [Go](https://network.tanzu.vmware.com/products/tanzu-go-buildpack)
+- [.NET Core](https://network.tanzu.vmware.com/products/tanzu-dotnet-core-buildpack/)
+- [Python](https://network.tanzu.vmware.com/products/tanzu-python-buildpack/)
+- [Web servers](https://network.tanzu.vmware.com/products/tanzu-web-servers-buildpack/)
+- [Ruby](https://network.tanzu.vmware.com/products/tanzu-ruby-buildpack/)
+- [Procfile](https://network.tanzu.vmware.com/products/tanzu-procfile-buildpack/)
 
 New versions of all other buildpacks are released on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page.
 
@@ -218,21 +224,23 @@ New versions of all other buildpacks are released on the [Tanzu Build Service De
 Here is a list of how to update each buildpack that is included with Tanzu Build Service by default:
 
 ```
+kp clusterstore add default -b registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_php:<version>
 kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-java-buildpack/java:<version>
+kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-java-native-image-buildpack/java-native-image:<version>
 kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-nodejs-buildpack/nodejs:<version>
 kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-go-buildpack/go:<version>
-kp clusterstore add default -b registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_dotnet-core:<version>
-kp clusterstore add default -b registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_php:<version>
-kp clusterstore add default -b registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_nginx:<version>
-kp clusterstore add default -b registry.tanzu.vmware.com/tbs-dependencies/tanzu-buildpacks_httpd:<version>
-kp clusterstore add default -b registry.tanzu.vmware.com/tbs-dependencies/paketo-buildpacks_procfile:<version>
+kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-dotnet-core-buildpack/dotnet-core:<version>
+kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-python-buildpack/python:<version>
+kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-web-servers-buildpack/web-servers:<version>
+kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-ruby-buildpack/ruby:<version>
+kp clusterstore add default -b registry.tanzu.vmware.com/tanzu-procfile-buildpack/procfile:<version>
 ```
 
 Additionally, multiple buildpackages can be added to Build Service by passing multiple image references:
 
 ```
 kp clusterstore add <store-name> \
-  -b registry.tanzu.vmware.com/buildpacakge-1 \
+  -b registry.tanzu.vmware.com/buildpackage-1 \
   -b registry.tanzu.vmware.com/buildpackage-2 \
   -b registry.tanzu.vmware.com/buildpackage-3
 ```
