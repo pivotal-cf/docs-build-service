@@ -3,65 +3,9 @@ title: Managing Image Resources and Builds
 owner: Build Service Team
 ---
 
-This topic contains the following sections:
+This topic tells you how to create image resources and 
 
-- [Image Resources](#images)
-- [Builds](#builds)
-
-The `kp` CLI can be used to manage image resources and builds. The help text is published in the [kpack-cli documentation](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md) on GitHub.
-
-```
-$ kp image
-Image commands
-
-Usage:
-  kp image [command]
-
-Aliases:
-  image-resource, images, imgs, img
-
-Available Commands:
-  create      Create an image resource
-  delete      Delete an image resource
-  list        List image resources
-  patch       Patch an existing image resource
-  save        Create or patch an image resource
-  status      Display status for an image resource
-  trigger     Trigger an image resource build
-
-Flags:
-  -h, --help   help for image
-
-Use "kp image [command] --help" for more information about a command.
-```
-
-```
-$ kp build
-Build Commands
-
-Usage:
-  kp build [command]
-
-Aliases:
-  build, builds, blds, bld
-
-Available Commands:
-  list        List builds for an image resource
-  logs        Tails logs for an image resource build
-  status      Display status for an image resource build
-
-Flags:
-  -h, --help   help for build
-
-Use "kp build [command] --help" for more information about a command.
-```
-
-<p class='note'>
-  <strong>Note:</strong> These docs assume you are using kp CLI v0.10.x with Tanzu Build Service v1.10.x.
-  If a feature is not working, you might need to upgrade your CLI.
-</p>
-
-# <a id='images'></a> Image Resources
+## <a id='images'></a> Create Image Resources
 
 Image resources provide a configuration for Tanzu Build Service to build and maintain a Docker image utilizing Tanzu, Paketo, and custom [Cloud Native Buildpacks](https://buildpacks.io).
 
@@ -69,14 +13,13 @@ Build Service monitors the inputs to the image resource to rebuild the image whe
 
 The following procedures describe how to create and manage image resources in Build Service with the `kp` CLI.
 
-## <a id='create-image'></a> Creating Image Resources
+### Prerequisites:
 
-Prerequisites:
+- [Access to a cluster](accessing-tbs.html) running Build Service.
+- Configured write [secrets](managing-secrets.html) for your Docker registry.
+- kp CLI v0.11.x with Tanzu Build Service v1.11.x. The `kp` CLI can be used to manage image resources and builds. For more information, see [kpack-cli documentation](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
 
-* [Access to a cluster](accessing-tbs.html) running Build Service.
-* Configured write [secrets](managing-secrets.html) for your Docker registry.
-
-#### Source Code
+### Source Code
 
 The `kp` CLI supports creating Image Resources using source code from the following locations:
 
@@ -86,7 +29,7 @@ The `kp` CLI supports creating Image Resources using source code from the follow
 
 You can specify only one location for app source code.
 
-#### Builders
+### Builders
 
 Users can select a Builder (namespaced-scoped) or a Cluster Builder (cluster-scoped) used to create image resource builds. You can use any of the available Builders or Cluster Builders with any of the source types (git, blob, or local).
 
@@ -94,21 +37,23 @@ If you do not use the `--builder` or `--cluster-builder` flags, the `default` Cl
 
 For more information on Builders, see [Managing Builders](managing-builders.html).
 
-### <a id='create-image-with-git-repo'></a> Creating an image resource with source code in a Git repository
+### <a id='create-image-with-git-repo'></a> Create an image resource with source code in a Git repository
 
 To create an image resource using source code from a git repository, run:
 
-    kp image create <name> \
-      --tag <tag> \
-      [--builder <builder> or --cluster-builder <cluster-builder>] \
-      --namespace <namespace> \
-      --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-      --additional-tag <tag> \
-      --env <env> \
-      --sub-path <sub-path> \
-      --wait \
-      --git <git-repo> \
-      --git-revision <git-revision>
+```console
+kp image create <name> \
+  --tag <tag> \
+  [--builder <builder> or --cluster-builder <cluster-builder>] \
+  --namespace <namespace> \
+  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --additional-tag <tag> \
+  --env <env> \
+  --sub-path <sub-path> \
+  --wait \
+  --git <git-repo> \
+  --git-revision <git-revision>
+```
 
 Where:
 
@@ -126,24 +71,26 @@ Where:
 * `git-repo` is the Git repository URL of the source code.
 * `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
 
-<p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the Git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
+> **Note** If the `git-repo` is a private repository, you must configure the Git credentials. For more information, see [Create Secrets](managing-secrets.html#creating-secrets).
 
 ### <a id='create-image-by-referencing-blob-store-source'></a> Create an image resource with source code in a blob store
 
-Users can specify source code in a blob store saved as a compressed file (`zip`, `tar.gz`, `.tar`) or a `.jar` file.
+Specify source code in a blob store saved as a compressed file (`zip`, `tar.gz`, `.tar`) or a `.jar` file.
 
-To create an image resource using source code from blob store:
+Create an image resource using source code from blob store:
 
-	kp image create <name> \
-	  --tag <tag> \
-	  [--builder <builder> or --cluster-builder <cluster-builder>] \
-	  --namespace <namespace> \
-	  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-	  --additional-tag <tag> \
-	  --env <env> \
-	  --sub-path <sub-path> \
-	  --wait \
-	  --blob <blob-url>
+```console
+kp image create <name> \
+  --tag <tag> \
+  [--builder <builder> or --cluster-builder <cluster-builder>] \
+  --namespace <namespace> \
+  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --additional-tag <tag> \
+  --env <env> \
+  --sub-path <sub-path> \
+  --wait \
+  --blob <blob-url>
+```
 
 Where:
 
@@ -160,25 +107,27 @@ Where:
 * `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
 * `blob-url` is the URL of the source code blob file.
 
-<p class='note'><strong>Note:</strong> The source code file in the blob store must be publicly viewable or the <code>blob-url</code> must contain the basic authentication credentials.</p>
+> **Note** The source code file in the blob store must be publicly viewable or the 'blob-url` must contain the basic authentication credentials.
 
-### <a id='create-image-with-local-source-code'></a> Creating an image resource with local source code
+### <a id='create-image-with-local-source-code'></a> Create an image resource with local source code
 
-Users can apply local source code from a directory, compressed source code (`zip`, `tar.gz`, `.tar`), or a `.jar` file.
+Apply local source code from a directory, compressed source code (`zip`, `tar.gz`, `.tar`), or a `.jar` file.
 
-To create an image resource using source code from a local machine, run:
+Create an image resource using source code from a local machine:
 
-	kp image create <name> \
-	  --tag <tag> \
-	  --local-path <source-path> \
-	  [--builder <builder> or --cluster-builder <cluster-builder>] \
-	  --namespace <namespace> \
-	  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-	  --additional-tag <tag> \
-	  --env <env> \
-	  --cache \
-	  --registry-ca-cert-path <path-to-ca-cert> \
-	  --registry-verify-certs
+```console
+kp image create <name> \
+  --tag <tag> \
+  --local-path <source-path> \
+  [--builder <builder> or --cluster-builder <cluster-builder>] \
+  --namespace <namespace> \
+  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --additional-tag <tag> \
+  --env <env> \
+  --cache \
+  --registry-ca-cert-path <path-to-ca-cert> \
+  --registry-verify-certs
+```
 
 Where:
 
@@ -218,17 +167,17 @@ Use `kp clusterstore status <store-name> --verbose` to find the homepage of the 
 
 Buildpack configuration, including manually selecting buildpacks to use, can be set in two ways in Tanzu Build Service Image Resources. The configuration depends on the specific buildpack, find buildpack details in [Buildpack Configuration Documentation](#buildpack-config-docs).
 
-1. Creating a `buildpack.yml` file at the root of the application source code.
+1. Create a `buildpack.yml` file at the root of the application source code.
 
 Example `buildpack.yml` for a Go app to use the latest Go 1.15 version and build with the path `./cmd/package`:
 
-```
+```console
 go:
   version: 1.15.*
   targets: ["./cmd/package"]
 ```
 
-2. Setting environment variables on an image resource.
+2. Set environment variables on an image resource.
 
 Tanzu Build Service image resources can have environment variables configured that are set in all Builds and in the final exported registry image. These can be used for buildpack configuration.
 
@@ -241,25 +190,25 @@ kp image create my-image \
   --env BP_GO_TARGETS="./cmd/package"
 ```
 
-## <a id='patch-images'></a> Patching image resources
+## <a id='patch-images'></a> Patch image resources
 
-Users can patch their existing image resources with the `kp` CLI. Running a patch triggers a new build of the image resource if any of the build inputs are changed.
+You can patch you existing image resources with the `kp` CLI. Run a patch triggers a new build of the image resource if any of the build inputs are changed.
 
 Patch image resources with the following commands:
 
 * With source code in a Git repository
 
-	```
-    kp image patch <name> \
-	  [--builder <builder> or --cluster-builder <cluster-builder>] \
-	  --namespace <namespace> \
-	  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-	  --additional-tag <tag> \
-	  --env <env> \
-	  --wait \
-	  --git <git-repo> \
-	  --git-revision <git-revision>
-    ```
+```console
+  kp image patch <name> \
+  [--builder <builder> or --cluster-builder <cluster-builder>] \
+  --namespace <namespace> \
+  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --additional-tag <tag> \
+  --env <env> \
+  --wait \
+  --git <git-repo> \
+  --git-revision <git-revision>
+```
 
 * With source code in a blob store
 
@@ -303,7 +252,7 @@ Where:
 <p class='note'><strong>Note:</strong> If the <code>git-repo</code> is a private repository, you must configure the Git credentials. For more information, see <a href="managing-secrets.html#creating-secrets">Create Secrets</a>.</p>
 <p class='note'><strong>Note:</strong> The <code>tag</code> location in a registry and <code>name</code> of an image resource cannot be modified. To change these fields, you must create a new image resource.</p>
 
-## <a id='save-image'></a> Saving image resources
+## <a id='save-image'></a> Save image resources
 
 Users can create or patch an image resource using the `save` command. The `kp image save` command is used exactly the same as `kp image create` or `kp image patch`, but it determines whether an image resource needs to be created or patched.
 
@@ -317,15 +266,17 @@ kp image save my-image \
   --git-revision my-branch
 ```
 
-## <a id='list-images'></a> Listing images
+## <a id='list-images'></a> List images
 
 To list all the image resources in a Kubernetes namespace:
 
-    kp image list --namespace <namespace>
+```console
+kp image list --namespace <namespace>
+```
 
 For example:
 
-```
+```console
 $ kp image list -n example1
 
 NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
@@ -339,7 +290,7 @@ To list all the image resources across all Kubernetes namespaces:
 
 For example:
 
-```
+```console
 $ kp image list -A
 
 NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
@@ -351,9 +302,9 @@ test-image4     False     CONFIG           fourth/image:sha     example2
 
 ### <a id='filter-images'></a> Filter image resources
 
-Users can further filter the list of image resources by applying the `--filter` flag and specifying a filter and value. This command is useful for traversing large number of image resources by narrowing the list to only display image resources that possess certain attributes.
+Further filter the list of image resources by applying the `--filter` flag and specifying a filter and value. This command is useful for traversing large number of image resources by narrowing the list to only display image resources that possess certain attributes.
 
-```
+```console
 $ kp image list --filter ready=false -A
 
 NAME            READY     LATEST REASON    LATEST IMAGE         NAMESPACE
@@ -363,7 +314,7 @@ test-image4     False     CONFIG           fourth/image:sha     example2
 
 See below for the currently supported filters and values:
 
-```
+```console
 builder=string
 clusterbuilder=string
 latest-reason=commit,trigger,config,stack,buildpack
@@ -400,7 +351,7 @@ Build Service auto-rebuilds image resources when one or more of the following bu
 
 ### <a id='trigger-rebuild-image'></a> Trigger an image resource rebuild
 
-You can initiate a manual rebuild using `kp`:
+Initiate a manual rebuild using `kp`:
 
     kp image trigger <image-name> --namespace <namespace>
 
@@ -452,7 +403,7 @@ When you successfully delete an image resource, you see this message:
 
 ## <a id='additional-tags'></a> Image resource additional tags
 
-The following is an example you can use with `kubectl apply`. It pushes to both `my-registry.com/repo` and `my-registry.com/other-repo`.
+Use the following example with `kubectl apply`. It pushes to both `my-registry.com/repo` and `my-registry.com/other-repo`.
 
 Example:
 
@@ -548,7 +499,7 @@ To create a service binding in your application image, you must create *either* 
 
 <p class='note'><strong>Note:</strong> Check the desired buildpack documentation for details on the service bindings it supports. You can access these docs on [Language Family Buildpacks for VMware Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html).</p>
 
-The following is an example you can use with `kubectl apply`. It creates a `production-db-secret` service binding for a maven app.
+Use the following example with `kubectl apply`. It creates a `production-db-secret` service binding for a maven app.
 
 Example:
 
@@ -933,7 +884,7 @@ cosign:
     value: "annotationValue"
 ```
 
-One way these annotations can be viewed is through verifying cosign signatures. The annotations are under the `optional` key in the verified JSON response. For example, you can do this by running:
+One way these annotations can be viewed is through verifying cosign signatures. The annotations are under the `optional` key in the verified JSON response. For example, run:
 
 ```bash
 % cosign verify -key /path/to/cosign.pub registry.example.com/project/image@sha256:<DIGEST>
@@ -978,7 +929,7 @@ The same service account that has that cosign secret attached, and is used for s
 
 #### Cosign legacy Docker media types
 
-To sign images in a registry that does not fully support OCI media types, you can use legacy equivalents by adding the corresponding annotation to the cosign secret resource:
+To sign images in a registry that does not fully support OCI media types, use legacy equivalents by adding the corresponding annotation to the cosign secret resource:
 
 ```
 metadata:
