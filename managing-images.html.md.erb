@@ -165,7 +165,8 @@ Use `kp clusterstore status <store-name> --verbose` to find the home page of the
 
 #### <a id='buildpack-config-use-cases'></a> Buildpack configuration in image resources
 
-Buildpack configuration, including manually selecting buildpacks to use, can be set in two ways in Tanzu Build Service Image Resources. The configuration depends on the specific buildpack, find buildpack details in [Buildpack Configuration Documentation](#buildpack-config-docs).
+Buildpack configuration, including manually selecting buildpacks to use, can be set in two ways in Tanzu Build Service Image Resources. The configuration depends on the specific buildpack.
+For more information about buildpack details, see [Buildpack Configuration Documentation](#buildpack-config-docs).
 
 1. Create a `buildpack.yml` file at the root of the application source code.
 
@@ -443,7 +444,7 @@ Use the `default` service account for Build Service registry and Git secrets.
 
 You can configure Tanzu Build Service image resource to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
 
-For more details, see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) docs for how to set the cache tag.
+For more details about how to set the cache tag, see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) documentation.
 
 #### <a id='kubectl-secrets'></a> Using secrets
 
@@ -471,7 +472,8 @@ status:
 ```
 
 When a build fails, the image resource status reports the condition Succeeded=False. The image resource status also includes the status of the
-builder used by the image resource. If the builder is not ready, you may want to inspect that builder. More details in [Managing Builders](managing-builders.html).
+builder used by the image resource. If the builder is not ready, you can inspect that builder.
+For more information, see [Managing Builders](managing-builders.html).
 
 ```yaml
 status:
@@ -487,7 +489,7 @@ status:
   ...
 ```
 
-If more debugging is required, inspect the image resource's latest Build status discussed in [Viewing Build Details for an Image Resource](#build-status).
+If more debugging is required, inspect the image resource's latest Build status discussed in [Viewing Build Details for an Image](#build-status).
 
 ## <a id='service-bindings'></a> Image resource service bindings
 
@@ -502,7 +504,7 @@ To create a service binding in your application image, you must create *either* 
 * A [Provisioned service](https://github.com/servicebinding/spec#provisioned-service)
 * A Kubernetes secret that follows the guidelines provided in [Well-known Secret Entry](https://github.com/servicebinding/spec#provisioned-service)
 
-> **Note** Check the desired buildpack documentation for details on the service bindings it supports. You can access these docs on [Language Family Buildpacks for VMware Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html).</p>
+> **Note** Check the desired buildpack documentation for details about the service bindings it supports. For more information, see [Language Family Buildpacks for VMware Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html).
 
 Use the following example with `kubectl apply`. It creates a `production-db-secret` service binding for a maven app.
 
@@ -584,7 +586,7 @@ The following describes the fields in the example output:
     * `STACK`: Occurs when a new base OS image, called a `run image`, is available.
     * `TRIGGER`: Occurs when a new build is manually triggered.
 
-> **Note** A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the kp CLI output shows the primary `Reason` and appends a `+` sign to the `Reason` field. The priority rank for the `Reason`, from highest to lowest, is `CONFIG`, `COMMIT`, `BUILDPACK`, `STACK`, and `TRIGGER`.</p>
+> **Note** A rebuild can occur for more than one reason. When there are multiple reasons for a rebuild, the kp CLI output shows the primary `Reason` and appends a `+` sign to the `Reason` field. The priority rank for the `Reason`, from highest to lowest, is `CONFIG`, `COMMIT`, `BUILDPACK`, `STACK`, and `TRIGGER`.
 
 ## <a id='build-status'></a> Viewing build details for an image
 
@@ -645,7 +647,7 @@ The following describes the fields in the example output:
 
 * `Finished` is when a build finished.
 
-* `Pod Name` is the name of the Pod being used for the Build.
+* `Pod Name` is the name of the pod being used for the Build.
 
 * `Builder` is the full image tag for the builder image used by the build.
 
@@ -794,7 +796,7 @@ Build successful
 > `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the Tanzu Build Service bundle or by adding
 > `include_legacy_bom=false` to your `tbs-values.yml` file.
 >
-> * The ability to view bill of materials is no longer supported in kp cli 0.9.0+.
+> * The ability to view bill of materials is no longer supported in kp cli v0.9.0+.
 
 
 The kp CLI allows you to view the bill of materials in an image built by a Build.
@@ -805,7 +807,7 @@ kp build status <image-name> --bom
 
 To generate the bill of materials, the kp CLI reads metadata from the image (generated by the build) in the registry.
 
-> **Note** You must have credentials to access the image registry on your machine.</p>
+> **Note** You must have credentials to access the image registry on your machine.
 
 For example:
 
@@ -848,9 +850,9 @@ $ kp build status --bom my-app-image | jq
 
 Tanzu Build Service supports offline/air-gapped builds with Tanzu Buildpacks. Offline builds use pre-packaged dependencies and do not need to download from anywhere off-cluster to create application images.
 
-When using Tanzu Buildpacks the build will execute as an offline build. For details on how to configure buildpacks, see [Buildpack configuration in images](#buildpack-config-use-cases).
+When using Tanzu Buildpacks the build will execute as an offline build. For details about how to configure buildpacks, see [Buildpack configuration in images](#buildpack-config-use-cases).
 
-> **Note** Offline builds only ensure buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.
+> **Note** Offline builds only ensure that buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.
 
 ## <a id='cosign'></a> Image signing with cosign
 
@@ -881,7 +883,7 @@ After adding the cosign secret, the secret must be added to the list of `secrets
 
 #### Adding cosign annotations
 
-By default, the build number and build timestamp information ise added to the cosign signing annotations. Users can specify additional cosign annotations under the spec key.
+By default, the build number and build timestamp information is added to the cosign signing annotations. Users can specify additional cosign annotations under the spec key.
 
 ```yaml
 cosign:
