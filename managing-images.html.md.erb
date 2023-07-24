@@ -35,11 +35,11 @@ You can select a Builder (namespaced-scoped) or a Cluster Builder (cluster-scope
 
 If you do not use the `--builder` or `--cluster-builder` flags, the `default` Cluster Builder is used.
 
-For more information on Builders, see [Managing Builders](managing-builders.html).
+For more information about Builders, see [Managing Builders](managing-builders.html).
 
-### <a id='create-image-with-git-repo'></a> Create an image resource with source code in a Git repository
+### <a id='git-repo'></a> Create an image resource with source code in a Git repository
 
-To create an image resource using source code from a git repository, run:
+To create an image resource using source code from a Git repository, run:
 
 ```console
 kp image create <name> \
@@ -62,18 +62,19 @@ Where:
 * `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
 * `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. The `--service-binding` flag can be specified multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. The `--additional-tag` flag can be specified multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
+* `additional-tag` (optional) is an additional registry location where the image is created. You can 
+specify the `--additional-tag` flag multiple times.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
 * `sub-path` (optional) is the build code at the subpath located within the source code directory.
 * `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
 * `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
 * `git-repo` is the Git repository URL of the source code.
-* `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
+* `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag`, or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
 
 > **Note** If the `git-repo` is a private repository, you must configure the Git credentials. For more information, see [Create Secrets](managing-secrets.html#creating-secrets).
 
-### <a id='create-image-by-referencing-blob-store-source'></a> Create an image resource with source code in a blobstore
+### <a id='blob-store-source'></a> Create an image resource with source code in a blobstore
 
 Specify source code in a blobstore saved as a compressed file (`zip`, `tar.gz`, `.tar`) or a `.jar` file.
 
@@ -99,9 +100,9 @@ Where:
 * `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
 * `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. The `--service-binding` flag can be specified multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. The `--additional-tag` flag can be specified multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
+* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
 * `sub-path` (optional) is the build code at the subpath located within the source code directory.
 * `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
 * `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
@@ -109,7 +110,7 @@ Where:
 
 > **Note** The source code file in the blobstore must be publicly viewable or the 'blob-url` must contain the basic authentication credentials.
 
-### <a id='create-image-with-local-source-code'></a> Create an image resource with local source code
+### <a id='local-source-code'></a> Create an image resource with local source code
 
 Apply local source code from a directory, compressed source code (`zip`, `tar.gz`, `.tar`), or a `.jar` file.
 
@@ -137,9 +138,9 @@ Where:
 * `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
 * `cluster-builder` (optional) is the Cluster Builder name used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. The `--service-binding` flag can be specified multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. The `--additional-tag` flag can be specified multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
+* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
 * `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
 * `--wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
 * `registry-ca-cert-path` (optional) adds CA certificate for registry API.
@@ -149,7 +150,7 @@ Where:
 
 Image resources use buildpacks to build application images in a registry. The buildpacks contain the dependencies needed for these builds and you can add buildpack configuration to Tanzu Build Service image resources.
 
-#### <a id='buildpack-config-use-cases'></a> Buildpack configuration use cases
+#### <a id='bp-config-use-cases'></a> Buildpack configuration use cases
 
 Common use cases for setting buildpack configuration include:
 
@@ -159,11 +160,11 @@ Common use cases for setting buildpack configuration include:
 
 #### <a id='buildpack-config-docs'></a> Buildpack configuration documentation
 
-Buildpack configuration details can be found in the documentation for that specific buildpack.
+Buildpack configuration details are found in the documentation for that specific buildpack.
 
 Use `kp clusterstore status <store-name> --verbose` to find the home page of the desired buildpack.
 
-#### <a id='buildpack-config-use-cases'></a> Buildpack configuration in image resources
+#### <a id='bp-config-use-cases'></a> Buildpack configuration in image resources
 
 Buildpack configuration, including manually selecting buildpacks to use, can be set in two ways in Tanzu Build Service Image Resources. The configuration depends on the specific buildpack.
 For more information about buildpack details, see [Buildpack Configuration Documentation](#buildpack-config-docs).
@@ -241,12 +242,12 @@ Where:
 
 * `name` is the name of the image resource to patch.
 * `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. The `--service-binding` flag can be specified multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. The `--additional-tag` flag can be specified multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). The `--env` flag can be specified multiple times.
+* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
+* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
 * `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
 * `git-repo` is the Git repository URL of the source code. Must select one of `git-repo`, `blob-url`, or `source-path`
-* `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag` or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
+* `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag`, or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
 * `blob-url` is the URL of the source code blob file. Must select one of `git-repo`, `blob-url`, or `source-path`
 * `source-path` is the path to local source code. Must select one of `git-repo`, `blob-url`, or `source-path`
 
@@ -256,11 +257,12 @@ Where:
 
 ## <a id='save-image'></a> Save image resources
 
-Users can create or patch an image resource using the `save` command. The `kp image save` command is used exactly the same as `kp image create` or `kp image patch`, but it determines whether an image resource needs to be created or patched.
+Users can create or patch an image resource using the `save` command. The `kp image save` command is used the same as `kp image create` or `kp image patch`, but it determines whether an image resource needs to be created or patched.
 
 > **Note** For handling source code changes in the Tanzu Build Service process, VMware recommends using the `kp image save --wait` command within a CI/CD pipeline to update the source code referenced in the image resource.
 
-You can do this by updating the `--git-revision` field with a new commit ID.  This commit ID references source code that has undergone unit testing, so the resulting image can be deployed or promoted to higher level environments.
+You can do this by updating the `--git-revision` field with a new commit ID.  This commit ID references source code that has undergone unit testing, so the resulting image can be deployed or promoted to
+higher-level environments.
 
 ```console
 kp image save my-image \
@@ -346,7 +348,7 @@ Build Service auto-rebuilds image resources when one or more of the following bu
 
 * New buildpack versions are made available through updates to a Cluster Store.
     - New Buildpack versions are made available on [VMware Tanzu Network](https://network.tanzu.vmware.com/).
-    - To update buildpacks, you must add new buildpack versions from VMware Tanzu Network to a Cluster Store. See [Updating Build Service Dependencies](updating-deps.html) for more details.
+    - To update buildpacks, you must add new buildpack versions from VMware Tanzu Network to a Cluster Store. For more information, see [Updating Build Service Dependencies](updating-deps.html).
 
 * There is a new commit on a branch or tag Tanzu Build Service is tracking.
 
@@ -444,11 +446,11 @@ Use the `default` service account for Build Service registry and Git secrets.
 
 You can configure Tanzu Build Service image resource to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
 
-For more details about how to set the cache tag, see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) documentation.
+For more information about how to set the cache tag, see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) documentation.
 
 #### <a id='kubectl-secrets'></a> Using secrets
 
-Use the `default` service account for Build Service registry and Git secrets. kpack will default to the `default` service account if no service account is specified.
+Use the `default` service account for Build Service registry and Git secrets. kpack defaults to the `default` service account if no service account is specified.
 
 #### <a id='image-status'></a> Debugging with image resource status
 
@@ -489,7 +491,7 @@ status:
   ...
 ```
 
-If more debugging is required, inspect the image resource's latest Build status discussed in [Viewing Build Details for an Image](#build-status).
+If more debugging is required, inspect the image resource's latest Build status as described in [Viewing Build Details for an Image](#build-status).
 
 ## <a id='service-bindings'></a> Image resource service bindings
 
@@ -497,7 +499,7 @@ Tanzu Build Service supports application service bindings as described in the Ku
 
 ### <a id='service-bindings'></a> Creating an image resource with service bindings
 
-For more information, see [Service Bindings](https://github.com/pivotal/kpack/blob/main/docs/servicebindings.md) in the kpack documentation on GitHub.
+For more information, see [Service Bindings](https://github.com/pivotal/kpack/blob/main/docs/servicebindings.md) in the kpack documentation.
 
 To create a service binding in your application image, you must create *either* of the following:
 
@@ -506,7 +508,7 @@ To create a service binding in your application image, you must create *either* 
 
 > **Note** Check the desired buildpack documentation for details about the service bindings it supports. For more information, see [Language Family Buildpacks for VMware Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-index.html).
 
-Use the following example with `kubectl apply`. It creates a `production-db-secret` service binding for a maven app.
+Use the following example with `kubectl apply`. It creates a `production-db-secret` service binding for a Maven app.
 
 Example:
 
@@ -590,14 +592,14 @@ The following describes the fields in the example output:
 
 ## <a id='build-status'></a> Viewing build details for an image
 
-To display retrieve a detailed bill of materials for a particular build:
+To display and retrieve a detailed bill of materials for a particular build:
 
     kp build status <image> -b <build-number>
 
 Where:
 
 * `image-name` is the name of the image resource the build is associated with
-* `build-name` (optional) is the index of the build from [listing builds](#list-builds). Defaults to latest build.
+* `build-name` (optional) is the index of the build from [listing builds](#list-builds). Defaults to the latest build.
 
 The following is an example of the output for this command:
 
@@ -636,7 +638,7 @@ The following describes the fields in the example output:
 
 * `Status` describes the status of a previous build image.
 
-* `Reason` describes why an image resource build occurred and the change diff. The reason could be one or more  of these:
+* `Reason` describes why an image resource build occurred and the change diff. The reason can be one or more of these:
     * `CONFIG`: Occurs when a change is made to commit, branch, Git repository, or build fields on the image's configuration file and you run `kp image apply`.
     * `COMMIT`: Occurs when new source code is committed to a branch or tag that Build Service is monitoring for changes.
     * `BUILDPACK`: Occurs when new buildpack versions are made available through an updated builder.
@@ -850,7 +852,7 @@ $ kp build status --bom my-app-image | jq
 
 Tanzu Build Service supports offline/air-gapped builds with Tanzu Buildpacks. Offline builds use pre-packaged dependencies and do not need to download from anywhere off-cluster to create application images.
 
-When using Tanzu Buildpacks the build will execute as an offline build. For details about how to configure buildpacks, see [Buildpack configuration in images](#buildpack-config-use-cases).
+When using Tanzu Buildpacks the build executes as an offline build. For details about how to configure buildpacks, see [Buildpack configuration in images](#buildpack-config-use-cases).
 
 > **Note** Offline builds only ensure that buildpack dependencies are offline. The application build and custom configuration must also not reach off-cluster to be completely offline.
 
@@ -858,7 +860,7 @@ When using Tanzu Buildpacks the build will execute as an offline build. For deta
 
 Tanzu Build Service supports [cosign](https://github.com/sigstore/cosign) image signing.
 
-Images signed with cosign require using `kubectl` instead of `kp`.
+Images signed with cosign require using kubectl instead of `kp`.
 
 #### Cosign signing secret
 
@@ -876,7 +878,7 @@ Alternatively, create the cosign secret and provide your own cosign key files ma
 ```
 
 - `<secret-name>` is the name of the secret. Ensure that the secret is created in the same namespace as the eventual image resource.
-- `<password>` is the password provided to encrypt the private key. If not present, an empty password will be used.
+- `<password>` is the password provided to encrypt the private key. If not present, an empty password is used.
 - `</path/to/cosign.key>` is the cosign private key file generated with `cosign generate-key-pair`.
 
 After adding the cosign secret, the secret must be added to the list of `secrets` attached to the service account resource that is building the image.
@@ -892,7 +894,7 @@ cosign:
     value: "annotationValue"
 ```
 
-One way these annotations can be viewed is through verifying cosign signatures. The annotations are under the `optional` key in the verified JSON response. For example, run:
+One way these annotations can be viewed is by verifying cosign signatures. The annotations are under the `optional` key in the verified JSON response. For example, run:
 
 ```bash
 % cosign verify -key /path/to/cosign.pub registry.example.com/project/image@sha256:<DIGEST>
@@ -933,7 +935,7 @@ data:
 
 This is equivalent to setting `COSIGN_REPOSITORY` as specified in cosign [Specifying Registry](https://github.com/sigstore/cosign#specifying-registry) on GitHub.
 
-The same service account that has that cosign secret attached, and is used for signing and building the image, requires that the registry credentials for this other repository be placed under the listed `secrets`. It is not required to be listed in `imagePullSecrets`. To push the signatures to the same registry but to a different path from the image, the credential used must have access to both paths. You cannot use two separate credentials for the same registry with different paths.
+The same service account that has that cosign secret attached and is used for signing and building the image, requires that the registry credentials for this other repository be placed under the listed `secrets`. It is not required to be listed in `imagePullSecrets`. To push the signatures to the same registry but to a different path from the image, the credential used must have access to both paths. You cannot use two separate credentials for the same registry with different paths.
 
 #### Cosign legacy Docker media types
 
