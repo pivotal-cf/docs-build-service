@@ -3,26 +3,29 @@ title: TBS Release Notes
 owner: Build Service Team
 ---
 
-## <a id="1-10-3"></a> v1.10.3
+## <a id="1-11-10"></a> v1.11.10
 
-**Release Date: April 11th, 2023**
+**Release Date: July 27th, 2023**
 
 ### Breaking changes
-- The default ClusterBuilder now uses the Ubuntu Jammy (22.04) stack instead of Bionic (18.04).
+- Ubuntu Bionic (18.04) Stacks and ClusterBuilders are no longer shipped wiht TBS.
 
 ### New Features
-- Improved visibility into the build process by bubbling up more errors
+- Introduced new (Cluster)Buildpack Resource to improve visibility and control of Buildpacks on the cluster
+- (Cluster)Builders can leverage the new Buildpack resource. The Store key on the Builder is now optional if you just want to use the Buildpack resource.
+- Git implementation migarted back to go-git for increased performance and reliabilty
+- Improved error messages on all resources to help troubleshoot issues
+- Bump Cosign integration to v2
 
 ### Bug fixes
-- Fixed bug that prevented the lifecycle image from getting updated with Tanzu Build Service releases
-- Fixed bug that caused image signing to fail on OpenShift
+- (Cluster)Builder layers are now deduplicated
 
 ### Product Snapshot
 
-Tanzu Build Service v1.10.3 ships with the following components:
+Tanzu Build Service v1.11.10 ships with the following components:
 
-- [kpack v0.10.0](https://github.com/pivotal/kpack/releases/tag/v0.10.0)
-- [kpack cli v0.10.0](https://github.com/vmware-tanzu/kpack-cli/releases/tag/v0.10.0)
+- [kpack v0.11.2](https://github.com/buildpacks-community/kpack/releases/tag/v0.11.2)
+- [kpack cli v0.11.0](https://github.com/buildpacks-community/kpack-cli/releases/tag/v0.11.0)
 - [CNB lifecycle v0.16.0](https://github.com/buildpacks/lifecycle/releases/tag/v0.16.0)
 
 Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
@@ -33,5 +36,5 @@ You can install Tanzu Build Service on any Kubernetes cluster v1.24 or later.
 
 ### Upgrade Path
 
-You can upgrade v1.9.x to v1.10.x. For upgrade instructions, follow the procedures in
+You can upgrade v1.10.x to v1.11.x. For upgrade instructions, follow the procedures in
 [Installing Tanzu Build Service](installing.html).
