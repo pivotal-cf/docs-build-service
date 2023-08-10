@@ -12,6 +12,13 @@ This topic describes the changes in Tanzu Build Service (commonly known as TBS).
 ### Breaking changes
 - Ubuntu Bionic (18.04) Stacks and ClusterBuilders are no longer shipped wiht TBS.
 
+### Known Issues
+- When installing TBS through [Tanzu Application Platform profiles](installing-tap-profile.html),
+  the automatic dependency updater will fail to get created for TAP versions
+  v1.6.1 and v1.6.2. This will result in dependencies like buildpacks and
+  stacks not getting automatically updated from TanzuNetwork. A hotfix has been
+  released and can be [installed here](installing-tap-profile.html#deps-updater-hotfix).
+
 ### New Features
 - Introduced new (Cluster)Buildpack Resource to improve visibility and control of Buildpacks on the cluster
 - (Cluster)Builders can leverage the new Buildpack resource. The Store key on the Builder is now optional if you just want to use the Buildpack resource.
@@ -29,6 +36,9 @@ Tanzu Build Service v1.11.10 ships with the following components:
 - [kpack v0.11.2](https://github.com/buildpacks-community/kpack/releases/tag/v0.11.2)
 - [kpack cli v0.11.0](https://github.com/buildpacks-community/kpack-cli/releases/tag/v0.11.0)
 - [CNB lifecycle v0.16.0](https://github.com/buildpacks/lifecycle/releases/tag/v0.16.0)
+
+Tanzu Build Service v1.11.10 is shipped as part of
+- [Tanzu Application Platform v1.6.2](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/tanzu-build-service-tbs-about.html)
 
 Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
