@@ -257,7 +257,7 @@ Where:
 
 ## <a id='save-image'></a> Save image resources
 
-Users can create or patch an image resource using the `save` command. The `kp image save` command is used the same as `kp image create` or `kp image patch`, but it determines whether an image resource needs to be created or patched.
+You can create or patch an image resource using the `save` command. The `kp image save` command is used the same as `kp image create` or `kp image patch`, but it determines whether an image resource needs to be created or patched.
 
 > **Note** For handling source code changes in the Tanzu Build Service process, VMware recommends using the `kp image save --wait` command within a CI/CD pipeline to update the source code referenced in the image resource.
 
@@ -885,7 +885,7 @@ After adding the cosign secret, the secret must be added to the list of `secrets
 
 #### Adding cosign annotations
 
-By default, the build number and build timestamp information is added to the cosign signing annotations. Users can specify additional cosign annotations under the spec key.
+By default, the build number and build timestamp information is added to the cosign signing annotations. You can specify additional cosign annotations under the spec key.
 
 ```yaml
 cosign:
