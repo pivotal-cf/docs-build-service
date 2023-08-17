@@ -509,17 +509,17 @@ To install Tanzu Build Service with the Dependency Updater Hotfix for Tanzu Appl
 
 1. Add the Tanzu Build Service hotfix package repository by running:
 
-```console
+    ```console
     tanzu package repository add tbs-tap-install-hotfix \
       --url registry.tanzu.vmware.com/build-service/tap-profile-install-hotfix:tbs-1.11.10 \
       --namespace tap-install
-```
+    ```
 
 1. Install the hotfix package by running:
 
-```console
+    ```console
     tanzu package install tbs-tap-install-hotfix -p tap-install.hotfix.buildservice.tanzu.vmware.com -v 1.11.10 -n tap-install --values-file hotfix-values.yaml
-```
+    ```
 
 ### <a id='deps-updater-hotfix-uninstall'></a> Uninstalling the hotfix
 
@@ -527,14 +527,14 @@ When upgrading away from Tanzu Application v1.6.1 or v1.6.2, the hotfix needs to
 
 1. Delete the hotfix package by running:
 
-```console
+    ```console
     tanzu package installed delete tbs-tap-install-hotfix -n tap-install
-```
+    ```
 
 1. Delete the hotfix package repository by running:
-```console
+    ```console
     tanzu package repository delete tbs-tap-install-hotfix -n tap-install
-```
+    ```
 
 1. Re-add the `enable_automatic_dependency_updates`, `descriptor_name`, and `descriptor_version`
    fields to your `tap-values.yaml`.
