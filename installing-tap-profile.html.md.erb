@@ -266,6 +266,23 @@ buildservice:
 	kubernetes_distribution: <KUBERNETES_DISTRIBUTION>
 ```
 
+<p class="note"><strong>Note:</strong>
+There is a known issue with using `tanzunet_secret` on Tanzu Application
+Platform version v1.5.4, the workaround is to remove that block and use the
+`tanzunet_username` and `tanzunet_password` fields instead.
+</p>
+
+```yaml
+...
+buildservice:
+	# tanzunet_secret:
+	#   name: tanzunet-registry
+	#   namespace: tap-install
+    tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
+    tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
+...
+```
+
 Where:
 
 * `REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location.
