@@ -43,9 +43,9 @@ To view the previous methods of installation, see [Installing without kapp contr
 
 ## <a id='install-required-software'></a> Install Required Software
 
-* Follow [these instructions](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/install-tanzu-cli.html) to install the Tanzu CLI
+* Follow [these instructions](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/install-tanzu-cli.html) to install the Tanzu CLI
 
-* Follow [these instructions](https://docs.vmware.com/en/Cluster-Essentials-for-VMware-Tanzu/1.4/cluster-essentials/deploy.html) to install Cluster Essentials
+* Follow [these instructions](https://docs.vmware.com/en/Cluster-Essentials-for-VMware-Tanzu/1.6/cluster-essentials/deploy.html) to install Cluster Essentials
   * NOTE: When you use a VMware Tanzu Kubernetes Grid cluster, you do not need to install Cluster Essentials because the contents of Cluster Essentials are already installed on your cluster.
 
 * Install the `kp` CLI for your operating system from the [VMware Tanzu Network](https://network.tanzu.vmware.com/products/build-service/).
@@ -200,7 +200,7 @@ This package now includes a profile that installs Tanzu Build Service as a stand
 #### <a id='about-dependencies'></a> About Tanzu Build Service Dependencies
 
 Tanzu Build Service supports multiple methods of installing dependencies, for example, buildpacks, stacks, and builders.
-The method of dependency installation must be decided before installing Tanzu Build Service and each has a slightly different installation process. Tanzu Build Service dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.4/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
+The method of dependency installation must be decided before installing Tanzu Build Service and each has a slightly different installation process. Tanzu Build Service dependencies fall into two categories, named `full` and `lite`. Deciding which one to use is the first step. For more information, see [Dependencies](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/tanzu-build-service-dependencies.html) in the Tanzu Application Platform documentation.
 
 If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of Tanzu Build Service to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
