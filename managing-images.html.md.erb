@@ -45,12 +45,6 @@ To create an image resource using source code from a Git repository, run:
 kp image create <name> \
   --tag <tag> \
   [--builder <builder> or --cluster-builder <cluster-builder>] \
-  --namespace <namespace> \
-  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-  --additional-tag <tag> \
-  --env <env> \
-  --sub-path <sub-path> \
-  --wait \
   --git <git-repo> \
   --git-revision <git-revision>
 ```
@@ -61,14 +55,6 @@ Where:
 * `tag` is the registry location where the image is created.
 * `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
 * `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
-* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. You can 
-specify the `--additional-tag` flag multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
-* `sub-path` (optional) is the build code at the subpath located within the source code directory.
-* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
-* `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
 * `git-repo` is the Git repository URL of the source code.
 * `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag`, or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
 
@@ -84,12 +70,6 @@ Create an image resource using source code from blobstore:
 kp image create <name> \
   --tag <tag> \
   [--builder <builder> or --cluster-builder <cluster-builder>] \
-  --namespace <namespace> \
-  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-  --additional-tag <tag> \
-  --env <env> \
-  --sub-path <sub-path> \
-  --wait \
   --blob <blob-url>
 ```
 
@@ -99,13 +79,6 @@ Where:
 * `tag` is the registry location where the image is created.
 * `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
 * `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
-* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
-* `sub-path` (optional) is the build code at the subpath located within the source code directory.
-* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
-* `wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
 * `blob-url` is the URL of the source code blob file.
 
 > **Note** The source code file in the blobstore must be publicly viewable or the 'blob-url` must contain the basic authentication credentials.
@@ -119,13 +92,8 @@ Create an image resource using source code from a local machine:
 ```console
 kp image create <name> \
   --tag <tag> \
-  --local-path <source-path> \
   [--builder <builder> or --cluster-builder <cluster-builder>] \
-  --namespace <namespace> \
-  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-  --additional-tag <tag> \
-  --env <env> \
-  --cache \
+  --local-path <source-path> \
   --registry-ca-cert-path <path-to-ca-cert> \
   --registry-verify-certs
 ```
@@ -137,14 +105,36 @@ Where:
 * `source-path` is the path to local source code.
 * `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
 * `cluster-builder` (optional) is the Cluster Builder name used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
-* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
-* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
-* `--wait` flag (optional) waits for image create to be reconciled and tails resulting build logs.
 * `registry-ca-cert-path` (optional) adds CA certificate for registry API.
 * `registry-verify-certs` (optional) sets whether to verify server's certificate chain and host name (default true).
+
+### Additional flags
+
+In addition to the source related flags, `kp image create` also accepts these optional flags:
+
+```console
+kp image create ... \
+  --additional-tag <tag> \
+  --cache-size <size>
+  --env <env> \
+  --namespace <namespace> \
+  --service-account <service-account name> \
+  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --sub-path <sub-path> \
+  --wait
+```
+
+Where:
+
+* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
+* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
+* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
+* `service-account` (optional) is the name of the service account to use. Defaults to `default`.
+* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
+* `sub-path` (optional) is the build code at the subpath located within the source code directory.
+* `--wait` (optional) waits for image create to be reconciled and tails resulting build logs.
+
 
 ### <a id='buildpack-config'></a> Buildpack configuration
 
@@ -200,28 +190,16 @@ Patch image resources with the following commands:
 
 * With source code in a Git repository
 
-```console
-  kp image patch <name> \
-  [--builder <builder> or --cluster-builder <cluster-builder>] \
-  --namespace <namespace> \
-  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-  --additional-tag <tag> \
-  --env <env> \
-  --wait \
-  --git <git-repo> \
-  --git-revision <git-revision>
-```
+    ```console
+      kp image patch <name> \
+      --git <git-repo> \
+      --git-revision <git-revision>
+    ```
 
 * With source code in a blobstore
 
 	```
     kp image patch <name> \
-	  [--builder <builder> or --cluster-builder <cluster-builder>] \
-	  --namespace <namespace> \
-	  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-	  --additional-tag <tag> \
-	  --env <env> \
-	  --wait \
 	  --blob <blob-url>
     ```
 
@@ -229,29 +207,56 @@ Patch image resources with the following commands:
 
 	```
     kp image patch <name> \
-	  [--builder <builder> or --cluster-builder <cluster-builder>] \
-	  --namespace <namespace> \
-	  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
-	  --additional-tag <tag> \
-	  --env <env> \
-	  --wait \
 	  --local-path <source-path>
     ```
 
 Where:
 
 * `name` is the name of the image resource to patch.
-* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
-* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
-* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
-* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
 * `git-repo` is the Git repository URL of the source code. Must select one of `git-repo`, `blob-url`, or `source-path`
 * `git-revision` (optional) is the Git revision of the code that the image is built against. Can be either a `branch`, `tag`, or a commit `sha`. When you target the image resource against a branch, Build Service triggers a build for every new commit. Defaults to `main`.
 * `blob-url` is the URL of the source code blob file. Must select one of `git-repo`, `blob-url`, or `source-path`
 * `source-path` is the path to local source code. Must select one of `git-repo`, `blob-url`, or `source-path`
 
 > **Note** If the `git-repo` is a private repository, you must configure the Git credentials. For more information, see [Create Secrets](managing-secrets.html#creating-secrets).
+
+### Additional flags
+
+In addition to the source related flags, `kp image patch` also accepts these optional flags:
+
+```
+kp image patch ... \
+  --additional-tag <tag> \
+  --delete-additional-tag <tag> \
+  --replace-additional-tag <tag> \
+  [--builder <builder> or --cluster-builder <cluster-builder>] \
+  --cache-size <size> \
+  --env <env> \
+  --delete-env <env> \
+  --namespace <namespace> \
+  --service-account <service-account name> \
+  --service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --delete-service-binding [<secret-name> or <kind>:<apiVersion>:<name>] \
+  --sub-path <sub-path> \
+  --wait
+```
+
+Where:
+
+* `additional-tag` (optional) is an additional registry location where the image is created. You can specify the `--additional-tag` flag multiple times.
+* `delete-additional-tag` (optional) removes a registry location that was previously added with `--additional-tag`. You can specify the `--delete-additional-tag` flag multiple times.
+* `replace-additional-tag` (optional) is equivalent to deleting all the previous `--additional-tag`s, and then adding new ones. You can specify the `--replace-additional-tag` flag multiple times.
+* `builder` (optional) is the builder name used in the image resource. Cannot be used with `cluster-builder`.
+* `cluster-builder` (optional) is the Cluster Builder name used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
+* `cache-size` (optional) is the cache size used for subsequent builds. Must be a valid Kubernetes quantity (default 2G).
+* `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
+* `delete-env` (optional) removes an image resource environment variable configuration previously added with `--env`. You can specify the `--delete-env` flag multiple times.
+* `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
+* `service-account` (optional) is the name of the service account to use. Defaults to `default`.
+* `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
+* `delete-service-binding` (optional) removes a service binding previously added with `--service-binding`. You can specify the `--delete-service-binding` flag multiple times.
+* `sub-path` (optional) is the build code at the subpath located within the source code directory.
+* `--wait` (optional) waits for image create to be reconciled and tails resulting build logs.
 
 > **Note** The `tag` location in a registry and `name` of an image resource cannot be modified. To change these fields, you must create a new image resource.
 
