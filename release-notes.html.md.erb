@@ -11,7 +11,7 @@ This topic describes the changes in Tanzu Build Service (commonly known as TBS).
 
 ### Breaking changes
 - The minimum supported CNB Platform API is now v0.7. The Platform API is the interface between kpack and the CNB lifecycle.
-  This only affects users that have not updated the lifecycle image in the last 2 years. If you encounter this issue, update the lifecycle image.
+  This only affects users who have not updated the lifecycle image in the last 2 years. If you encounter this issue, update the lifecycle image.
 
 ### New Features
 - Images are now signed before metadata is pulled. This is to support registries where unsigned image pulls are disabled.
@@ -26,7 +26,7 @@ This topic describes the changes in Tanzu Build Service (commonly known as TBS).
     - Added `--local-path-destination-image` to better control the location of the source code when using the local path
     flow.
     - Added `--success-build-history-limit` and `failed-build-history-limit` flags to the image commands.
-    - The `--store` flag is now optional for clusterbuilder and builder commands (builders may use only the Buildpack resource)
+    - The `--store` flag is now optional for clusterbuilder and builder commands (builders may use only the Buildpack resource).
     - `kp build log` now displays timestamps.
     - `kp build list` now supports a `--all-namespaces` flag.
     - `kp secret` commands now take into consideration if the service account exists.
