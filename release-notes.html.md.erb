@@ -5,6 +5,33 @@ owner: Build Service Team
 
 This topic describes the changes in Tanzu Build Service (commonly known as TBS).
 
+## <a id="1-12-4"></a> v1.12.4
+
+**Release Date: November 24, 2023**
+
+### Bug fixes
+- Fixed a bug preventing the dependency updater from using self signed certificates
+- Fixed an issue causing high memory consumption in stacks operator
+
+### Product Snapshot
+
+Tanzu Build Service v1.12.4 includes the following components:
+
+- [kpack v0.12.3](https://github.com/buildpacks-community/kpack/releases/tag/v0.12.3)
+- [kpack cli v0.12.1](https://github.com/buildpacks-community/kpack-cli/releases/tag/v0.12.1)
+- [CNB lifecycle v0.17.2](https://github.com/buildpacks/lifecycle/releases/tag/v0.17.2)
+
+Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
+
+### Product Dependencies
+
+You can install Tanzu Build Service on any Kubernetes cluster v1.26 or later.
+
+### Upgrade Path
+
+You can upgrade v1.11.x to v1.12.x. For upgrade instructions, follow the procedures in
+[Install Tanzu Build Service with kapp controller](installing.html).
+
 ## <a id="1-12-3"></a> v1.12.3
 
 **Release Date: November 7, 2023**
