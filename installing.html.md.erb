@@ -7,16 +7,9 @@ This topic tells you how to install and configure Tanzu Build Service (commonly 
 
 >**Important** This method of installation is now deprecated in favor of [Installing using a profile](installing-tap-profile.html).
 
-For the previous method of installation, see [Install without kapp controller](installing-no-kapp.html).
-
-Reasons to use the previous installation method include:
-
-* You do not want to install kapp controller on your cluster.
-* You want to make custom changes to the Tanzu Build Service installation through `ytt` templating or overlays.
-
 ## <a id='prerequisites'></a> Prerequisites
 
-* Have a Kubernetes cluster v1.23 or later.
+* Have a Kubernetes cluster v1.27 or later.
 
 * Ensure that all worker nodes have at least 50&nbsp;GB of ephemeral storage allocated to them.
 	* To do this on vSphere with Tanzu, mount a 50&nbsp;GB volume at `/var/lib/containerd` to the worker nodes in the `TanzuKubernetesCluster` resource that corresponds to your vSphere with Tanzu cluster. For information about configuring storage on worker nodes, see [Cluster with Separate Disks and Storage Parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-B1034373-8C38-4FE2-9517-345BF7271A1E.html#cluster-with-separate-disks-and-storage-parameters-1).
@@ -57,12 +50,6 @@ for authentication with registries.
 
 <p class="note"><strong>Note:</strong> vSphere with Tanzu clusters running Kubernetes v1.20.0-v1.20.6 are not compatible with Tanzu Build Service.</p>
 
-## <a id='DeprecatedFeatures'></a> Deprecated Features
-
-* The (legacy) CNB BOM format is deprecated, but enabled by default in Tanzu Build Service. Support can be deactivated manually by passing
-`--data-value-yaml include_legacy_bom=false` to `ytt` when processing the Tanzu Build Service bundle or by adding
-`include_legacy_bom=false` to your `tbs-values.yml` file.
-
 ## <a id='install-tbs'></a> Install Tanzu Build Service
 
 1. Set up environment variables for use during the installation.
@@ -72,6 +59,7 @@ for authentication with registries.
     export INSTALL_REPOSITORY=<IMAGE-REPOSITORY>
     export INSTALL_REGISTRY_USERNAME=<REGISTRY-USERNAME>
     export INSTALL_REGISTRY_PASSWORD=<REGISTRY-PASSWORD>
+    export INSTALL_NAMESPACE=<INSTALL-NAMESPACE>
     export TANZUNET_REGISTRY_USERNAME=<TANZUNET_REGISTRY_USERNAME>
     export TANZUNET_REGISTRY_PASSWORD=<TANZUNET_REGISTRY_PASSWORD>
     export TBS_VERSION=<LATEST-TBS-VERSION>
@@ -86,6 +74,7 @@ for authentication with registries.
       * Harbor has the form `my-harbor.io/my-project/build-service`.
     * `REGISTRY-USERNAME` is the user name of the registry. You must be able to write to `IMAGE-REPOSITORY` with this credential. `gcr.io` expects `_json_key`.
     * `REGISTRY-PASSWORD` is the password of the registry. You must be able to write to `IMAGE-REPOSITORY` with this credential.
+    * `INSTALL-NAMESPACE` is the namespace where all the packages will be installed. This namespace keeps the installation objects grouped together logically. (Ex. `tbs-install`)
     * `TANZUNET_REGISTRY_USERNAME` is the user name you use to access [TanzuNet](https://network.tanzu.vmware.com).
     * `TANZUNET_REGISTRY_PASSWORD` is the password you use to access [TanzuNet](https://network.tanzu.vmware.com).
       * For Google Cloud Registry, use the contents of the service account JSON key.
@@ -160,13 +149,11 @@ The local machine must have write access to the install registry.
 
 ### <a id='install'></a> Installation
 
-1. Create a namespace called tbs-install for deploying the package:
+1. Create an installation namespace for deploying the package:
 
     ```
-    kubectl create ns tbs-install
+    kubectl create ns ${INSTALL_NAMESPACE}
     ```
-
-    This namespace keeps the installation objects grouped together logically.
 
 1. Create a secret to pull in the package repository:
 
@@ -174,21 +161,31 @@ The local machine must have write access to the install registry.
     tanzu secret registry add tbs-install-registry \
       --username ${INSTALL_REGISTRY_USERNAME} --password ${INSTALL_REGISTRY_PASSWORD} \
       --server ${INSTALL_REGISTRY_HOSTNAME} \
-      --export-to-all-namespaces --yes --namespace tbs-install
+      --export-to-all-namespaces --yes --namespace ${INSTALL_NAMESPACE}
     ```
+
+1. When leveraging automatic dependency updates, create the secret for the VMware Tanzu Network credentials using the `tanzu` cli:
+
+   ```
+   tanzu secret registry add tanzunet-creds \
+     --server "registry.tanzu.vmware.com" \
+     --username "${TANZUNET_REGISTRY_USERNAME}" \
+     --password "${TANZUNET_REGISTRY_PASSWORD}" \
+     --namespace ${INSTALL_NAMESPACE}
+   ```
 
 1. Add the Tanzu Build Service package repository to the cluster:
 
     ```
     tanzu package repository add tbs-repository \
         --url "${INSTALL_REPOSITORY}:${TBS_VERSION}" \
-        --namespace tbs-install
+        --namespace ${INSTALL_NAMESPACE}
     ```
 
 1. Get the status of the package repository (the status should be `Reconcile succeeded`):
 
     ```
-    tanzu package repository get tbs-repository --namespace tbs-install
+    tanzu package repository get tbs-repository --namespace ${INSTALL_NAMESPACE}
     ```
 
 1. Create a `tbs-values.yml` file by using the following sample as a guide. Keep this file for future use.
@@ -196,79 +193,31 @@ The local machine must have write access to the install registry.
     ```yaml
     ---
     kp_default_repository: <INSTALL_REPOSITORY>
-    kp_default_repository_username: <INSTALL_REGISTRY_USERNAME>
-    kp_default_repository_password: <INSTALL_REGISTRY_PASSWORD>
-    pull_from_kp_default_repo: true
-    tanzunet_username: <TANZUNET_REGISTRY_USERNAME>
-    tanzunet_password: <TANZUNET_REGISTRY_PASSWORD>
-    descriptor_name: <DESCRIPTOR_NAME>
-    enable_automatic_dependency_updates: true
+    kp_default_repository_secret:
+      name: tbs-install-registry
+      namespace: <INSTALL_NAMESPACE>
+    install_namespace: <INSTALL_NAMESPACE>
     ca_cert_data: <CA_CERT_CONTENTS> (optional)
     injected_sidecar_support: true (optional)
+    exclude_dependencies: false
+    dependency_updates:
+      allow: true
+      scope: "stacks-only"
+      include_packages: [""]
+      exclude_packages: [""]
     ```
+<p class="note"><strong>Note:</strong> This will install the lite dependencies with automatic stack updates enabled. For more information on dependencies see: [Managing Dependencies](managing-dependencies.html) page.  </p>
 
     Where:
-
     * `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
-    * `INSTALL_REGISTRY_USERNAME` is the registry username. Same value as used during relocation.
-    * `INSTALL_REGISTRY_PASSWORD` is the registry password. Same value as used during relocation.
-    * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network. Same value used during relocation
-    * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network. Same value used during relocation
-    * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
-      * `full` contains all dependencies.
-      * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
+    * `INSTALL_NAMESPACE` is the namespace created above
     * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
     * `INJECTED_SIDECAR_SUPPORT` Optionally enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/pivotal/kpack/blob/v0.10.0/docs/injected_sidecars.md))
 
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
-    ```
-
-    <p class="note"><strong>Note:</strong> Installing with VMware Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
-
-#### <a id='secret-references'></a> Using Secrets for credentials
-
-You may not want to install Tanzu Build Service with passwords saved in plaintext in the `tbs-values.yml`.
-
-You can store these credentials in `Secrets` and reference them in the `tbs-values.yml` using the following process:
-
-1. Create the secret for the `kp-default-repository` credentials using the `tanzu` cli:
-
-    ```
-    tanzu secret registry add kp-default-repository-creds \
-      --username "${INSTALL_REGISTRY_USERNAME}" \
-      --password "${INSTALL_REGISTRY_PASSWORD}" \
-      --server "${INSTALL_REGISTRY_HOSTNAME}" \
-      --namespace tbs-install
-    ```
-
-1. When leveraging automatic updates, create the secret for the VMware Tanzu Network credentials using the `tanzu` cli:
-
-	```
-	tanzu secret registry add tanzunet-creds \
-	  --server "registry.tanzu.vmware.com" \
-	  --username "${TANZUNET_REGISTRY_USERNAME}" \
-	  --password "${TANZUNET_REGISTRY_PASSWORD}" \
-	  --namespace tbs-install
-	```
-
-1. Create a `tbs-values.yml` with secret references instead of plaintext credentials:
-
-    ```yaml
-    ---
-    kp_default_repository: <INSTALL_REPOSITORY>
-    kp_default_repository_secret:
-      name: kp-default-repository-creds
-      namespace: tbs-install
-    pull_from_kp_default_repo: true
-    tanzunet_secret:
-      name: tanzunet-creds
-      namespace: tbs-install
-    descriptor_name: <DESCRIPTOR_NAME>
-    enable_automatic_dependency_updates: true
-    ca_cert_data: <CA_CERT_CONTENTS> (optional)
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n ${INSTALL_NAMESPACE} -f tbs-values.yml --poll-timeout 30m
     ```
 
 #### <a id='additional-config'></a> Additional configuration
