@@ -217,7 +217,7 @@ The local machine must have write access to the install registry.
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n ${INSTALL_NAMESPACE} --values-file tbs-values.yaml --poll-timeout 30m
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n ${INSTALL_NAMESPACE} --values-file tbs-values.yml --poll-timeout 30m
     ```
 
 #### <a id='additional-config'></a> Additional configuration
@@ -361,7 +361,7 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
 1. Install the package with the same `tbs-values.yml` file used during the initial installation:
 
     ```
-    tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
+    tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install --values-file tbs-values.yml --poll-timeout 30m
     ```
 
 ## <a id='offline-install-tbs'></a> Installing Tanzu Build Service (air-gapped)
@@ -526,7 +526,7 @@ This procedure relocates images from the VMware Tanzu Network registry to an int
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install --values-file tbs-values.yaml
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install --values-file tbs-values.yml
     ```
 
 ### <a id='offline-update-deps'></a> Updating Tanzu Build Service Dependencies (air-gapped)
