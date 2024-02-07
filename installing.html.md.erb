@@ -217,7 +217,7 @@ The local machine must have write access to the install registry.
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n ${INSTALL_NAMESPACE} -f tbs-values.yml --poll-timeout 30m
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n ${INSTALL_NAMESPACE} --values-file tbs-values.yaml --poll-timeout 30m
     ```
 
 #### <a id='additional-config'></a> Additional configuration
@@ -526,7 +526,7 @@ This procedure relocates images from the VMware Tanzu Network registry to an int
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install --values-file tbs-values.yaml
     ```
 
 ### <a id='offline-update-deps'></a> Updating Tanzu Build Service Dependencies (air-gapped)
