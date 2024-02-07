@@ -38,7 +38,7 @@ For more details on air-gapped builds, see [Offline Builds](managing-images.html
 
 ## <a id='faq-4'></a> Is there documentation on supported Tanzu Buildpacks?
 
-Yes, documentation is available on [Tanzu Buildpacks Documenation](https://docs.pivotal.io/tanzu-buildpacks/).
+Yes, documentation is available on [Tanzu Buildpacks Documenation](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
 ---
 
@@ -383,7 +383,7 @@ When you configure the Tanzu Network Auto Updater during installation, dependenc
 
 Using the steps from the installation docs will result in all dependencies to stay up-to-date with the latest buildpacks.
 
-To pin to a TBS "descriptor" version, find the desired version of the descriptor from the [TBS Dependencies Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) page. Run the following command to re-install TBS:
+To pin to a TBS "descriptor" version, find the desired version of the descriptor from the [TBS Dependencies Tanzu Network](https://network.tanzu.vmware.com/products/tbs-dependencies/) page. Run the following command to re-install TBS:
 
 ```
 ytt -f /tmp/bundle/config/ \
@@ -401,7 +401,7 @@ ytt -f /tmp/bundle/config/ \
 
 Where:
 
-* `DESCRIPTOR-VERSION` is the desired descriptor version from the [TBS Dependencies Tanzu Network](https://network.pivotal.io/products/tbs-dependencies/) page.
+* `DESCRIPTOR-VERSION` is the desired descriptor version from the [TBS Dependencies Tanzu Network](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
 
 ## <a id='faq-23'></a> Build pods showing volume errors on EKS running Kubernetes 1.23
 
