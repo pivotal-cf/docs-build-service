@@ -223,7 +223,7 @@ The local machine must have write access to the install registry.
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install --values-file tbs-values.yml --poll-timeout 30m
     ```
 
     <p class="note"><strong>Note:</strong> Installing with VMware Tanzu Network credentials automatically relocates buildpack dependencies to your registry. This install process can take some time and the `--poll-timeout` flag increases the timeout duration. Using the `lite` descriptor speeds this up significantly. If the command times out, periodically run the installation verification step provided in the following optional step. Image relocation continues in the background. </p>
@@ -412,7 +412,7 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
 1. Install the package with the same `tbs-values.yml` file used during the initial installation:
 
     ```
-    tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install -f tbs-values.yml --poll-timeout 30m
+    tanzu package installed update tbs -p buildservice.tanzu.vmware.com -v $NEW_TBS_VERSION -n tbs-install --values-file tbs-values.yml --poll-timeout 30m
     ```
 
 ## <a id='offline-install-tbs'></a> Installing Tanzu Build Service (air-gapped)
@@ -577,7 +577,7 @@ This procedure relocates images from the VMware Tanzu Network registry to an int
 1. Install the package:
 
     ```
-    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install -f tbs-values.yml
+    tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n tbs-install --values-file tbs-values.yml
     ```
 
 ### <a id='offline-update-deps'></a> Updating Tanzu Build Service Dependencies (air-gapped)
