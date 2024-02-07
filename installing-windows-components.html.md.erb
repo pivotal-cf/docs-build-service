@@ -13,7 +13,7 @@ This topic tells you how to install Windows components of Tanzu Build Service (c
 </p>
 
 
-Tanzu Build Service supports building [.NET Framework](https://docs.pivotal.io/tanzu-buildpacks/dotnet-framework/dotnet-framework-buildpack.html)
+Tanzu Build Service supports building [.NET Framework](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-dotnet-framework-dotnet-framework-buildpack.html)
 application images. Building .NET Framework images requires a Kubernetes cluster with Windows nodes
 provisioned.
 
@@ -29,7 +29,7 @@ To set up Tanzu Build Service for Windows-based builds, complete the following s
 
 2. Ensure that you have a Kubernetes cluster with Windows nodes provisioned.
 
-3. Navigate to the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/)
+3. Navigate to the [Tanzu Build Service Dependencies for Microsoft Windows](https://network.tanzu.vmware.com/products/tbs-dependencies-windows/)
 in VMware Tanzu Network and accept the EULA.
 
 4. Import the Tanzu Build Service Windows Dependencies.
@@ -37,7 +37,7 @@ in VMware Tanzu Network and accept the EULA.
     The Tanzu Build Service Windows Dependencies (Stacks, Buildpacks, Builders, etc.) are used to
     build .NET Framework applications and keep them patched. These must be imported with the `kp` cli
     and the Dependency Descriptor (`windows-descriptor-<version>.yaml`) file from the
-    [Tanzu Build Service Dependencies for Microsoft Windows](https://network.pivotal.io/products/tbs-dependencies-windows/) page.
+    [Tanzu Build Service Dependencies for Microsoft Windows](https://network.tanzu.vmware.com/products/tbs-dependencies-windows/) page.
     ```
     kp import -f /tmp/windows-descriptor-<version>.yaml
     ```
