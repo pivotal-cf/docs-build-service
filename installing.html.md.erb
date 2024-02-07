@@ -200,6 +200,7 @@ The local machine must have write access to the install registry.
     ca_cert_data: <CA_CERT_CONTENTS> (optional)
     injected_sidecar_support: true (optional)
     exclude_dependencies: false
+    create_secret_exports: true
     dependency_updates:
       allow: true
       scope: "stacks-only"
@@ -236,6 +237,8 @@ The local machine must have write access to the install registry.
     ```console
     tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
     ```
+
+As of Tanzu Build Service 1.13, there is a new flag to set in your tbs values file for secret exports. Currently this flag will default to `true`. In a future release, this flag will default to false and secret exports will no longer created by default when installing the build service package. Previously creating the secret exports have been problematic when another component also needed the secret exported. Users can now choose to export the secret to the required namespaces manually. They can be exported to all namespaces but are only required in the `kpack` and `build-service` namespaces. In the case of using TAP, users are already creating this secret and exporting to all namespaces there is no need to do anything else.
 
 #### <a id='aws-iam-auth'></a> Using AWS IAM for Authentication with ECR
 
@@ -497,6 +500,7 @@ This procedure relocates images from the VMware Tanzu Network registry to an int
     kp_default_repository_password: $INSTALL_REGISTRY_PASSWORD
     pull_from_kp_default_repo: true
     exclude_dependencies: true
+    create_secret_exports: true
     ca_cert_data: <CA_CERT_CONTENTS>
     ```
 

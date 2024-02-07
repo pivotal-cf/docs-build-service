@@ -1,0 +1,10 @@
+---
+title: Install Tanzu Build Service without kapp controller
+owner: Build Service Team
+---
+
+This method to install Tanzu Build Service (commonly known as TBS) without kapp controller is no longer supported.
+
+TBS 1.13 tries to stamp out package installs. Lite dependencies have been added to package installs so we now rely on kapp controller for installation.
+
+Older versions of TBS do not have lite deps automatically and only works if you auto deps updater

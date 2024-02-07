@@ -1,0 +1,45 @@
+A ClusterBuildpack is a cluster scoped version of Buildpack. Users often ask about creating a custom ClusterBuildpack and adding in to a ClusterBuilder in their environment. A common use case for this is using  an alternative JVM.
+
+If you create your own buildpack image, you can create your own ClusterBuildpack from it. For example:
+
+````
+apiVersion: kpack.io/v1alpha2
+kind: ClusterBuildpack
+metadata:
+  name: sample-cluster-buildpack
+spec:
+  serviceAccountRef:
+    name: sample-sa
+    namespace: sample-namespace
+  image: gcr.io/paketo-buildpacks/java@sha256:fc1c6fba46b582f63b13490b89e50e93c95ce08142a8737f4a6b70c826c995de
+ ````
+
+ After creating you own ClusterBuildpack, you can create a ClusterBuilder that references this buildpack:
+
+```yaml
+ ---
+
+ apiVersion: kpack.io/v1alpha2
+ kind: ClusterBuilder
+ metadata:
+   name: my-cluster-builder
+ spec:
+   tag: gcr.io/sample/builder
+   stack:
+     name: base-jammy
+     kind: ClusterStack
+   store:
+     name: default
+     kind: ClusterStore
+   serviceAccountRef:
+     name: default
+     namespace: default
+   order:
+      - group:
+        - name: sample-cluster-buildpack
+          kind: ClusterBuildpack
+          id: paketo-buildpacks/nodejs
+          version: 1.2.3
+ ```
+
+More information can be found here: https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-java-java-buildpack.html#use-an-alternative-jvm)
