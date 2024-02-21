@@ -359,7 +359,7 @@ Build Service auto-rebuilds image resources when one or more of the following bu
 
 * There is a new Cluster Stack (that is, base OS image) available, such as `full`, `tiny`, or `base`.
 	- New Stack versions are made available on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on VMware Tanzu Network.
-    - You can get updates to Stacks from the VMware Tanzu Network Registry by using the `kp` CLI. For 
+    - You can get updates to Stacks from the VMware Tanzu Network Registry by using the `kp` CLI. For
     more information, see [Updating Build Service Dependencies](updating-deps.html).
 
 ### <a id='trigger-rebuild-image'></a> Trigger an image resource rebuild
@@ -804,7 +804,7 @@ Build successful
   You can deactivate support manually by passing `--data-value-yaml include_legacy_bom=false`
   to `ytt` when processing the Tanzu Build Service bundle or by adding `include_legacy_bom=false`
   to your `tbs-values.yml` file.
-- The ability to view bill of materials is no longer supported in kp cli v0.9.0+.
+- The ability to view bill of materials is no longer supported in kp CLI v0.9.0 and later.
 
 The kp CLI allows you to view the bill of materials in an image built by a Build.
 
