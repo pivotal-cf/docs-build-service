@@ -444,7 +444,7 @@ create`, `kp image patch`, and `kp image save`.
 
 ## <a id='image-with-YAML'></a> Managing image resources with YAML
 
-Create Build Services image resources by applying the [kpack image resources](https://github.com/pivotal/kpack/blob/main/docs/image.md) to cluster through kubectl.
+Create Build Services image resources by applying the [kpack image resources](https://github.com/buildpacks-community/kpack/blob/main/docs/image.md) to cluster through kubectl.
 
 Use the `default` service account for Build Service registry and Git secrets.
 
@@ -452,7 +452,7 @@ Use the `default` service account for Build Service registry and Git secrets.
 
 You can configure Tanzu Build Service image resource to use a registry as the build cache instead of a persistent volume. Currently, configuring the registry cache is not supported with kp and kubectl must be used.
 
-For more information about how to set the cache tag, see the kpack [image config](https://github.com/pivotal/kpack/blob/main/docs/image.md) documentation.
+For more information about how to set the cache tag, see the kpack [image config](https://github.com/buildpacks-community/kpack/blob/main/docs/image.md) documentation.
 
 #### <a id='kubectl-secrets'></a> Using secrets
 
@@ -505,7 +505,7 @@ Tanzu Build Service supports application service bindings as described in the Ku
 
 ### <a id='service-bindings'></a> Creating an image resource with service bindings
 
-For more information, see [Service Bindings](https://github.com/pivotal/kpack/blob/main/docs/servicebindings.md) in the kpack documentation.
+For more information, see [Service Bindings](https://github.com/buildpacks-community/kpack/blob/main/docs/servicebindings.md) in the kpack documentation.
 
 To create a service binding in your application image, you must create *either* of the following:
 
