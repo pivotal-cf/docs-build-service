@@ -3,7 +3,7 @@ title: Access Tanzu Build Service
 owner: Build Service Team
 ---
 
-This topic tells you how to gain kubeconfig access to the Kubernetes cluster with 
+This topic tells you how to gain kubeconfig access to the Kubernetes cluster with
 Tanzu Build Service (commonly known as TBS).
 
 For example, if you are using TKGI (formerly PKS):
@@ -16,7 +16,7 @@ tkgi get-credentials <clustername> -a <tkg-api-url> -u <username> -p <password>
 You can use the `kp` CLI, downloaded as part of the [installation](installing.html) to interact with Build Service.
 The `kp` CLI uses the local `KUBECONFIG` utilized by `kubectl`. All operations are performed on Kubernetes current-context namespace.
 
-The `kp` CLI help text is published [here](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+The `kp` CLI help text is published [here](https://github.com/buildpacks-community/kpack-cli/blob/v0.2.0/docs/kp.md).
 
 ```
 $ kp
@@ -24,7 +24,7 @@ kp controls the kpack installation on Kubernetes.
 
 kpack extends Kubernetes and utilizes unprivileged kubernetes primitives to provide
 builds of OCI images as a platform implementation of Cloud Native Buildpacks (CNB).
-Learn more about kpack @ https://github.com/pivotal/kpack
+Learn more about kpack @ https://github.com/buildpacks-community/kpack
 
 Usage:
   kp [command]
