@@ -3,11 +3,20 @@ title: Create custom ClusterBuildpacks for Tanzu Build Service
 owner: Build Service Team
 ---
 
-A ClusterBuildpack is a cluster scoped version of Buildpack. Users often ask about creating a custom ClusterBuildpack and adding in to a ClusterBuilder in their environment. A common use case for this is using  an alternative JVM.
+This topic tells you how to create a custom ClusterBuildpack for Tanzu Build Service.
+A ClusterBuildpack is a cluster scoped version of a Buildpack.
 
-If you create your own buildpack image, you can create your own ClusterBuildpack from it. For example:
+You can create a custom ClusterBuildpack and add it to a ClusterBuilder in your environment.
+A common use case for this is if you want to use an alternative JVM.
+For more information, see [Use an Alternative JVM](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-java-java-buildpack.html#use-an-alternative-jvm)
+in the Tanzu Buildpacks documentation.
 
-````
+## <a id="create-clusterbuildpack"></a> Create a ClusterBuildpack
+
+If you create your own buildpack image, you can create your ClusterBuildpack from it.
+For example:
+
+```yaml
 apiVersion: kpack.io/v1alpha2
 kind: ClusterBuildpack
 metadata:
@@ -17,34 +26,35 @@ spec:
     name: sample-sa
     namespace: sample-namespace
   image: gcr.io/paketo-buildpacks/java@sha256:fc1c6fba46b582f63b13490b89e50e93c95ce08142a8737f4a6b70c826c995de
- ````
+```
 
- After creating you own ClusterBuildpack, you can create a ClusterBuilder that references this buildpack:
+## <a id="add-clusterbuildpack"></a> Add your ClusterBuildpack to a ClusterBuilder
+
+After creating your ClusterBuildpack, you can create a ClusterBuilder that references this buildpack.
+For example:
 
 ```yaml
- ---
+---
 
- apiVersion: kpack.io/v1alpha2
- kind: ClusterBuilder
- metadata:
-   name: my-cluster-builder
- spec:
-   tag: gcr.io/sample/builder
-   stack:
-     name: base-jammy
-     kind: ClusterStack
-   store:
-     name: default
-     kind: ClusterStore
-   serviceAccountRef:
-     name: default
-     namespace: default
-   order:
-      - group:
-        - name: sample-cluster-buildpack
-          kind: ClusterBuildpack
-          id: paketo-buildpacks/nodejs
-          version: 1.2.3
- ```
-
-More information can be found here: https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-java-java-buildpack.html#use-an-alternative-jvm)
+apiVersion: kpack.io/v1alpha2
+kind: ClusterBuilder
+metadata:
+  name: my-cluster-builder
+spec:
+  tag: gcr.io/sample/builder
+  stack:
+    name: base-jammy
+    kind: ClusterStack
+  store:
+    name: default
+    kind: ClusterStore
+  serviceAccountRef:
+    name: default
+    namespace: default
+  order:
+    - group:
+      - name: sample-cluster-buildpack
+        kind: ClusterBuildpack
+        id: paketo-buildpacks/nodejs
+        version: 1.2.3
+```

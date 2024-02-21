@@ -9,7 +9,7 @@ This topic provides you with the answers to commonly asked questions about Tanzu
 
 **CNBs** are build tools that adhere to the <a href="https://github.com/buildpacks/spec">CNB v3 Specification</a> and transform source code into an OCI compliant runnable image. The v3 specification, lifecycle, and local CLI (`pack`) are governed by the open source <a href="https://buildpacks.io">Cloud Native Buildpacks project.</a>
 
-<a href="https://github.com/pivotal/kpack">kpack</a> is a collection of open source resource controllers that together function as a Kubernetes native build service. The product provides a declarative image type that builds an image and schedules image rebuilds when dependencies of the image change. kpack is a platform implementation of CNBs in that it utilizes CNBs and the v3 lifecycle to execute image builds.
+<a href="https://github.com/buildpacks-community/kpack">kpack</a> is a collection of open source resource controllers that together function as a Kubernetes native build service. The product provides a declarative image type that builds an image and schedules image rebuilds when dependencies of the image change. kpack is a platform implementation of CNBs in that it utilizes CNBs and the v3 lifecycle to execute image builds.
 
 **Tanzu Build Service** is a commercial product owned and operated by VMware that utilizes kpack and CNBs. Build Service provides additional abstractions intended to ease the use of the above technologies in Enterprise settings. These abstractions are covered in detail throughout the documentation on this site. Additionally, customers of Build Service are entitled to support and VMware Tanzu  buildpacks.
 
@@ -345,21 +345,35 @@ as they sometimes differ from local credentials:
             crane pull alpine alpine.tar && crane push alpine.tar <tbs-registry>/<build-service-repository>
             ```
 
-## <a id='faq-18'></a> Why does TBS leave behind pods after builds on my Cluster?
+## <a id='faq-18'></a> Why does Tanzu Build Service leave behind pods after builds on my Cluster?
 
-All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This can be done by using the `kp` CLI with the `--failed-build-history-limit` or `--success-build-history-limit` flags. Users can also apply yaml configurations using `kubectl` to update these fields.  Follow [this link](https://github.com/pivotal/kpack/blob/main/docs/image.md) for documentation.
+All Tanzu Build Service builds happen in pods. By default, Tanzu Build Service does not delete the
+last ten successful and failed builds to provide historical logging and debugging.
 
-## <a id='faq-19'></a> How do I check what version of TBS I am using?
-**After successfully installing tanzu-build-service**
-In terminal run the command `kubectl describe configMap build-service-version -n build-service`
+If you want to change this behavior, update the number of stored build pods by configuring
+`failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource by using one of the
+following methods:
 
-Under the `data` field you will see the version of TBS you are currently using.
-EX:
+- **Using the kp CLI:** Use the `--failed-build-history-limit` or `--success-build-history-limit` flags.
+- **Using YAML:** Apply YAML configurations using kubectl to update these fields.
+
+For more information, see the [kpack documentation](https://github.com/buildpacks-community/kpack/blob/main/docs/image.md).
+
+## <a id='faq-19'></a> How do I check what version of Tanzu Build Service I am using?
+
+After installing Tanzu Build Service, in terminal run the command:
+
+```console
+kubectl describe configMap build-service-version -n build-service
 ```
+
+Under the `data` field, you will see the version of Tanzu Build Service you are currently using.
+For example:
+
+```console
     data:
       version: 1.3.0
 ```
-<p class="note"><strong>Note:</strong> This will only work for TBS versions 1.2 and above</p>
 
 ## <a id='faq-20'></a> How does TBS use windows-based images?
 
