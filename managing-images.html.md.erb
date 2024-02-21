@@ -798,13 +798,13 @@ Build successful
 
 ## <a id='build-status'></a> Viewing bill of materials
 
-> **Deprecation Note:**
-> * The (legacy) CNB BOM format is deprecated, but enabled by default in Tanzu Build Service. Support can be deactivated manually by passing
-> `--data-value-yaml include_legacy_bom=false` to `ytt` when processing the Tanzu Build Service bundle or by adding
-> `include_legacy_bom=false` to your `tbs-values.yml` file.
->
-> * The ability to view bill of materials is no longer supported in kp cli v0.9.0+.
+**Deprecation Notices:**
 
+- The (legacy) CNB BOM format is deprecated, but enabled by default in Tanzu Build Service.
+  You can deactivate support manually by passing `--data-value-yaml include_legacy_bom=false`
+  to `ytt` when processing the Tanzu Build Service bundle or by adding `include_legacy_bom=false`
+  to your `tbs-values.yml` file.
+- The ability to view bill of materials is no longer supported in kp cli v0.9.0+.
 
 The kp CLI allows you to view the bill of materials in an image built by a Build.
 
