@@ -19,14 +19,14 @@ You can use the `kp` CLI to update any resource. See the kpack-cli [help text](h
 ## <a id='online-update'></a> Updating dependencies
 
 ### <a id='dependency-updater'></a> Automatically update dependencies
+
 ## Enable Automatic Dependency Updates
 
-TAP ships with the ability to configure TBS dependencies to be updated. These updates are provided through a separate package repository with available version lines for all supported TAP minor versions. Within a version line, only patch versions are incremented to avoid any possible breaking changes. Users can customize the packages that can be updated through tap-values or their full deps values.
+TBS dependencies can be configured to be automatically updated. Within a version line, only patch versions are incremented to avoid any possible breaking changes. Users can customize the packages that can be updated through tbs-values or their full deps values.
 
-1. Add the following to tap-values.yaml:
+1. Add the following to tbs-values.yaml:
 
     ```yaml
-    buildservice:
       dependency_updates:
       allow: true
       scope: <SCOPE>
@@ -40,7 +40,7 @@ TAP ships with the ability to configure TBS dependencies to be updated. These up
         - `all`: stacks, builders, and buildpacks are updated
         - `custom`: this list is empty by default, use the `include_packages` key to add packages to be updated
 
-<p class="note"><strong>Note:</strong> The TAP package install and/or the Full Deps Package install will need to be updated after changing tap-values</p>
+<p class="note"><strong>Note:</strong> The TBS package install and/or the Full Deps Package install will need to be updated after changing tbs-values</p>
 
 2. Create a secret for VMware Tanzu Network using the `tanzu` cli:
 
@@ -125,18 +125,17 @@ Build Image:    gcr.io/build-service-dev/test/build@sha256:5288d9c5b7cf7068d07b5
 
 ### <a id='online-store-update'></a> Cluster store update
 
-Cluster stores are no longer used. They have been replaced with cluster buildpacks. More info on creating clusterbuildpacks can be found on the the [Creating Custom Cluster Buildpacks](creating-custom-clusterbuildpack.html) page.
+Cluster stores are no longer used. They have been replaced with Cluster Buildpacks. More info on creating Cluster Buildpacks can be found on the the [Creating Custom Cluster Buildpacks](creating-custom-clusterbuildpack.html) page.
 
 ## <a id='offline-update'></a> Offline update of dependencies
 
 ## Enable Automatic Dependency Updates - airgapped
 
-TAP ships with the ability to configure TBS dependencies to be updated. These updates are provided through a separate package repository with available version lines for all supported TAP minor versions. Within a version line, only patch versions are incremented to avoid any possible breaking changes. Users can customize the packages that can be updated through tap-values or their full deps values.
+TBS dependencies can also be configured to be automatically updated in an airgapped environment.
 
-1. Add the following to tap-values.yaml:
+1. Add the following to tbs-values.yaml:
 
     ```yaml
-    buildservice:
       dependency_updates:
       allow: true
       scope: <SCOPE>
@@ -150,10 +149,10 @@ TAP ships with the ability to configure TBS dependencies to be updated. These up
         - `all`: stacks, builders, and buildpacks are updated
         - `custom`: this list is empty by default, use the `include_packages` key to add packages to be updated
 
-<p class="note"><strong>Note:</strong> The TAP package install and/or the Full Deps Package install will need to be updated after changing tap-values</p>
+<p class="note"><strong>Note:</strong> The TBS package install and/or the Full Deps Package install will need to be updated after changing tbs-values</p>
 
 2. Login to registry.tanzu.vmware.com and the internal repo on a machine that has internal repo access (assumes the cluster has a secret for the internal repo)
-3. relocate deps updater package repo with imgpkg to the internal repo
+3. Relocate the deps updater package repo with imgpkg to the internal repo
 4. Add the Tanzu Build Service Dependency Updates package repository by running:
 
    ```
@@ -173,4 +172,4 @@ TAP ships with the ability to configure TBS dependencies to be updated. These up
                constraints: "1.8.x"
    EOF
    ```
-5. set up ci to watch registry.tanzu.vmware.com/build-service-dependency-updater/package-repo and relocate automatically. cluster will be watching internal repo <optional, but updates wont be automatic without it>
+5. Set up ci to watch registry.tanzu.vmware.com/build-service-dependency-updater/package-repo for changes and then relocate to the internal repo automatically. The cluster will be watching the internal repo <optional, but updates wont be automatic without it>
