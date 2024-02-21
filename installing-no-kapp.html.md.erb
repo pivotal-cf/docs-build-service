@@ -5,11 +5,8 @@ owner: Build Service Team
 
 Installing Tanzu Build Service (commonly known as TBS) without kapp controller is no longer supported.
 
-Tanzu Build Service v1.13 tries to stamp out package installs.
-<!-- What does this mean? Does it mean this version removes package installs or standardizes them? -->
-Lite dependencies are now included with
-package installs so Tanzu Build Service now relies on kapp controller for installation.
+Tanzu Build Service v1.13 includes lite dependencies with package installs. Tanzu Build Service now
+relies on kapp controller for installation.
 
-Older versions of Tanzu Build Service do not have lite dependencies automatically and only works if
-you use the automatic dependency updater.
-<!-- does this mean you can only install lite deps with the auto deps updater in 1.12 and earlier? -->
+Older versions of Tanzu Build Service do not have lite dependencies automatically.
+With these versions, you can install lite dependencies if you use the automatic dependency updater.

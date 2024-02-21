@@ -208,6 +208,7 @@ The local machine must have write access to the install registry.
       include_packages: [""]
       exclude_packages: [""]
     ```
+
     <p class="note"><strong>Note:</strong>
       This installs the lite dependencies with automatic stack updates enabled.
       For more information about dependencies, see [Managing Dependencies](managing-dependencies.html).
@@ -236,7 +237,6 @@ The local machine must have write access to the install registry.
     * `https_proxy` is the HTTPS proxy to use for network traffic.
     * `no_proxy` is a comma-separated list of host names, IP addresses, or IP address ranges in CIDR format.
     These must not use a proxy.
-    <!-- should `create_secret_exports` be listed here? -->
 
 1. You can see the full values schema by running:
 
@@ -252,12 +252,23 @@ In Tanzu Build Service v1.13, this flag defaults to `true`.
 VMware plans for this flag to default to `false` in a future release, and secret exports will
 no longer be created by default when installing the Tanzu Build Service package.
 
-Previously creating the secret exports caused problems when another component also needed the secret
+Previously, creating the secret exports caused problems when another component also needed the secret
 exported.
 You can now choose to export the secret to the required namespaces manually.
 You can export secrets to all namespaces but you are only required to export to the `kpack`,
 `cert-injection-webhook`, `stacks-operator-system`, and `build-service` namespaces.
-<!-- Do we require steps for manual secret exports for users who want to set `create_secret_exports` to false? -->
+
+Example SecretExport resource required for manual secret exports:
+
+```yaml
+apiVersion: secretgen.carvel.dev/v1alpha1
+kind: SecretExport
+metadata:
+  name: my-synced-secret
+  namespace: build-service
+spec:
+  toNamespace: "kpack"
+```
 
 If you are using Tanzu Application Platform, this secret is already created and exported to all
 namespaces. There is no need to take any action.
