@@ -5,51 +5,51 @@ owner: Build Service Team
 
 This topic tells you how to add Buildpacks to Builders for your Tanzu Build Service (commonly known as TBS).
 
-## Prerequisites
+## <a id='prereqs'></a> Prerequisites
 
 Create a buildpack using [this guide](https://buildpacks.io/docs/buildpack-author-guide/create-buildpack/) in the Buildpack documentation.
 
 Package a buildpack using [this guide](https://buildpacks.io/docs/buildpack-author-guide/package-a-buildpack/) in the Buildpack documentation. The output of the buildpack creation is a buildpackage.
 
-## Procedure
+## <a id='procedure'></a> Procedure
 
 1. Add a buildpack to an existing ClusterStore:
 
-    ```
+    ```console
     kp clusterstore save <store> -b <buildpackage>
     ```
 
 2. (Optional) Create a clusterstack:
 
-    ```
+    ```console
     kp clusterstack save <stack> --build-image paketobuildpacks/build:base-cnb --run-image paketobuildpacks/run:base-cnb
     ```
 
-3. Add a buildpack to a custom builder. A buildpack can be added either to a new custom builder or to an existing one.
+3. Add a buildpack to a custom builder. You can add a buildpack either to a new custom builder or to
+   an existing one.
 
-    To create a new custom builder and add a buildpack, run:
+    - To create a new custom builder and add a buildpack, run:
 
-    ```
-    kp builder save <builder> --tag <IMAGE-TAG> --stack <stack> --store <store>  --buildpack <buildpackage>
-    ```
+        ```console
+        kp builder save <builder> --tag <IMAGE-TAG> --stack <stack> --store <store>  --buildpack <buildpackage>
+        ```
 
-    **or**
+    - To add a buildpack to an existing custom builder, run:
 
-    Add a buildpack to an existing custom builder:
+        <p class="note"><strong>Note:</strong> This only works with existing custom builders.</p>
 
-   <p class="note"><strong>Note:</strong> This only works with existing custom builders </p>
+        ```console
+        kp builder save <builder> -o <order>
+        ```
 
-    ```
-    kp builder save <builder> -o <order>
-    ```
+        Where `<order>` is a YAML file describing the new order. If there is only one detection group, with one or multiple buildpacks, you don't need to use an `<order>` file. For example:
 
-    Where `<order>` is a yaml file describing the new order. If there is only one detection group (with one or multiple buildpacks), you don't need to use an `<order>` file:
-
-    ```
-    kp builder save <builder> -b <buildpackage1> -b <buildpackage2>...
-    ```
-
+        ```consol
+        kp builder save <builder> -b <buildpackage1> -b <buildpackage2>...
+        ```
 
 4. Update an image to use the updated custom builder:
 
-    `kp image save <image> --builder <builder>`
+    ```console
+    kp image save <image> --builder <builder>
+    ```

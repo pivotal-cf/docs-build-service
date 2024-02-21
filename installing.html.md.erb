@@ -164,7 +164,8 @@ The local machine must have write access to the install registry.
       --export-to-all-namespaces --yes --namespace ${INSTALL_NAMESPACE}
     ```
 
-1. When leveraging automatic dependency updates, create the secret for the VMware Tanzu Network credentials using the `tanzu` cli:
+1. When leveraging automatic dependency updates, create the secret for the VMware Tanzu Network
+   credentials using the Tanzu CLI:
 
    ```
    tanzu secret registry add tanzunet-creds \
@@ -207,9 +208,10 @@ The local machine must have write access to the install registry.
       include_packages: [""]
       exclude_packages: [""]
     ```
-<p class="note"><strong>Note:</strong> This will install the lite dependencies with automatic stack updates enabled. For more information on dependencies see: [Managing Dependencies](managing-dependencies.html) page.  </p>
+    <p class="note"><strong>Note:</strong> This will install the lite dependencies with automatic stack updates enabled. For more information on dependencies see: [Managing Dependencies](managing-dependencies.html) page.  </p>
 
     Where:
+
     * `INSTALL_REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. Same value as used during relocation.
     * `INSTALL_NAMESPACE` is the namespace created above
     * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
