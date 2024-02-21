@@ -236,12 +236,15 @@ The local machine must have write access to the install registry.
     * `https_proxy` is the HTTPS proxy to use for network traffic.
     * `no_proxy` is a comma-separated list of host names, IP addresses, or IP address ranges in CIDR format.
     These must not use a proxy.
+    <!-- should `create_secret_exports` be listed here? -->
 
 1. You can see the full values schema by running:
 
     ```console
     tanzu package available get buildservice.tanzu.vmware.com/$TBS_VERSION --values-schema --namespace tbs-install
     ```
+
+#### <a id='secret-expotrs'></a> Secret exports
 
 As of Tanzu Build Service v1.13, the new field `create_secret_exports` is available in your
 `tbs-values.yml` file to activate or deactivate creating secret exports.
