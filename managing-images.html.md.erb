@@ -63,7 +63,7 @@ Where:
 * `cluster-builder` (optional) is the Cluster Builder name to be used in the image resource. Defaults to `default` when `builder` is not set. Cannot be used with `builder`.
 * `namespace` (optional) is the Kubernetes namespace for the image resource. Defaults to the local Kubernetes current-context namespace.
 * `service-binding` (optional) is to [bind a service](#service-bindings) to the build process. The long form is `<kind>:<apiVersion>:<name>`, but if only the `<name>` is given, the kind and apiVersion is defaulted to `Secret:v1`. You can specify the `--service-binding` flag multiple times.
-* `additional-tag` (optional) is an additional registry location where the image is created. You can 
+* `additional-tag` (optional) is an additional registry location where the image is created. You can
 specify the `--additional-tag` flag multiple times.
 * `env` (optional) is the image resource environment variable configuration as key=val pairs (`env_var=env_val`). You can specify the `--env` flag multiple times.
 * `sub-path` (optional) is the build code at the subpath located within the source code directory.
@@ -354,7 +354,7 @@ Build Service auto-rebuilds image resources when one or more of the following bu
 
 * There is a new Cluster Stack (that is, base OS image) available, such as `full`, `tiny`, or `base`.
 	- New Stack versions are made available on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on VMware Tanzu Network.
-    - You can get updates to Stacks from the VMware Tanzu Network Registry by using the `kp` CLI. For 
+    - You can get updates to Stacks from the VMware Tanzu Network Registry by using the `kp` CLI. For
     more information, see [Updating Build Service Dependencies](updating-deps.html).
 
 ### <a id='trigger-rebuild-image'></a> Trigger an image resource rebuild
@@ -799,7 +799,7 @@ Build successful
   You can deactivate support manually by passing `--data-value-yaml include_legacy_bom=false`
   to `ytt` when processing the Tanzu Build Service bundle or by adding `include_legacy_bom=false`
   to your `tbs-values.yml` file.
-- The ability to view bill of materials is no longer supported in kp cli v0.9.0+.
+- The ability to view bill of materials is no longer supported in kp CLI v0.9.0 and later.
 
 The kp CLI allows you to view the bill of materials in an image built by a Build.
 
