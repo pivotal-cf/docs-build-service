@@ -17,6 +17,7 @@
 * [**Managing Builders**](managing-builders.html)
 * [**Adding Buildpacks to Builders**](add-buildpack-to-builder.html)
 * [**Managing Custom Stacks**](managing-custom-stacks.html)
+* [**Creating Custom ClusterBuildpacks**](creating-custom-clusterbuildpack.html)
 * [**Using the kp CLI**](kp-cli.html)
 * [**RBAC in Tanzu Build Service**](tbs-rbac.html)
 * [**Using TBS in CI/CD**](tbs-in-ci.html)
