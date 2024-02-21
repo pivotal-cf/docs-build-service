@@ -27,7 +27,7 @@ To view the previous methods of installation, see [Installing without kapp contr
   `PersistentVolumeClaims` caches build artifacts, which reduces the time of subsequent builds.
 
     * For more information about persistent volumes see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/).
-    
+
     * For information about defining a default StorageClass, see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
 
 ## <a id='accept-eulas'></a> Accept Required Eulas
@@ -93,38 +93,38 @@ imgpkg tag list -i registry.tanzu.vmware.com/tanzu-application-platform/tap-pack
 
    Where:
 
-   - `MY-REGISTRY-USER` is the user with write access to `MY-REGISTRY`.  
-   - `MY-REGISTRY-PASSWORD` is the password for `MY-REGISTRY-USER`.  
-   - `MY-REGISTRY` is your own registry.  
-   - `VERSION-NUMBER` is the Tanzu Application Platform version. NOTE: To find the latest version, see [VMware Tanzu Network](https://network.tanzu.vmware.com/products/tanzu-application-platform/).  
+   - `MY-REGISTRY-USER` is the user with write access to `MY-REGISTRY`.
+   - `MY-REGISTRY-PASSWORD` is the password for `MY-REGISTRY-USER`.
+   - `MY-REGISTRY` is your own registry.
+   - `VERSION-NUMBER` is the Tanzu Application Platform version. NOTE: To find the latest version, see [VMware Tanzu Network](https://network.tanzu.vmware.com/products/tanzu-application-platform/).
    - `TARGET-REPOSITORY` is your target repository, a directory or repository on `MY-REGISTRY` that serves as the location
      for the installation files for Tanzu Application Platform.
-   
-   VMware recommends using a JSON key file to authenticate with Google Container Registry. 
+
+   VMware recommends using a JSON key file to authenticate with Google Container Registry.
    In this case, the value of `INSTALL_REGISTRY_USERNAME` is `_json_key` and
    the value of `INSTALL_REGISTRY_PASSWORD` is the content of the JSON key file.
    For more information about how to generate the JSON key file,
-   see [Google Container Registry documentation](https://cloud.google.com/container-registry/docs/advanced-authentication).  
+   see [Google Container Registry documentation](https://cloud.google.com/container-registry/docs/advanced-authentication).
 
 
 2. Relocate the images with the `imgpkg` CLI by running:
 
 	Non-Air-gapped Environments:
-	
+
    ```console
    imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:${TAP_VERSION} --to-repo ${INSTALL_REGISTRY_HOSTNAME}/${INSTALL_REPO}/tap-packages
    ```
-   
-   Air-gapped Environments: 
-   
+
+   Air-gapped Environments:
+
    ```console
     imgpkg copy \
   	-b registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:$TAP_VERSION \
    --to-tar tap-packages-$TAP_VERSION.tar \
    --include-non-distributable-layers
-      
+
    # move to computer with registry access
-      
+
    # set the same envs from above
    export INSTALL_REGISTRY_USERNAME=MY-REGISTRY-USER
    export INSTALL_REGISTRY_PASSWORD=MY-REGISTRY-PASSWORD
@@ -132,7 +132,7 @@ imgpkg tag list -i registry.tanzu.vmware.com/tanzu-application-platform/tap-pack
    export TAP_VERSION=VERSION-NUMBER
    export INSTALL_REPO=TARGET-REPOSITORY
 
-   
+
    imgpkg copy \
    --tar tap-packages-$TAP_VERSION.tar \
    --to-repo $INSTALL_REGISTRY_HOSTNAME/${INSTALL_REPO}/tap-packages \
@@ -204,13 +204,13 @@ The method of dependency installation must be decided before installing Tanzu Bu
 
 If installing the `full` dependencies, you can install the Full Deps Package repository, which is relocated to your registry and supports air-gapped environments, but needs to be upgraded with new releases of Tanzu Build Service to stay up to date. Alternatively, there is an automatic dependency updater that pulls new dependencies from VMware Tanzu Network as they are released. This can provide for a shorter time to receive updates, but requires cluster Internet access and has a longer initial install due to the relocation of dependencies that happens during installation.
 
-If installing the `lite` dependencies, you can use the bundled dependencies that are in the Tanzu Build Service package or enable the automatic dependency updates. 
+If installing the `lite` dependencies, you can use the bundled dependencies that are in the Tanzu Build Service package or enable the automatic dependency updates.
 
 
 #### <a id='install-secrets'></a> Set Up Install Secrets
 
 1. Create a secret for your `kp-default-repository` in the `tap-install` namespace:
-	
+
 	```console
     tanzu secret registry add kp-default-repository \
       --username ${KP_DEFAULT_REPOSITORY_USERNAME} \
@@ -218,7 +218,7 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
       --server ${REGISTRY_HOSTNAME} \
       --yes --namespace tap-install
 	```
-	
+
 	Where:
 
 	* `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
@@ -234,7 +234,7 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
 </p>
 
 	This is only required if enabling automatic dependency updates.
-	
+
 	```console
     tanzu secret registry add tanzunet-registry \
       --username ${TANZUNET_USERNAME} \
@@ -242,12 +242,12 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
       --server "registry.tanzu.vmware.com" \
       --yes --namespace tap-install
 	```
-	
+
 	Where:
 
-	* `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network. 
-	* `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network. 
-	
+	* `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network.
+	* `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network.
+
 #### <a id='tap-values'></a> Create Values File
 Create a `tap-values.yaml` file that contains the following:
 
@@ -264,7 +264,7 @@ buildservice:
 		namespace: tap-install
 	exclude_dependencies: <EXCLUDE_DEPENDENCIES>
 	enable_automatic_dependency_updates: <ENABLE_AUTOMATIC_DEPENDENCY_UPDATES>
-	ca_cert_data: <CA_CERT_CONTENTS>	
+	ca_cert_data: <CA_CERT_CONTENTS>
 	descriptor_name: <DESCRIPTOR_NAME>
 	injected_sidecar_support: <INJECTED_SIDECAR_SUPPORT>
 	kubernetes_version: <KUBERNETES_VERSION>
@@ -290,11 +290,11 @@ buildservice:
 
 Where:
 
-* `REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location. 
+* `REPOSITORY` is a writable repository in your registry. Tanzu Build Service Dependencies are written to this location.
 	* Docker Hub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
 	* gcr.io has the form `gcr.io/my-project/build-service`.
-	* Harbor has the form `my-harbor.io/my-project/build-service`. 
-* `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required. 
+	* Harbor has the form `my-harbor.io/my-project/build-service`.
+* `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required.
 * `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents Tanzu Build Service from installing its bundled lite dependencies.
 * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
   * `full` contains all dependencies.
@@ -302,7 +302,7 @@ Where:
 * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that is used during the build time. For more information about adding CA certificate to the run image, see [Using custom CA certificates at run time](./faq.html#faq-26).
 * `INJECTED_SIDECAR_SUPPORT` (Optional) enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/pivotal/kpack/blob/main/docs/injected_sidecars.md))
 * `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift)
-* `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift). 
+* `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift).
 
 #### <a id='example-values'></a> Example `tap-values.yml`
 
@@ -328,7 +328,7 @@ buildservice:
   kp_default_repository_secret:
 	name: kp-default-repository
 	namespace: tap-install
-  exclude_dependencies: true	
+  exclude_dependencies: true
 ```
 
 Example values for full deps automatic dependency updater install:
@@ -369,7 +369,7 @@ buildservice:
 
 #### <a id='package-install'></a> Install The Package
 2. List version information for the package by running:
-		
+
 	```console
 	tanzu package available list tap.tanzu.vmware.com --namespace tap-install
 	```
@@ -387,7 +387,7 @@ buildservice:
 	```console
 	tanzu package installed get tap -n tap-install
 	```
-	
+
 This might take 30 minutes if automatic dependency updates are being used
 
 #### <a id='install-openshift'></a> Installing on OpenShift
@@ -404,7 +404,7 @@ Installing Tanzu Build Service on OpenShift requires some extra steps.
     ```
 
 2. On OpenShift v4.10 and below, you must configure any namespaces that will have Image or Build resources after installation.
-   
+
    To do this you must configure RBAC for the service account used for Image resources (the `default` service account is used by default).
 
     Apply the following `RoleBinding`:
@@ -443,14 +443,14 @@ To install `full` dependencies:
 1. Relocate the Tanzu Build Service `full` dependencies package repository by running:
 
     For Non-Air-gapped Environments:
-    
+
     ```console
     imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:VERSION \
     --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/tbs-full-deps
     ```
-    
+
     For Air-gapped Environments:
-    
+
     ```console
     imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:VERSION \
       --to-tar=tbs-full-deps.tar

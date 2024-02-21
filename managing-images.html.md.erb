@@ -17,7 +17,8 @@ The following procedures describe how to create and manage image resources in Bu
 
 - [Access to a cluster](accessing-tbs.html) running Build Service.
 - Configured write [secrets](managing-secrets.html) for your Docker registry.
-- kp CLI v0.11.x with Tanzu Build Service v1.12.x. Use the `kp` CLI to manage image resources and builds. For more information, see [kpack-cli documentation](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+- kp CLI v0.11.x with Tanzu Build Service v1.13.x. Use the `kp` CLI to manage image resources and builds. For more information, see [kpack-cli documentation](https://github.com/vmware-tanzu/kpack-cli/blob/v0.2.0/docs/kp.md).
+
 
 ### Source Code
 
@@ -359,7 +360,7 @@ Build Service auto-rebuilds image resources when one or more of the following bu
 
 * There is a new Cluster Stack (that is, base OS image) available, such as `full`, `tiny`, or `base`.
 	- New Stack versions are made available on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies) page on VMware Tanzu Network.
-    - You can get updates to Stacks from the VMware Tanzu Network Registry by using the `kp` CLI. For 
+    - You can get updates to Stacks from the VMware Tanzu Network Registry by using the `kp` CLI. For
     more information, see [Updating Build Service Dependencies](updating-deps.html).
 
 ### <a id='trigger-rebuild-image'></a> Trigger an image resource rebuild
