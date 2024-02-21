@@ -9,7 +9,7 @@ This topic provides you with the answers to commonly asked questions about Tanzu
 
 **CNBs** are build tools that adhere to the <a href="https://github.com/buildpacks/spec">CNB v3 Specification</a> and transform source code into an OCI compliant runnable image. The v3 specification, lifecycle, and local CLI (`pack`) are governed by the open source <a href="https://buildpacks.io">Cloud Native Buildpacks project.</a>
 
-<a href="https://github.com/pivotal/kpack">kpack</a> is a collection of open source resource controllers that together function as a Kubernetes native build service. The product provides a declarative image type that builds an image and schedules image rebuilds when dependencies of the image change. kpack is a platform implementation of CNBs in that it utilizes CNBs and the v3 lifecycle to execute image builds.
+<a href="https://github.com/buildpacks-community/kpack">kpack</a> is a collection of open source resource controllers that together function as a Kubernetes native build service. The product provides a declarative image type that builds an image and schedules image rebuilds when dependencies of the image change. kpack is a platform implementation of CNBs in that it utilizes CNBs and the v3 lifecycle to execute image builds.
 
 **Tanzu Build Service** is a commercial product owned and operated by VMware that utilizes kpack and CNBs. Build Service provides additional abstractions intended to ease the use of the above technologies in Enterprise settings. These abstractions are covered in detail throughout the documentation on this site. Additionally, customers of Build Service are entitled to support and VMware Tanzu  buildpacks.
 
@@ -347,7 +347,7 @@ as they sometimes differ from local credentials:
 
 ## <a id='faq-18'></a> Why does TBS leave behind pods after builds on my Cluster?
 
-All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This is not currently supported in the `kp` CLI, but users can apply yaml configuration using `kubectl` to update these fields.  Follow [this link](https://github.com/pivotal/kpack/blob/main/docs/image.md) for documentation.
+All TBS builds happen in pods.  By default, TBS will not delete the last ten successful builds and the last ten failed builds for the purpose of providing historical logging and debugging.  If this behavior is not desired, users can configure the number of stored build pods by modifying the `failedBuildHistoryLimit` and `successBuildHistoryLimit` on the Image resource.  This is not currently supported in the `kp` CLI, but users can apply yaml configuration using `kubectl` to update these fields.  Follow [this link](https://github.com/buildpacks-community/kpack/blob/main/docs/image.md) for documentation.
 
 ## <a id='faq-19'></a> How do I check what version of TBS I am using?
 **After successfully installing tanzu-build-service**
