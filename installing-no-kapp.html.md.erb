@@ -65,9 +65,12 @@ for authentication with registries.
 
 ## <a id='DeprecatedFeatures'></a> Deprecated Features
 
-* The (legacy) CNB BOM format is deprecated, but enabled by default in TBS. Support can be deactivated manually by passing
-`--data-value-yaml include_legacy_bom=false` to `ytt` when processing the TBS bundle or by adding
-`include_legacy_bom=false` to your `tbs-values.yml` file.
+The legacy Cloud Native Buildpack Bill of Materials (CNB BOM) format is deprecated and is now
+deactivated by default in Tanzu Build Service.
+If required, you can activate it manually by passing `--data-value-yaml include_legacy_bom=true`
+to `ytt` when processing the Tanzu Build Service bundle or by adding `include_legacy_bom=true`
+to your `tbs-values.yml` file.
+The feature will be removed in Tanzu Build Service v1.13.
 
 ## <a id='install'></a> Installing
 
