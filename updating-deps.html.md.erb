@@ -126,4 +126,10 @@ TBS dependencies can also be configured to be automatically updated in an airgap
                constraints: "1.8.x"
    EOF
    ```
-5. Set up ci to watch registry.tanzu.vmware.com/build-service-dependency-updater/package-repo for changes and then relocate to the internal repo automatically. The cluster will be watching the internal repo <optional, but updates wont be automatic without it>
+5. Set up a job to watch `registry.tanzu.vmware.com/build-service-dependency-updater/package-repo` for changes and then relocate to the internal repo using: 
+
+```console
+    imgpkg copy -b build-service-dependency-updater/package-repo:<LATEST-VERSION-FOR-TBS-MINOR> --to-repo=${INTERNAL_REPOSITORY}
+    ```  
+
+The cluster will be watching the internal repo. This step is optional, but updates won't be completely automatic without it.
