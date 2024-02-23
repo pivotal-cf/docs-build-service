@@ -13,19 +13,21 @@ Package a buildpack using [this guide](https://buildpacks.io/docs/buildpack-auth
 
 ## <a id='procedure'></a> Procedure
 
-1. Add a buildpack to an existing ClusterStore:
+1. Create a buildpack to an existing ClusterStore:
 
     ```console
     kp clusterstore save <store> -b <buildpackage>
     ```
 
-2. (Optional) Create a clusterstack:
+    2. Alternatively, you can [create a Buildpack Resource](managing-buildpacks.html.md.erb) if you are not using ClusterStores
+
+3. (Optional) Create a clusterstack:
 
     ```console
     kp clusterstack save <stack> --build-image paketobuildpacks/build:base-cnb --run-image paketobuildpacks/run:base-cnb
     ```
 
-3. Add a buildpack to a custom builder. You can add a buildpack either to a new custom builder or to
+4. Add a buildpack to a custom builder. You can add a buildpack either to a new custom builder or to
    an existing one.
 
     - To create a new custom builder and add a buildpack, run:
@@ -48,7 +50,7 @@ Package a buildpack using [this guide](https://buildpacks.io/docs/buildpack-auth
         kp builder save <builder> -b <buildpackage1> -b <buildpackage2>...
         ```
 
-4. Update an image to use the updated custom builder:
+5. Update an image to use the updated custom builder:
 
     ```console
     kp image save <image> --builder <builder>
