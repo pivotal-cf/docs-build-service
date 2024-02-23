@@ -268,6 +268,8 @@ buildservice:
 	descriptor_name: <DESCRIPTOR_NAME>
 	injected_sidecar_support: <INJECTED_SIDECAR_SUPPORT>
 	generate_slsa_attestation: <GENERATE_SLSA_ATTESTATION>
+	enable_ubi_builder: <ENABLE_UBI_BUILDER>
+	enable_static_builder: <ENABLE_STATIC_BUILDER>
 	kubernetes_version: <KUBERNETES_VERSION>
 	kubernetes_distribution: <KUBERNETES_DISTRIBUTION>
 ```
@@ -303,6 +305,8 @@ Where:
 * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that is used during the build time. For more information about adding CA certificate to the run image, see [Using custom CA certificates at run time](./faq.html#faq-26).
 * `INJECTED_SIDECAR_SUPPORT` (Optional) enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/buildpacks-community/kpack/blob/main/docs/injected_sidecars.md))
 * `GENERATE_SLSA_ATTESTATION` (Optional) enable support for [SLSA attestations](slsa-attestations.md)
+* `ENABLE_UBI_BUILDER` (Optional) enable the UBI 8 Standard builder
+* `ENABLE_STATIC_BUILDER` (Optional) enable the Jammy Static builder
 * `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift)
 * `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift).
 
