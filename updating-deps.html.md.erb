@@ -75,57 +75,11 @@ For more information on adding new buildpack versions or updating buildpacks out
 
 ### <a id='online-stack-update'></a> Cluster stacks update
 
-Cluster stacks are now managed by kapp controller. You need to create new resources and reference them in your builder if you want to change them.
-
-This section describes how to update individual cluster stacks. This provides a more fine-grained way to patch operating system packages.
-
-New stack versions are provided on the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/) page on Tanzu Network.
-
-To update specific cluster stacks, go to the latest release of the [Tanzu Build Service Dependencies](https://network.tanzu.vmware.com/products/tbs-dependencies/)
-page on Tanzu Network to find the image references and their `<sha256>` sums. Example commands are provided on this page.
-
-Use the following `kp` CLI commands to update the desired stack:
-
-```
-kp clusterstack update base \
-  --build-image registry.tanzu.vmware.com/tbs-dependencies/build-base@<sha256> \
-  --run-image registry.tanzu.vmware.com/tbs-dependencies/run-base@<sha256>
-
-kp clusterstack update default \
-  --build-image registry.tanzu.vmware.com/tbs-dependencies/build-full@<sha256> \
-  --run-image registry.tanzu.vmware.com/tbs-dependencies/run-full@<sha256>
-
-kp clusterstack update full \
-  --build-image registry.tanzu.vmware.com/tbs-dependencies/build-full@<sha256> \
-  --run-image registry.tanzu.vmware.com/tbs-dependencies/run-full@<sha256>
-
-kp clusterstack update tiny \
-  --build-image registry.tanzu.vmware.com/tbs-dependencies/build-tiny@<sha256> \
-  --run-image registry.tanzu.vmware.com/tbs-dependencies/run-tiny@<sha256>
-```
-
-<p class="note"><strong>Note:</strong> Both build and run images need to be provided to update the stack.</p>
-
-To view the updated ClusterStack, run:
-
-```
-kp clusterstack status <stack-name>
-```
-
-Example output:
-
-```
-$ kp clusterstack status tiny
-Status:         Ready
-Id:             io.paketo.stacks.tiny
-Run Image:      gcr.io/build-service-dev/test/run@sha256:34b01fd9a3745fcaa345f8993938291c931f7977cc2bee78ed377da2edc55e3d
-Build Image:    gcr.io/build-service-dev/test/build@sha256:5288d9c5b7cf7068d07b5a184f3ec2f124fbc5842401b8b23c74485c4d2ba23a
-
-```
+Cluster stacks are now managed by kapp controller. You need to create new resources and reference them in your builder if you want to change them. More info on managing stacks can be found on the [Managing Stacks](managing-stacks.html) page.
 
 ### <a id='online-store-update'></a> Cluster store update
 
-Cluster stores are no longer used. They have been replaced with Cluster Buildpacks. More info on creating Cluster Buildpacks can be found on the the [Creating Custom Cluster Buildpacks](creating-custom-clusterbuildpack.html) page.
+We now use Cluster buildpacks instead of Cluster stores. You can still use Cluster stores but Cluster buildpacks are recommended. More info on creating Cluster Buildpacks can be found on the [Creating Custom Cluster Buildpacks](creating-custom-clusterbuildpack.html) page.
 
 ## <a id='offline-update'></a> Offline update of dependencies
 
