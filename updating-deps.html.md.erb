@@ -108,6 +108,7 @@ TBS dependencies can also be configured to be automatically updated in an airgap
 2. Login to registry.tanzu.vmware.com and the internal repo on a machine that has internal repo access (assumes the cluster has a secret for the internal repo)
 3. Relocate the deps updater package repo with imgpkg to the internal repo
 4. Add the Tanzu Build Service Dependency Updates package repository by running:
+<p class="note"><strong>Note:</strong> The automatic dependency updater follows a different version than TBS. It uses the TAP version to align with our recommended install method. TBS 1.13 corresponds to dependency version `1.8.x`</p>
 
    ```
    kubectl apply -f - <<EOF
