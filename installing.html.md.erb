@@ -200,7 +200,8 @@ The local machine must have write access to the install registry.
       namespace: <INSTALL_NAMESPACE>
     install_namespace: <INSTALL_NAMESPACE>
     ca_cert_data: <CA_CERT_CONTENTS> (optional)
-    injected_sidecar_support: true (optional)
+    injected_sidecar_support: <INJECTED_SIDECAR_SUPPORT> (optional)
+    generate_slsa_attestation: <GENERATE_SLSA_ATTESTATION> (optional)
     exclude_dependencies: false
     create_secret_exports: true
     dependency_updates:
@@ -221,6 +222,7 @@ The local machine must have write access to the install registry.
     * `INSTALL_NAMESPACE` is the namespace created above
     * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This should be the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
     * `INJECTED_SIDECAR_SUPPORT` Optionally enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/buildpacks-community/kpack/blob/v0.10.0/docs/injected_sidecars.md))
+    * `GENERATE_SLSA_ATTESTATION` (Optional) enable support for [SLSA attestations](slsa-attestations.md)
 
 1. Install the package:
 
