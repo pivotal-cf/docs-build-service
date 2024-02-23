@@ -268,8 +268,6 @@ buildservice:
 	descriptor_name: <DESCRIPTOR_NAME>
 	injected_sidecar_support: <INJECTED_SIDECAR_SUPPORT>
 	generate_slsa_attestation: <GENERATE_SLSA_ATTESTATION>
-	enable_ubi_builder: <ENABLE_UBI_BUILDER>
-	enable_static_builder: <ENABLE_STATIC_BUILDER>
 	kubernetes_version: <KUBERNETES_VERSION>
 	kubernetes_distribution: <KUBERNETES_DISTRIBUTION>
 ```
@@ -305,8 +303,6 @@ Where:
 * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that is used during the build time. For more information about adding CA certificate to the run image, see [Using custom CA certificates at run time](./faq.html#faq-26).
 * `INJECTED_SIDECAR_SUPPORT` (Optional) enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/buildpacks-community/kpack/blob/main/docs/injected_sidecars.md))
 * `GENERATE_SLSA_ATTESTATION` (Optional) enable support for [SLSA attestations](slsa-attestations.md)
-* `ENABLE_UBI_BUILDER` (Optional) enable the UBI 8 Standard builder
-* `ENABLE_STATIC_BUILDER` (Optional) enable the Jammy Static builder
 * `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift)
 * `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift).
 
@@ -438,6 +434,7 @@ Installing Tanzu Build Service on OpenShift requires some extra steps.
 
 ## <a id='full-deps-package-install'></a> Install the Full Dependencies Package
 
+
 To install `full` dependencies:
 
 1. Get the version of the Tanzu Build Service by running:
@@ -452,7 +449,7 @@ To install `full` dependencies:
 
     ```console
     imgpkg copy -b registry.tanzu.vmware.com/tanzu-application-platform/full-tbs-deps-package-repo:VERSION \
-    --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/tbs-full-deps
+    --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/full-deps-package-repo
     ```
 
     For Air-gapped Environments:
@@ -462,7 +459,7 @@ To install `full` dependencies:
       --to-tar=tbs-full-deps.tar
     # move tbs-full-deps.tar to environment with registry access
     imgpkg copy --tar tbs-full-deps.tar \
-      --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/tbs-full-deps
+      --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/full-deps-package-repo
     ```
 
     Where:
@@ -475,7 +472,7 @@ To install `full` dependencies:
 
     ```console
     tanzu package repository add tbs-full-deps-repository \
-      --url INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/tbs-full-deps:VERSION \
+      --url INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/full-deps-package-repo:VERSION \
       --namespace tap-install
     ```
 
@@ -485,10 +482,43 @@ To install `full` dependencies:
     - `TARGET-REPOSITORY` is your target repository.
     - `VERSION` is the version of the Tanzu Build Service package you retrieved earlier.
 
+1. Create a new `tbs-full-deps-values.yaml` and copy the `kp_default_repository`
+   key-value pair from your `tbs-values.yaml` or `tap-values.yaml`:
+
+   ```yaml
+   ---
+     kp_default_repository: "REPO-NAME"
+     kp_default_repository_secret:
+       name: kp-default-repository-creds
+       namespace: tap-install
+   ```
+
+   a. (Optional) Install the UBI builder. The UBI builder is a builder based on Red
+      Hat UBI 8 for the build and run image. The only languages supported by this
+      builder is Java and Node.js. If you would like to install the UBI builder,
+      add the key-value pair `enable_ubi_builder: true` to your `tbs-full-deps-values.yaml`.
+
+       ```yaml
+       ---
+       enable_ubi_builder: true
+       ```
+
+   b. (Optional) Install the Static builder. The Static builder is based on Ubuntu
+      Jammy for the build image and a minimal static run image, the only languages
+      supported is Golang. If you would like to install the Static builder,
+      add the key-value pair `enable_static_builder: true` to your `tbs-full-deps-values.yaml`.
+
+       ```yaml
+       ---
+       enable_static_builder: true
+       ```
+
 1. Install the `full` dependencies package by running:
 
     ```console
-    tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v VERSION -n tap-install
+    tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v VERSION -n tap-install -v VALUES-FILE
     ```
 
-    Where `VERSION` is the version of the Tanzu Build Service package you retrieved earlier.
+    Where:
+    - `VERSION` is the version of the Tanzu Build Service package you retrieved earlier.
+    - `VALUES-FILE` is the path the `tbs-full-deps-values.yaml` file you created earlier.
