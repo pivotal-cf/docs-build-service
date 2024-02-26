@@ -78,18 +78,17 @@ The following Stacks and their updates can be found on the [Tanzu Build Service 
 | base-jammy | io.buildpacks.stacks.jammy |
 | full-jammy | io.buildpacks.stacks.jammy |
 
-### <a id='descriptors'></a> Descriptors
+### <a id='dependencies'></a> Descriptors
 
-Tanzu Build Service descriptors are curated sets of dependencies, including stacks and buildpacks, that are
-continuously released on [VMware Tanzu Network](https://network.tanzu.vmware.com/products/tbs-dependencies/) to resolve all workload
-Critical and High CVEs.
-Descriptors are imported into Tanzu Build Service to update the entire cluster.
+Tanzu Build Service dependencies are curated sets of stacks, buildpacks, and builders that are
+continuously released to resolve all workload Critical and High CVEs.
+Dependencies can be configured to automatically update. See [Updating Dependencies](./updating-deps.html)
 
-There are two types of descriptor, `lite` and `full`.
-The different descriptors can apply to different use cases and workload types.
-You can configure which descriptor is imported when installing Tanzu Build Service.
+There are two types of dependencies available for TBS, `lite` and `full`.
+They  can apply to different use cases and workload types.
+You can configure which dependencies to use when installing Tanzu Build Service.
 
-For more information, see [Descriptors](./descriptors.html).
+For more information, see [Dependencies](./dependencies.html).
 
 ### <a id='upgrading-dependencies'></a> Updating Build Service Dependencies
 

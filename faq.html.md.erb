@@ -391,32 +391,6 @@ By default, `imgpkg` will not relocate the proprietary windows layers to your re
 
 "Image resource" describes a kubernetes custom resource that produces OCI images by way of build resources. This resource will continue producing new builds that, when successful, output container images to the registry as configured by the image resource.
 
-## <a id='faq-22'></a> Pinning the Tanzu Net Updater
-
-When you configure the Tanzu Network Auto Updater during installation, dependencies are pulled in from network.tanzu.vmware.com as they are released to keep the all app OCI images up-to-date and patched.
-
-Using the steps from the installation docs will result in all dependencies to stay up-to-date with the latest buildpacks.
-
-To pin to a TBS "descriptor" version, find the desired version of the descriptor from the [TBS Dependencies Tanzu Network](https://network.tanzu.vmware.com/products/tbs-dependencies/) page. Run the following command to re-install TBS:
-
-```
-ytt -f /tmp/bundle/config/ \
-	-v kp_default_repository='<IMAGE-REPOSITORY>' \
-	-v kp_default_repository_username='<REGISTRY-USERNAME>' \
-	-v kp_default_repository_password='<REGISTRY-PASSWORD>' \
-	--data-value-yaml pull_from_kp_default_repo=true \
-	-v tanzunet_username='<TANZUNET-USERNAME>' \
-	-v tanzunet_password='<TANZUNET-PASSWORD>' \
-	-v descriptor_name='<DESCRIPTOR-NAME>' \
-	-v descriptor_version='<DESCRIPTOR-VERSION>' \
-	| kbld -f /tmp/bundle/.imgpkg/images.yml -f- \
-	| kapp deploy -a tanzu-build-service -f- -y
-```
-
-Where:
-
-* `DESCRIPTOR-VERSION` is the desired descriptor version from the [TBS Dependencies Tanzu Network](https://network.tanzu.vmware.com/products/tbs-dependencies/) page.
-
 ## <a id='faq-23'></a> Build pods showing volume errors on EKS running Kubernetes 1.23
 
 In Kubernetes 1.23 on EKS, the [CSIMigrationAWS in this K8s version version](https://aws.amazon.com/blogs/containers/amazon-eks-now-supports-kubernetes-1-23/) means that users need to install the [Amazon EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
