@@ -71,7 +71,7 @@ TBS dependencies can be configured to be automatically updated. Within a version
    EOF
    ```
 
-For more information on adding new buildpack versions or updating buildpacks out of band, see the [Creating Custom Cluster Buildpacks](creating-custom-clusterbuildpack.html) page.
+For more information on adding new buildpack versions or updating buildpacks out of band, see the [Creating Custom Cluster Buildpacks](managing-buildpacks.html) page.
 
 ### <a id='online-stack-update'></a> Cluster stacks update
 
@@ -79,7 +79,7 @@ Cluster stacks are now managed by kapp controller. You need to create new resour
 
 ### <a id='online-store-update'></a> Cluster store update
 
-We now use Cluster buildpacks instead of Cluster stores. You can still use Cluster stores but Cluster buildpacks are recommended. More info on creating Cluster Buildpacks can be found on the [Creating Custom Cluster Buildpacks](creating-custom-clusterbuildpack.html) page.
+We now use Cluster buildpacks instead of Cluster stores. You can still use Cluster stores but Cluster buildpacks are recommended. More info on creating Cluster Buildpacks can be found on the [Creating Custom Cluster Buildpacks](managing-buildpacks.html) page.
 
 ## <a id='offline-update'></a> Offline update of dependencies
 
@@ -127,10 +127,10 @@ TBS dependencies can also be configured to be automatically updated in an airgap
                constraints: "1.8.x"
    EOF
    ```
-5. Set up a job to watch `registry.tanzu.vmware.com/build-service-dependency-updater/package-repo` for changes and then relocate to the internal repo using: 
+5. Set up a job to watch `registry.tanzu.vmware.com/build-service-dependency-updater/package-repo` for changes and then relocate to the internal repo using:
 
 ```console
     imgpkg copy -b build-service-dependency-updater/package-repo:<LATEST-VERSION-FOR-TBS-MINOR> --to-repo=${INTERNAL_REPOSITORY}
-    ```  
+    ```
 
 The cluster will be watching the internal repo. This step is optional, but updates won't be completely automatic without it.

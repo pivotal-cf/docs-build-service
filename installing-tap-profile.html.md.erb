@@ -206,49 +206,42 @@ If installing the `full` dependencies, you can install the Full Deps Package rep
 
 If installing the `lite` dependencies, you can use the bundled dependencies that are in the Tanzu Build Service package or enable the automatic dependency updates.
 
-
 #### <a id='install-secrets'></a> Set Up Install Secrets
 
 1. Create a secret for your `kp-default-repository` in the `tap-install` namespace:
 
-	```console
-    tanzu secret registry add kp-default-repository \
-      --username ${KP_DEFAULT_REPOSITORY_USERNAME} \
-      --password ${KP_DEFAULT_REPOSITORY_PASSWORD} \
-      --server ${REGISTRY_HOSTNAME} \
-      --yes --namespace tap-install
-	```
+    ```console
+      tanzu secret registry add kp-default-repository \
+        --username ${KP_DEFAULT_REPOSITORY_USERNAME} \
+        --password ${KP_DEFAULT_REPOSITORY_PASSWORD} \
+        --server ${REGISTRY_HOSTNAME} \
+        --yes --namespace tap-install
+    ```
 
-	Where:
+    Where:
 
-	* `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
-	* `KP_DEFAULT_REPOSITORY_USERNAME` is the registry user name. Same value as used during relocation.
-	* `KP_DEFAULT_REPOSITORY_PASSWORD` is the registry password. Same value as used during relocation.
+    * `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
+    * `KP_DEFAULT_REPOSITORY_USERNAME` is the registry user name. Same value as used during relocation.
+    * `KP_DEFAULT_REPOSITORY_PASSWORD` is the registry password. Same value as used during relocation.
 
-2. Create a secret for VMware Tanzu Network in the `tap-install` namespace
+2. Create a secret for VMware Tanzu Network in the `tap-install` namespace.
+	 This is only required if enabling automatic dependency updates.
 
-<p class="note warning"><strong>Important:</strong>
-    There is a known issue with the automatic dependency updater not being created when installing
-    TBS from Tanzu Application Profile v1.6.1 or v1.6.2. See the [depedency updater hotfix](#deps-updater-hotfix)
-    for workaround.
-</p>
+    ```console
+      tanzu secret registry add tanzunet-registry \
+        --username ${TANZUNET_USERNAME} \
+        --password ${TANZUNET_PASSWORD} \
+        --server "registry.tanzu.vmware.com" \
+        --yes --namespace tap-install
+    ```
 
-	This is only required if enabling automatic dependency updates.
+    Where:
 
-	```console
-    tanzu secret registry add tanzunet-registry \
-      --username ${TANZUNET_USERNAME} \
-      --password ${TANZUNET_PASSWORD} \
-      --server "registry.tanzu.vmware.com" \
-      --yes --namespace tap-install
-	```
-
-	Where:
-
-	* `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network.
-	* `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network.
+    * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network.
+    * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network.
 
 #### <a id='tap-values'></a> Create Values File
+
 Create a `tap-values.yaml` file that contains the following:
 
 ```yaml
@@ -273,9 +266,9 @@ buildservice:
 ```
 
 <p class="note"><strong>Note:</strong>
-There is a known issue with using `tanzunet_secret` on Tanzu Application
+There is a known issue with using <code>tanzunet_secret</code> on Tanzu Application
 Platform version v1.5.4, the workaround is to remove that block and use the
-`tanzunet_username` and `tanzunet_password` fields instead.
+<code>tanzunet_username</code> and <code>tanzunet_password</code> fields instead.
 </p>
 
 ```yaml
@@ -295,15 +288,23 @@ Where:
 	* Docker Hub has the form `my-dockerhub-username/build-service` or `index.docker.io/my-dockerhub-username/build-service`.
 	* gcr.io has the form `gcr.io/my-project/build-service`.
 	* Harbor has the form `my-harbor.io/my-project/build-service`.
+
 * `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is set to `true` to pull dependencies directly from Tanzu Network as soon as they are released. This is not supported in air-gapped environments. If this is set to `true`, `exclude_dependencies: true` is required.
+
 * `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents Tanzu Build Service from installing its bundled lite dependencies.
+
 * `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
   * `full` contains all dependencies.
   * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
+
 * `CA_CERT_CONTENTS` *must be provided when using a registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that is used during the build time. For more information about adding CA certificate to the run image, see [Using custom CA certificates at run time](./faq.html#faq-26).
-* `INJECTED_SIDECAR_SUPPORT` (Optional) enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/buildpacks-community/kpack/blob/main/docs/injected_sidecars.md))
-* `GENERATE_SLSA_ATTESTATION` (Optional) enable support for [SLSA attestations](slsa-attestations.md)
-* `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift)
+
+* (Optional) `INJECTED_SIDECAR_SUPPORT` use to enable support for Tanzu Service Mesh and Istio ([Documentation](https://github.com/buildpacks-community/kpack/blob/main/docs/injected_sidecars.md)).
+
+* (Optional) `GENERATE_SLSA_ATTESTATION` use to enable support for [SLSA attestations](slsa-attestations.md).
+
+* `KUBERNETES_VERSION` is the major.minor version of Kubernetes, for example, `1.25` (Optional when not installing on OpenShift).
+
 * `KUBERNETES_DISTRIBUTION` is the Kubernetes provider that you are using. This field is required to [deploy on OpenShift](#install-openshift).
 
 #### <a id='example-values'></a> Example `tap-values.yml`
@@ -482,41 +483,43 @@ To install `full` dependencies:
     - `TARGET-REPOSITORY` is your target repository.
     - `VERSION` is the version of the Tanzu Build Service package you retrieved earlier.
 
-1. Create a new `tbs-full-deps-values.yaml` and copy the `kp_default_repository`
-   key-value pair from your `tbs-values.yaml` or `tap-values.yaml`:
+1. Create a new `tbs-full-deps-values.yaml` file and copy the `kp_default_repository`
+   key-value pair from your `tbs-values.yaml` or `tap-values.yaml` file:
 
-   ```yaml
-   ---
-     kp_default_repository: "REPO-NAME"
-     kp_default_repository_secret:
-       name: kp-default-repository-creds
-       namespace: tap-install
-   ```
+    ```yaml
+    ---
+      kp_default_repository: "REPO-NAME"
+      kp_default_repository_secret:
+        name: kp-default-repository-creds
+        namespace: tap-install
+    ```
 
-   a. (Optional) Install the UBI builder. The UBI builder is a builder based on Red
-      Hat UBI 8 for the build and run image. The only languages supported by this
-      builder is Java and Node.js. If you would like to install the UBI builder,
-      add the key-value pair `enable_ubi_builder: true` to your `tbs-full-deps-values.yaml`.
+    - (Optional) Install the UBI builder.
 
-       ```yaml
-       ---
-       enable_ubi_builder: true
-       ```
+      The UBI builder is based on Red Hat Universal Base Image (UBI) v8 for the build and run image.
+      This builder only supports Java and Node.js. To install the UBI builder, add the key-value pair
+      `enable_ubi_builder: true` to your `tbs-full-deps-values.yaml` file.
 
-   b. (Optional) Install the Static builder. The Static builder is based on Ubuntu
-      Jammy for the build image and a minimal static run image, the only languages
-      supported is Golang. If you would like to install the Static builder,
-      add the key-value pair `enable_static_builder: true` to your `tbs-full-deps-values.yaml`.
+        ```yaml
+        ---
+        enable_ubi_builder: true
+        ```
 
-       ```yaml
-       ---
-       enable_static_builder: true
-       ```
+    - (Optional) Install the Static builder.
+
+      The Static builder is based on Ubuntu Jammy for the build image and a minimal static run image.
+      This builder only supports Golang. To install the Static builder, add the key-value pair
+      `enable_static_builder: true` to your `tbs-full-deps-values.yaml` file.
+
+        ```yaml
+        ---
+        enable_static_builder: true
+        ```
 
 1. Install the `full` dependencies package by running:
 
     ```console
-    tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v VERSION -n tap-install -v VALUES-FILE
+    tanzu package install full-tbs-deps -p full-tbs-deps.tanzu.vmware.com -v VERSION -n tap-install --values-file VALUES-FILE
     ```
 
     Where:
