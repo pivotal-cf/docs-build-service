@@ -16,6 +16,13 @@ This topic describes the changes in Tanzu Build Service (commonly known as TBS).
 
 - The legacy Cloud Native Buildpack Bill of Materials (CNB BOM) format has been removed.
 
+- kapp based installs are no longer supported. TBS requires kapp-controller to be installed.
+
+- ClusterStores are no longer created by default during install. 
+  Buildpacks are now represented by (Cluster)Buildpack resources.
+
+- The TanzunetDependencyUpdater is removed and replaced with a new Dependency Updater with enhanced configuration options
+
 ### New Features
 
 - Tanzu Build Service can now generate Supply-chain Levels for Software Artifacts (SLSA) attestations.
@@ -27,6 +34,12 @@ This topic describes the changes in Tanzu Build Service (commonly known as TBS).
   and `enable_startic_builder` fields during [Installation](installing.md#install).
 
   For the supported languages for these builders, see the [Tanzu Stacks documentation](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html).
+
+- Dependency updates now allow configuration for exactly which dependencies get updated.
+
+  See [Updating Dependencies](updating-deps.html) for more info.
+
+- Kp cli now supports configuring `failedBuildHistoryLimit` and `successBuildHistoryLimit` on images
 
 ### Product Snapshot
 
