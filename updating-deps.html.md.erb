@@ -5,132 +5,189 @@ owner: Build Service Team
 
 This topic tells you how to update your Tanzu Build Service (commonly known as TBS) dependencies.
 
-Keeping applications up-to-date with the latest dependency patches is a core feature of Tanzu Build Service. Updates to dependencies will be propagated to application images. The resources that account for these patches are:
+Keeping applications up to date with the latest dependency patches is a core feature of
+Tanzu Build Service. Updates to dependencies are propagated to application images.
 
-- **ClusterStacks** - Update a ClusterStack to patch operating system packages.
+The resources that account for these patches are ClusterStacks. Update a ClusterStack to patch
+operating system packages.
 
-You can use the `kp` CLI to update any resource. See the kpack-cli [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md) on GitHub.
+You can use the `kp` CLI to update any resource.
+See the kpack-cli [help text](https://github.com/vmware-tanzu/kpack-cli/blob/v0.4.0/docs/kp.md) on GitHub.
 
 <p class='note'>
   <strong>Note:</strong> These docs assume you are using kp CLI v0.11.x with Tanzu Build Service v1.13.x.
   If a feature is not working, you might need to upgrade your CLI.
 </p>
 
-## <a id='online-update'></a> Updating dependencies
+## <a id='online-update'></a> Update dependencies
 
-### <a id='dependency-updater'></a> Automatically update dependencies
+This section describes how to update dependencies in an online environment.
 
-## Enable Automatic Dependency Updates
+### <a id='dependency-updater'></a> Enable automatic dependencies update
 
-TBS dependencies can be configured to be automatically updated. Within a version line, only patch versions are incremented to avoid any possible breaking changes. Users can customize the packages that can be updated through tbs-values or their full deps values.
+You can configure automatic dependencies updates for Tanzu Build Service dependencies.
+Within a version line, only patch versions are incremented to avoid any possible breaking changes.
+You can customize the packages that you want the automatic dependency updater to update through the
+`tbs-values.yaml` or your full dependencies values.
 
 1. Add the following to tbs-values.yaml:
 
     ```yaml
       dependency_updates:
         allow: true
-        scope: <SCOPE>
+        scope: SCOPE
         include_packages: [""]
         exclude_packages: [""]
     ```
+
     Where:
-    - `SCOPE` is the list of dependencies you would like to be updated.
-        The options are:
-        - `stacks-only` (default value): only stacks and builders are updated
-        - `all`: stacks, builders, and buildpacks are updated
-        - `custom`: this list is empty by default, use the `include_packages` key to add packages to be updated
 
-<p class="note"><strong>Note:</strong> The TBS package install and/or the Full Deps Package install will need to be updated after changing tbs-values</p>
+    - `SCOPE` is the list of dependencies you want to be updated. The options are:
+      - `stacks-only` (default): Only stacks and builders are updated
+      - `all`: Stacks, builders, and buildpacks are updated
+      - `custom`: This list is empty by default. To add the packages you want updated, use the
+        `include_packages` key.
 
-2. Create a secret for VMware Tanzu Network using the `tanzu` cli:
+    <p class="note"><strong>Note:</strong>
+      You must update the Tanzu Build Service package install and the Full Dependencies package install
+      after changing <code>tbs-values.yaml</code> file.
+    </p>
 
-    ```commandline
-     tanzu secret registry add tanzunet-creds \
-     --server "registry.tanzu.vmware.com" \
-     --username "${TANZUNET_REGISTRY_USERNAME}" \
-     --password "${TANZUNET_REGISTRY_PASSWORD}" \
-     --namespace ${INSTALL_NAMESPACE}
-   ```
-3. Add the Tanzu Build Service Dependency Updates package repository by running:
+1. Create a secret for VMware Tanzu Network using the Tanzu CLI:
 
-   ```
-   kubectl apply -f - <<EOF
-     apiVersion: packaging.carvel.dev/v1alpha1
-     kind: PackageRepository
-     metadata:
-       name: tbs-dependencies-package-repository
-       namespace: tap-install
-     spec:
-       fetch:
-         imgpkgBundle:
-           image: registry.tanzu.vmware.com/build-service-dependency-updater/package-repo
-           tagSelection:
-             semver:
-             # this should be TAP major.minor.x
-               constraints: "1.8.x"
-   EOF
+    ```console
+    tanzu secret registry add tanzunet-creds \
+      --server "registry.tanzu.vmware.com" \
+      --username "${TANZUNET_REGISTRY_USERNAME}" \
+      --password "${TANZUNET_REGISTRY_PASSWORD}" \
+      --namespace ${INSTALL_NAMESPACE}
    ```
 
-For more information on adding new buildpack versions or updating buildpacks out of band, see the [Creating Custom Cluster Buildpacks](managing-buildpacks.html) page.
+1. Add the Tanzu Build Service Dependency Updates package repository by running:
+
+    ```console
+    kubectl apply -f - <<EOF
+      apiVersion: packaging.carvel.dev/v1alpha1
+      kind: PackageRepository
+      metadata:
+        name: tbs-dependencies-package-repository
+        namespace: tap-install
+      spec:
+        fetch:
+          imgpkgBundle:
+            image: registry.tanzu.vmware.com/build-service-dependency-updater/package-repo
+            tagSelection:
+              semver:
+                constraints: "VERSION-CONSTRAINT"
+    EOF
+    ```
+
+    Where `VERSION-CONSTRAINT` is the corresponding Tanzu Application Platform version in the format
+    `MAJOR.MINOR.x`. For example, `1.8.x`.
+
+For more information about adding new buildpack versions or updating buildpacks out of band, see
+[Creating Custom Cluster Buildpacks](managing-buildpacks.html).
 
 ### <a id='online-stack-update'></a> Cluster stacks update
 
-Cluster stacks are now managed by kapp controller. You need to create new resources and reference them in your builder if you want to change them. More info on managing stacks can be found on the [Managing Stacks](managing-stacks.html) page.
+The kapp controller now manages cluster stacks. You must create new resources and reference them in
+your builder if you want to change them. For more information about managing stacks, see
+[Managing Stacks](managing-stacks.html).
 
 ### <a id='online-store-update'></a> Cluster store update
 
-We now use Cluster buildpacks instead of Cluster stores. You can still use Cluster stores but Cluster buildpacks are recommended. More info on creating Cluster Buildpacks can be found on the [Creating Custom Cluster Buildpacks](managing-buildpacks.html) page.
+Tanzu Build Service now uses ClusterBuildpacks instead of ClusterStores.
+You can still use ClusterStores but VMware recommends that you use ClusterBuildpacks.
+For more information about creating ClusterBuildpacks, see
+[Creating custom ClusterBuildpacks](managing-buildpacks.html) page.
 
-## <a id='offline-update'></a> Offline update of dependencies
+## <a id='offline-update'></a> Update dependencies (offline)
 
-## Enable Automatic Dependency Updates - airgapped
+This section describes how to update dependencies in an air-gapped (offline) environment.
 
-TBS dependencies can also be configured to be automatically updated in an airgapped environment.
+### <a id='dependency-updater'></a> Enable automatic dependency updates - air-gapped
+
+You can also configure automatic dependency updates for Tanzu Build Service dependencies in
+air-gapped environments.
+
+**Prerequisites:** These steps assume the cluster already has a secret for your internal repository.
+
+To enable automatic dependency updates in an air-gapped environment:
 
 1. Add the following to tbs-values.yaml:
 
     ```yaml
       dependency_updates:
       allow: true
-      scope: <SCOPE>
+      scope: SCOPE
       include_packages: [""]
       exclude_packages: [""]
     ```
+
     Where:
-    - `SCOPE` is the list of dependencies you would like to be updated.
-        The options are:
-        - `stacks-only` (default value): only stacks and builders are updated
-        - `all`: stacks, builders, and buildpacks are updated
-        - `custom`: this list is empty by default, use the `include_packages` key to add packages to be updated
 
-<p class="note"><strong>Note:</strong> The TBS package install and/or the Full Deps Package install will need to be updated after changing tbs-values</p>
+    - `SCOPE` is the list of dependencies you want to be updated. The options are:
+      - `stacks-only` (default): Only stacks and builders are updated
+      - `all`: Stacks, builders, and buildpacks are updated
+      - `custom`: This list is empty by default. To add the packages you want updated, use the
+        `include_packages` key.
 
-2. Login to registry.tanzu.vmware.com and the internal repo on a machine that has internal repo access (assumes the cluster has a secret for the internal repo)
-3. Relocate the deps updater package repo with imgpkg to the internal repo
-4. Add the Tanzu Build Service Dependency Updates package repository by running:
-<p class="note"><strong>Note:</strong> The automatic dependency updater follows a different version than TBS. It uses the TAP version to align with our recommended install method. TBS 1.13 corresponds to dependency version `1.8.x`</p>
+    <p class="note"><strong>Note:</strong>
+      You must update the Tanzu Build Service package install and the Full Dependencies package install
+      after changing <code>tbs-values.yaml</code> file.
+    </p>
 
-   ```
-   kubectl apply -f - <<EOF
-     apiVersion: packaging.carvel.dev/v1alpha1
-     kind: PackageRepository
-     metadata:
-       name: tbs-dependencies-package-repository
-       namespace: tap-install
-     spec:
-       fetch:
-         imgpkgBundle:
-           image: <internal repo ref>
-           tagSelection:
-             semver:
-             # this should be TAP major.minor.x
-               constraints: "1.8.x"
-   EOF
-   ```
-5. Set up a job to watch `registry.tanzu.vmware.com/build-service-dependency-updater/package-repo` for changes and then relocate to the internal repo using:
+1. Login to `registry.tanzu.vmware.com` and your internal repository on a machine that has access to
+   your internal repository.
 
-```console
-    imgpkg copy -b build-service-dependency-updater/package-repo:<LATEST-VERSION-FOR-TBS-MINOR> --to-repo=${INTERNAL_REPOSITORY}
+1. Relocate the dependency updater package repository with imgpkg to the internal repository.
+
+1. Add the Tanzu Build Service Dependency Updates package repository by running:
+
+    <p class="note important"><strong>Important:</strong>
+      The automatic dependency updater follows a different version than Tanzu Build Service.
+      It uses the Tanzu Application Package version to align with the recommended installation method.
+      Tanzu Build Service v1.13 corresponds to dependency version <code>1.8.x</code>.
+    </p>
+
+    ```console
+    kubectl apply -f - <<EOF
+      apiVersion: packaging.carvel.dev/v1alpha1
+      kind: PackageRepository
+      metadata:
+        name: tbs-dependencies-package-repository
+        namespace: tap-install
+      spec:
+        fetch:
+          imgpkgBundle:
+            image: INTERNAL-REPO-REF
+            tagSelection:
+              semver:
+                constraints: "VERSION-CONSTRAINT"
+    EOF
     ```
 
-The cluster will be watching the internal repo. This step is optional, but updates won't be completely automatic without it.
+    Where:
+
+    - `INTERNAL-REPO-REF` is the location of the package repository. This is the internal container
+      image registry for air-gapped installs.
+    - `VERSION-CONSTRAINT` is the corresponding Tanzu Application Platform version in the format
+      `MAJOR.MINOR.x`. For example, `1.8.x`.
+
+    <!-- get these checked -->
+
+1. Set up a job to watch `registry.tanzu.vmware.com/build-service-dependency-updater/package-repo`
+   for changes and then relocate to the internal repo by running:
+
+    ```console
+    imgpkg copy \
+      -b build-service-dependency-updater/package-repo:VERSION \
+      --to-repo=${INTERNAL_REPOSITORY}
+    ```
+
+    Where `VERSION` is the latest version of the Tanzu Build Service Dependency
+    Updates package for the Tanzu Build service minor.
+    <!-- how do they find this? -->
+
+    The cluster will watch the internal repo. This step is optional, but updates are not completely
+    automatic without it.

@@ -211,34 +211,34 @@ If installing the `lite` dependencies, you can use the bundled dependencies that
 1. Create a secret for your `kp-default-repository` in the `tap-install` namespace:
 
     ```console
-      tanzu secret registry add kp-default-repository \
-        --username ${KP_DEFAULT_REPOSITORY_USERNAME} \
-        --password ${KP_DEFAULT_REPOSITORY_PASSWORD} \
-        --server ${REGISTRY_HOSTNAME} \
-        --yes --namespace tap-install
+    tanzu secret registry add kp-default-repository \
+      --username ${KP_DEFAULT_REPOSITORY_USERNAME} \
+      --password ${KP_DEFAULT_REPOSITORY_PASSWORD} \
+      --server ${REGISTRY_HOSTNAME} \
+      --yes --namespace tap-install
     ```
 
     Where:
 
-    * `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
-    * `KP_DEFAULT_REPOSITORY_USERNAME` is the registry user name. Same value as used during relocation.
-    * `KP_DEFAULT_REPOSITORY_PASSWORD` is the registry password. Same value as used during relocation.
+    - `REGISTRY_HOSTNAME` is the host name for your registry. (i.e. `gcr.io`)
+    - `KP_DEFAULT_REPOSITORY_USERNAME` is the registry user name. Same value as used during relocation.
+    - `KP_DEFAULT_REPOSITORY_PASSWORD` is the registry password. Same value as used during relocation.
 
 2. Create a secret for VMware Tanzu Network in the `tap-install` namespace.
-	 This is only required if enabling automatic dependency updates.
+   This is only required if enabling automatic dependency updates.
 
     ```console
-      tanzu secret registry add tanzunet-registry \
-        --username ${TANZUNET_USERNAME} \
-        --password ${TANZUNET_PASSWORD} \
-        --server "registry.tanzu.vmware.com" \
-        --yes --namespace tap-install
+    tanzu secret registry add tanzunet-registry \
+      --username ${TANZUNET_USERNAME} \
+      --password ${TANZUNET_PASSWORD} \
+      --server "registry.tanzu.vmware.com" \
+      --yes --namespace tap-install
     ```
 
     Where:
 
-    * `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network.
-    * `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network.
+    - `TANZUNET_REGISTRY_USERNAME` is used to pull dependencies from VMware Tanzu Network.
+    - `TANZUNET_REGISTRY_PASSWORD` is used to pull dependencies from VMware Tanzu Network.
 
 #### <a id='tap-values'></a> Create Values File
 
