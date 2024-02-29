@@ -2,7 +2,6 @@
 * [**Release Notes**](release-notes.html)
 * [**Installing using a profile (recommended)**](installing-tap-profile.html)
     * [Installing Windows Components](installing-windows-components.html)
-    * [Getting Started with Tanzu Build Service](getting-started.html)
     * [Installing with kapp controller](installing.html)
     * [Installing without kapp controller](installing-no-kapp.html)
     * [Opting out of telemetry collection](opt-out-of-telemetry-collection.html)
