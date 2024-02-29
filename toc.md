@@ -1,4 +1,4 @@
-* [**Tanzu Build Service v1.13 Documentation**](index.html)
+* [**Tanzu Build Service v1.14 Documentation**](index.html)
 * [**Release Notes**](release-notes.html)
 * [**Installing using a profile (recommended)**](installing-tap-profile.html)
     * [Installing Windows Components](installing-windows-components.html)

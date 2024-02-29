@@ -5,25 +5,12 @@ owner: Build Service Team
 
 This topic describes the changes in Tanzu Build Service (commonly known as TBS).
 
-## <a id="1-13-0"></a> v1.13.0
+## <a id="1-14-0"></a> v1.14.0
 
 **Release Date: February 29, 2024**
 
 ### Breaking changes
 
-- Lifecycle v0.12.0 is the minimum supported version for Tanzu Build Service v1.13.
-  Older versions have Platform API v0.7 or earlier, which are not supported by Tanzu Build Service.
-
-- The legacy Cloud Native Buildpack Bill of Materials (CNB BOM) format has been removed.
-
-- You can no longer install Tanzu Build Service without kapp. Tanzu Build Service requires the kapp
-  controller to be installed.
-
-- ClusterStores are no longer created by default during install. Buildpacks are now represented by
-  ClusterBuildpack and Buildpack resources.
-
-- The `TanzunetDependencyUpdater` is removed and replaced with a new dependency updater with enhanced
-  configuration options.
 
 ### Deprecations
 
@@ -31,30 +18,11 @@ This topic describes the changes in Tanzu Build Service (commonly known as TBS).
 
 ### New Features
 
-- Tanzu Build Service can now generate Supply-chain Levels for Software Artifacts (SLSA) attestations.
-  For instructions, see
-  [Use Supply-chain Levels for Software Artifacts](slsa-attestations.md).
-
-- Tanzu UBI and Static builders are now available and you can install them as part
-  of the Full dependencies. For instructions, see the `enable_ubi_builder`
-  and `enable_startic_builder` fields during [Installation](installing.md#install).
-
-  For the supported languages for these builders, see the [Tanzu Stacks documentation](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html).
-
-- Dependency updates allow you to configure which dependencies get updated.
-  For more information, see [Updating Dependencies](updating-deps.html).
-
-- The kp CLI now supports configuring the number of successful and failed build that are retained by
-  setting `failedBuildHistoryLimit` and `successBuildHistoryLimit` on images. For more information,
-  see the [kpack documentation](https://github.com/buildpacks-community/kpack/blob/main/docs/image.md).
 
 ### Product Snapshot
 
-Tanzu Build Service v1.13.0 includes the following components:
+Tanzu Build Service v1.14.0 includes the following components:
 
-- [kpack v0.13.0](https://github.com/buildpacks-community/kpack/releases/tag/v0.13.0)
-- [kpack cli v0.13.0](https://github.com/buildpacks-community/kpack-cli/releases/tag/v0.13.0)
-- [CNB lifecycle v0.17.3](https://github.com/buildpacks/lifecycle/releases/tag/v0.17.3)
 
 Tanzu Build Service supports and uses [Tanzu Buildpacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html).
 
@@ -64,5 +32,5 @@ You can install Tanzu Build Service on any Kubernetes cluster v1.27 or later.
 
 ### Upgrade Path
 
-You can upgrade v1.12.x to v1.13.x. For upgrade instructions, follow the procedures in
+You can upgrade v1.13.x to v1.14.x. For upgrade instructions, follow the procedures in
 [Install Tanzu Build Service with kapp controller](installing.html).
