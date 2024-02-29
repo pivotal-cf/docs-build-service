@@ -20,7 +20,7 @@ the source for this page in GitHub" at the bottom of the topic.
 | **Branch Name** | **Content**               | **Location**                                                                                  |
 |-----------------|---------------------------|-----------------------------------------------------------------------------------------------|
 | `master`        | DO NOT USE                |                                                                                               |                                                                                     
-| `v1.13`         | Tanzu Build Service 1.13  | https://docs-staging.vmware.com/en//Tanzu-Build-Service/1.13/vmware-tanzu-build-service/index.html    |      
+| `v1.13`         | Tanzu Build Service 1.13  | https://docs-staging.vmware.com/en/draft/Tanzu-Build-Service/1.13/vmware-tanzu-build-service/index.html    |      
 | `v1.12`         | Tanzu Build Service 1.12  | https://docs.vmware.com/en/Tanzu-Build-Service/1.12/vmware-tanzu-build-service/index.html     |  
 | `v1.11`         | Tanzu Build Service 1.11  | https://docs.vmware.com/en/Tanzu-Build-Service/1.11/vmware-tanzu-build-service/index.html     |        
 | `v1.10`         | Tanzu Build Service 1.10  | https://docs.vmware.com/en/Tanzu-Build-Service/1.10/vmware-tanzu-build-service/index.html     |
