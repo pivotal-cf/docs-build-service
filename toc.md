@@ -21,6 +21,7 @@
 * [**Using the kp CLI**](kp-cli.html)
 * [**RBAC in Tanzu Build Service**](tbs-rbac.html)
 * [**Using TBS in CI/CD**](tbs-in-ci.html)
+* [Using Supply-chain Levels for Software Artifacts](slsa-attestations.html)
 * [**Buildpacks Documentation**](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/index.html)
 * [**Frequently Asked Questions**](faq.html)
 * [**Additional Resources**](additional-resources.html)
