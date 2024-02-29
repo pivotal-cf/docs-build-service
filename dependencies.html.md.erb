@@ -3,67 +3,72 @@ title: Configure the dependencies of your Tanzu Build Service
 owner: Build Service Team
 ---
 
-This topic helps you decide between the depedency options for Tanzu Build Service.
+This topic helps you to decide between the dependency options for Tanzu Build Service.
 
 ## <a id="about"></a> About dependencies
 
-Tanzu Build Service dependencies (stacks, buildpacks, and builders) are
+Tanzu Build Service dependencies consist of stacks, buildpacks, and builders. Dependencies are
 continuously released on VMware Tanzu Network to resolve all workload Critical and High CVEs.
 
 There are two types of dependencies, `lite` and `full`, available for install
 They can apply to different use cases and workload types.
-For the differences between the dependencies, see [Dependency comparison](#dependency-comparison).
+For the differences between the dependencies, see [Dependency comparison](#dependency-comparison)
+later in this topic.
 
 ### <a id="lite-deps"></a> Lite Dependencies
 
-The Tanzu Build Service `lite` dependencies 
+The Tanzu Build Service `lite` dependencies contains a smaller footprint to speed up installation time.
+However, the `lite` dependencies do not support all workload types.
+For example, the `lite` dependencies do not contain the PHP buildpack.
 
-It contains a smaller footprint to speed up installation time. However, it does not support all
-workload types. For example, the `lite` dependencies do not contain the PHP buildpack.
-
-The `lite` dependencies only contains the `base-jammy` stack.
+The `lite` dependencies only contain the `base-jammy` stack.
 The `default` stack is installed, but is identical to the `base-jammy` stack.
-For more information, see [Stacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html).
+For more information, see [Stacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html)
+in the Tanzu Buildpacks documentation.
 
 ### <a id="full-deps"></a> Full Dependencies
 
-The Tanzu Build Service `full` dependencies contain more buildpacks and stacks, allowing for more workload
-types.
+The Tanzu Build Service `full` dependencies contain more buildpacks and stacks. This allow for more
+workload types.
 
 The build-time language dependencies are pre-packaged so builds don't have to download them from the Internet.
-This can speed up build times and allows builds to occur in airgapped environments.
+This can speed up build times and allows builds to occur in air-gapped environments.
 
-The `full` dependencies contains the following stacks, which support different use cases:
+The `full` dependencies contain the following stacks, which support different use cases:
 
 - `base-jammy`
 - `full-jammy`
 - `tiny-jammy`
 - `default` (identical to `base-jammy`)
 
-For more information, see [Stacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html).
+For more information, see [Stacks](https://docs.vmware.com/en/VMware-Tanzu-Buildpacks/services/tanzu-buildpacks/GUID-stacks.html)
+in the Tanzu Buildpacks documentation.
 Due to the larger footprint of `full`, installations might take longer.
 
 ### <a id="dependency-comparison"></a> Dependency comparison
 
-Both `lite` and `full` dependencies can be used in production environments, but the `full` dependencies will provide a better experience in most cases.
+You can use either `lite` or `full` dependencies in production environments, but the `full` dependencies
+provide a better experience in most cases.
 
-|                                    | lite | full |
-|------------------------------------|------|------|
-| Faster installation time           | Yes  | No   |
-| Shorter build times                | No   | Yes  |
-| Dependencies pre-packaged          | No   | Yes  |
-| Support for Airgapped environments | No   | Yes  |
-| Contains base stack                | Yes  | Yes  |
-| Contains full stack                | No   | Yes  |
-| Contains tiny stack                | No   | Yes  |
-| Supports Java workloads            | Yes  | Yes  |
-| Supports Node.js workloads         | Yes  | Yes  |
-| Supports Go workloads              | Yes  | Yes  |
-| Supports Python workloads          | Yes  | Yes  |
-| Supports .NET Core workloads       | Yes  | Yes  |
-| Supports PHP workloads             | No   | Yes  |
-| Supports Ruby workloads            | Yes  | Yes  |
-| Supports Web Servers workloads     | Yes  | Yes  |
-| Supports static workloads          | Yes  | Yes  |
-| Supports binary workloads          | Yes  | Yes  |
-| Supports ubi workloads             | No   | Yes  |
+The following table compares the contents of the `lite` and `full` dependencies.
+
+| Feature                             | lite | full |
+| ----------------------------------- | ---- | ---- |
+| Faster installation time            | Yes  | No   |
+| Shorter build times                 | No   | Yes  |
+| Dependencies pre-packaged           | No   | Yes  |
+| Support for air-gapped environments | No   | Yes  |
+| Contains base stack                 | Yes  | Yes  |
+| Contains full stack                 | No   | Yes  |
+| Contains tiny stack                 | No   | Yes  |
+| Supports Java workloads             | Yes  | Yes  |
+| Supports Node.js workloads          | Yes  | Yes  |
+| Supports Go workloads               | Yes  | Yes  |
+| Supports Python workloads           | Yes  | Yes  |
+| Supports .NET Core workloads        | Yes  | Yes  |
+| Supports PHP workloads              | No   | Yes  |
+| Supports Ruby workloads             | Yes  | Yes  |
+| Supports web servers workloads      | Yes  | Yes  |
+| Supports static workloads           | Yes  | Yes  |
+| Supports binary workloads           | Yes  | Yes  |
+| Supports ubi workloads              | No   | Yes  |

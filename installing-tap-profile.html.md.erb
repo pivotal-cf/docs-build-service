@@ -19,7 +19,7 @@ To view the previous methods of installation, see [Installing without kapp contr
 * Have access to a container image registry to install Tanzu Build Service and store application images.
   * Although the documentation references specific registries for the purpose of providing examples, any registry that adheres to the Docker Registry HTTP API V2 is supported.
   * If installing using the `lite` dependencies, VMware recommends at least 1&nbsp;GB of registry storage.
-  * If installing using the `full` dependencies, which are intended for production use and offline environments, VMware recommends at least  10&nbsp;GB of available storage.
+  * If installing using the `full` dependencies, which you can use in offline environments, VMware recommends at least  10&nbsp;GB of available storage.
   * This registry space suggestion does not include the space used for application images built by Tanzu Build Service.
 
 * Ensure that your Kubernetes cluster is configured with a default `StorageClass`.
@@ -293,7 +293,7 @@ Where:
 
 * `EXCLUDE_DEPENDENCIES` must be set to `true` if `ENABLE_AUTOMATIC_DEPENDENCY_UPDATES` is `true` or if the TBS Full Deps package repository will be installed. This prevents Tanzu Build Service from installing its bundled lite dependencies.
 
-* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case, see [Descriptors](./descriptors.html). Available options:
+* `DESCRIPTOR-NAME` is the name of the descriptor to import automatically. For more information about which descriptor to choose for your workload and use case. Available options:
   * `full` contains all dependencies.
   * `lite` smaller footprint used for speeding up installs. Requires Internet access on the cluster.
 
