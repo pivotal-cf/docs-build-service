@@ -5,7 +5,7 @@ owner: Build Service Team
 
 This topic tells you how to install and configure Tanzu Build Service (commonly known as TBS) with the Tanzu CLI and kapp controller.
 
->**Important** This method of installation is now deprecated in favor of [Installing using a profile](installing-tap-profile.html).
+> **Important** This installation method is now deprecated in favor of [Installing using a profile](installing-tap-profile.html).
 
 ## <a id='prerequisites'></a> Prerequisites
 
@@ -212,7 +212,8 @@ The local machine must have write access to the install registry.
     ```
 
     <p class="note"><strong>Note:</strong>
-      This installs the lite dependencies with automatic stack updates enabled. If you plan on installing the full dependencies in a later step, set `exclude_dependencies: true`
+      This installs the lite dependencies with automatic stack updates enabled. If you plan to install
+      the full dependencies later, set `exclude_dependencies: true`.
     </p>
 
     Where:
@@ -227,15 +228,16 @@ The local machine must have write access to the install registry.
 
     * (Optional) `GENERATE_SLSA_ATTESTATION` use to enable support for [SLSA attestations](slsa-attestations.md).
 
-
 1. Install the package:
 
     ```
     tanzu package install tbs -p buildservice.tanzu.vmware.com -v $TBS_VERSION -n ${INSTALL_NAMESPACE} --values-file tbs-values.yml --poll-timeout 30m
     ```
-1.  If you would like to install the full dependencies, [Installing Full Dependencies](#full-deps-install)
 
-1. If you want like to configure automatic dependency updates, see [Updating Dependencies](updating-deps.html)
+1. (Optional) To install the full dependencies, see [Installing Full Dependencies](#full-deps-install)
+   later in this topic.
+
+1. (Optional) To configure automatic dependency updates, see [Updating Dependencies](updating-deps.html).
 
 #### <a id='additional-config'></a> Additional configuration
 
@@ -283,7 +285,7 @@ spec:
 If you are using Tanzu Application Platform, this secret is already created and exported to all
 namespaces. There is no need to take any action.
 
-##### <a id='full-deps-install'></a> Install the Full Dependencies for Tanzu Build Service
+#### <a id='full-deps-install'></a> Install the Full Dependencies for Tanzu Build Service
 
 1. If you have not done so already, you must exclude the default dependencies
    by adding the key-value pair `exclude_dependencies: true` to your `tbs-values.yaml`.
@@ -295,41 +297,45 @@ namespaces. There is no need to take any action.
 
 1. If you have not updated your Tanzu Build Service package installation
    after adding the key-value pair `exclude_dependencies: true` to your values file,
-   you must perform the update by running:
+   perform the update by running:
 
     ```console
     tanzu package installed update tbs --namespace ${INSTALL_NAMESPACE} --values-file VALUES-FILE
     ```
 
-   Where `VALUES-FILE` is the path to the `tbs-values.yaml` file you edited earlier.
+    Where `VALUES-FILE` is the path to the `tbs-values.yaml` file you edited earlier.
 
-1. Relocate the Tanzu Build Service `full` dependencies package repository by either:
+1. Relocate the Tanzu Build Service `full` dependencies package repository by doing one of the following:
 
-   1. Relocating the images directly for online installation:
+    - Relocate the images directly for online installation:
 
-       ```console
-       imgpkg copy -b registry.tanzu.vmware.com/build-service/full-deps-package-repo:VERSION \
+        ```console
+        imgpkg copy \
+          -b registry.tanzu.vmware.com/build-service/full-deps-package-repo:VERSION \
           --to-repo ${INSTALL_REGISTRY_HOSTNAME}/full-deps-package-repo
-       ```
+        ```
 
-      Where `VERSION` is the version of the Tanzu Build Service you are installing.
+        Where `VERSION` is the version of the Tanzu Build Service you are installing.
 
-   1. Relocating to an external storage device and then to the registry in the air-gapped environments:
+    - Relocate the images to an external storage device and then to the registry in the air-gapped
+      environment:
 
-       ```console
-       imgpkg copy -b registry.tanzu.vmware.com/build-service/full-deps-package-repo:VERSION \
-         --to-tar=full-deps-package-repo.tar
-       # move full-deps-package-repo.tar to environment with registry access
-       imgpkg copy --tar full-deps-package-repo.tar \
-         --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/full-deps-package-repo
-       ```
+        ```console
+        imgpkg copy \
+          -b registry.tanzu.vmware.com/build-service/full-deps-package-repo:VERSION \
+          --to-tar=full-deps-package-repo.tar
 
-      Where:
+        # move full-deps-package-repo.tar to environment with registry access
+        imgpkg copy \
+          --tar full-deps-package-repo.tar \
+          --to-repo=INSTALL-REGISTRY-HOSTNAME/TARGET-REPOSITORY/full-deps-package-repo
+        ```
 
-      - `VERSION` is the version of the Tanzu Build Service you are installing.
-      - `INSTALL-REGISTRY-HOSTNAME` is your container registry.
-      - `TARGET-REPOSITORY` is your target repository.
+        Where:
 
+        - `VERSION` is the version of the Tanzu Build Service you are installing.
+        - `INSTALL-REGISTRY-HOSTNAME` is your container registry.
+        - `TARGET-REPOSITORY` is your target repository.
 
 1. Add the Tanzu Build Service `full` dependencies package repository by running:
 
@@ -343,7 +349,7 @@ namespaces. There is no need to take any action.
 
    - `INSTALL-REGISTRY-HOSTNAME` is your container registry.
    - `TARGET-REPOSITORY` is your target repository.
-   - `VERSION` is the version of the TAP package you retrieved earlier.
+   - `VERSION` is the version of the Tanzu Application Platform package you retrieved earlier.
 
 1. Create a new `tbs-full-deps-values.yaml` and copy the `kp_default_repository`
    key-value pair from your `tbs-values.yaml`:
@@ -353,15 +359,14 @@ namespaces. There is no need to take any action.
      kp_default_repository: "REPO-NAME"
     ```
 
-   Where `REPO-NAME` is copied from the `kp_default_repository` field in your `tbs-values.yaml`.
+    Where `REPO-NAME` is copied from the `kp_default_repository` field in your `tbs-values.yaml`.
 
    1. (Optional) Install the UBI builder.
 
-      The UBI builder is uses Red Hat Universal Base Image (UBI) v8
-      for both build and run images.
+      The UBI builder uses Red Hat Universal Base Image (UBI) v8 for both build and run images.
       This builder only supports Java and Node.js.
-      To install the UBI builder, add the key-value pair `enable_ubi_builder: true`
-      to your `tbs-full-deps-values.yaml`.
+      To install the UBI builder, add the key-value pair `enable_ubi_builder: true` to your
+      `tbs-full-deps-values.yaml`.
 
        ```yaml
        ---
@@ -382,7 +387,11 @@ namespaces. There is no need to take any action.
 1. Install the `full` dependencies package by running:
 
     ```console
-    tanzu package install full-deps -p full-deps.buildservice.tanzu.vmware.com -v "> 0.0.0" --namespace ${INSTALL_NAMESPACE} --values-file VALUES-FILE
+    tanzu package install full-deps \
+      --package full-deps.buildservice.tanzu.vmware.com \
+      --version "> 0.0.0" \
+      --namespace ${INSTALL_NAMESPACE} \
+      --values-file VALUES-FILE
     ```
 
    Where `VALUES-FILE` is the path to the `tbs-full-deps-values.yaml` you created earlier.
@@ -492,7 +501,7 @@ Installing Tanzu Build Service on Openshift requires some extra steps.
         * `BUILD-NAMESPACE` is the namespace where Image and Build resources will be created.
         * `BUILD-SERVICE-ACCOUNT` is the service account used for Image resources (`default` by default).
 
-### <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
+## <a id='upgrade-tbs'></a> Upgrading Tanzu Build Service
 
 1. Relocate the new package repository:
 
@@ -657,6 +666,9 @@ This procedure relocates images from the VMware Tanzu Network registry to an int
     * `INSTALL_REGISTRY_USERNAME` is the internal registry username. Same value as used during relocation.
     * `INSTALL_REGISTRY_PASSWORD` is the internal registry password. Same value as used during relocation.
     * `CA_CERT_CONTENTS` *must be provided when using registry that is signed by a Custom Cert*. This is the value of the PEM-encoded CA certificate that will be used during the build time. For more information about adding CA certificate to the run image, see [the FAQ](./faq.html#faq-26).
+
+<!-- install full deps? -->
+<!-- auto deps updater? -->
 
 #### <a id='offline-additional-config'></a> Additional configuration
 
