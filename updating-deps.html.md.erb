@@ -52,7 +52,8 @@ You can customize the packages that you want the automatic dependency updater to
       --server "registry.tanzu.vmware.com" \
       --username "${TANZUNET_REGISTRY_USERNAME}" \
       --password "${TANZUNET_REGISTRY_PASSWORD}" \
-      --namespace ${INSTALL_NAMESPACE}
+      --namespace ${INSTALL_NAMESPACE} \
+      --export-to-all-namespaces
    ```
 
 1. Add the Tanzu Build Service Dependency Updates package repository by running:
